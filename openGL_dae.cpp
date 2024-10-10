@@ -1,7 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
+#ifdef PLATFORM_UNIX
 #include <unistd.h>
+#endif // PLATFORM_UNIX
+
 #include <iostream>
 
 /*
