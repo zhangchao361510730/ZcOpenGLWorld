@@ -27,5 +27,5 @@ include_directories(${CMAKE_SOURCE_DIR}/linux_libs/includes)
 
 set(DEPENDS_LIB glfw3)
 
-add_executable(${PROJECT_NAME}_main openGL_dae.cpp src/glad.c)
+add_executable(${PROJECT_NAME}_main openGLMain.cpp src/glad.c)
 target_link_libraries(${PROJECT_NAME}_main PUBLIC ${DEPENDS_LIB})

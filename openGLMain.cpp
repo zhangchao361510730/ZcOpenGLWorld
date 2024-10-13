@@ -5,7 +5,7 @@
 #include <unistd.h>
 #endif // PLATFORM_UNIX
 #include <iostream>
-
+#include"src/globaDefine.h"
 /*
 书签记录，每次结束都更新下面的页数
 https://learnopengl-cn.github.io/01%20Getting%20started/04%20Hello%20Triangle/ 
@@ -26,9 +26,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-
-
-    GLFWwindow* window = glfwCreateWindow(800, 600, "jojoOpenGl", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(windowsWidth, windowsHeight, "jojoOpenGl", NULL, NULL);
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -54,7 +52,7 @@ int main()
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);  
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, windowsWidth, windowsHeight);
 
     //glfwSetKeyCallback(window,) typedef void (* GLFWkeyfun)(GLFWwindow*,int,int,int,int);
 
