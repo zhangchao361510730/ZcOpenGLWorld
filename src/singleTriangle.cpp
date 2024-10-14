@@ -1,4 +1,4 @@
-#include <random>
+
 #include<iostream>
 
 #include"globaDefine.h"
@@ -8,7 +8,7 @@ extern const char* fragmentShaderSource;
 extern const char* vertexShaderSource; 
 
 
-singleTriangle::singleTriangle():gen(std::random_device{}()) {
+singleTriangle::singleTriangle(){
 
 }
 
@@ -83,19 +83,3 @@ void singleTriangle::runDrawProcess() {
     unInitResource();
 }
 
-void singleTriangle::processInput(GLFWwindow *window) {
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-            glfwSetWindowShouldClose(window, true);
-        }
-}
-
-
-void  singleTriangle::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    singleTriangle* thiz = (singleTriangle*)glfwGetWindowUserPointer(window);
-    glViewport(0, 0, width, height);
-    std::uniform_real_distribution<float> dis(0.0f, 1.0f); // 定义均匀分布范围
-    thiz->r = dis(thiz->gen);
-    thiz->b = dis(thiz->gen);
-    thiz->g = dis(thiz->gen);
-    thiz->a = dis(thiz->gen);
-}

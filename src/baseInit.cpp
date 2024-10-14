@@ -1,7 +1,11 @@
 #include"baseInit.h"
+#include"globaDefine.h"
 
-baseInit::baseInit()
-{
+extern const char* fragmentShaderSource;
+extern const char* vertexShaderSource;
+
+baseInit::baseInit():gen(std::random_device{}()) {
+
 }
 
 baseInit::~baseInit()
@@ -25,7 +29,7 @@ bool baseInit::InitGlSource()
         glfwTerminate();
         return false;
     }
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetFramebufferSizeCallback(window, baseInit::framebuffer_size_callback);
     glfwMakeContextCurrent(window);
     // 这类似一个函数指针绑定，只不过还强制转化了一下
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -72,4 +76,21 @@ bool baseInit::InitGlSource()
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 	return true;
+}
+
+void baseInit::processInput(GLFWwindow* window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
+    }
+}
+
+
+void  baseInit::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    baseInit* thiz = (baseInit*)glfwGetWindowUserPointer(window);
+    glViewport(0, 0, width, height);
+    std::uniform_real_distribution<float> dis(0.0f, 1.0f); // 定义均匀分布范围
+    thiz->r = dis(thiz->gen);
+    thiz->b = dis(thiz->gen);
+    thiz->g = dis(thiz->gen);
+    thiz->a = dis(thiz->gen);
 }

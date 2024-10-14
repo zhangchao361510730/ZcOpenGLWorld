@@ -13,7 +13,7 @@
 
 int main() {
     singleTriangle sT;
-    sT.init();
+    sT.InitGlSource();
     sT.runDrawProcess();
 
     return 0;
