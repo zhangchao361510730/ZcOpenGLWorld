@@ -10,9 +10,9 @@ private:
     float r = 1.0f,g = 0.0f,b = 1.0f,a = 1.0f;
     GLFWwindow* window = nullptr;
     std::mt19937 gen; // 使用梅森旋转算法初始化随机数生成器
-    uint32_t shaderProgram;
-    uint32_t VBO;
-    uint32_t VAO;
+    uint32_t shaderProgram = 0;
+    uint32_t VBO = 0;
+    uint32_t VAO = 0;
 public:
     singleTriangle(/* args */);
     ~singleTriangle();
