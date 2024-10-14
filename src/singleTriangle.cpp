@@ -20,7 +20,7 @@ bool singleTriangle::init() {
     
     if (!glfwInit()) {
         std::cout << "Failed to initialize GLFW" << std::endl;
-        return -1;
+        return false;
     }
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -31,14 +31,14 @@ bool singleTriangle::init() {
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
-        return -1;
+        return false;
     }
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwMakeContextCurrent(window);
     // 这类似一个函数指针绑定，只不过还强制转化了一下
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
+        return false;
     }
     glfwSetWindowUserPointer(window, (void*)this);
     // vertex shader
