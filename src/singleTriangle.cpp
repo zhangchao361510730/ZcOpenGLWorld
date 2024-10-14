@@ -127,6 +127,7 @@ bool singleTriangle::unInitResource() {
     glDeleteBuffers(1, &VBO);
     glDeleteProgram(shaderProgram);
     glfwTerminate();
+    return true;
 }
 
 void singleTriangle::runDrawProcess() {
@@ -152,11 +153,13 @@ void singleTriangle::runDrawProcess() {
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-    
+    unInitResource();
 }
 
 void singleTriangle::processInput(GLFWwindow *window) {
-
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+            glfwSetWindowShouldClose(window, true);
+        }
 }
 
 
