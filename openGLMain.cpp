@@ -63,7 +63,7 @@ int main()
     glCompileShader(vertexShader);
     // check for shader compile errors
     int success;
-    char infoLog[512];
+    char infoLog[512] = {0};
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
     if (!success)
     {
@@ -76,8 +76,7 @@ int main()
     glCompileShader(fragmentShader);
     // check for shader compile errors
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
+    if (!success) {
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
