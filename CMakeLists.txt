@@ -21,11 +21,16 @@ elseif (UNIX)
 	include_directories(${CMAKE_SOURCE_DIR}/linux_libs/includes)
 endif()
 
+#file(GLOB SRCFILE ${CMAKE_CURRENT_SOURCE_DIR}/server_core/*.cc)
+#file(GLOB COMMONSRCFILE ${CMAKE_CURRENT_SOURCE_DIR}/common_util/*.cc)
+#list(APPEND SRCFILE ${COMMONSRCFILE})
+#add_executable(${PROJECT_NAME}_main main.cpp ${SRCFILE})
+
 
 link_directories(${CMAKE_SOURCE_DIR}/linux_libs/lib)
 include_directories(${CMAKE_SOURCE_DIR}/linux_libs/includes)
 
 set(DEPENDS_LIB glfw3)
 
-add_executable(${PROJECT_NAME}_main openGLMain.cpp src/glad.c)
+add_executable(${PROJECT_NAME}_main openGLMain.cpp src/sourceLib/glad.c)
 target_link_libraries(${PROJECT_NAME}_main PUBLIC ${DEPENDS_LIB})
