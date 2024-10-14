@@ -101,11 +101,44 @@ int main()
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // 左边的-0.5, 0.5 ,0.0 是x轴的坐标
-    float vertices[] = {
-        -0.5f, -0.5f, 0.0f, // left  
-         0.5f, -0.5f, 0.0f, // right 
-         0.0f,  0.5f, 0.0f  // top   
+    // float vertices[] = {
+    //     -0.5f, -0.5f, 0.0f, // left  
+    //      0.5f, -0.5f, 0.0f, // right 
+    //      0.0f,  0.5f, 0.0f  // top   
+    // };
+
+    // float vertices2[] = {
+    //         // 第一个三角形
+    //     0.5f, 0.5f, 0.0f,   // 右上角
+    //     0.5f, -0.5f, 0.0f,  // 右下角
+    //     -0.5f, 0.5f, 0.0f,  // 左上角
+    //     // 第二个三角形
+    //     0.5f, -0.5f, 0.0f,  // 右下角
+    //     -0.5f, -0.5f, 0.0f, // 左下角
+    //     -0.5f, 0.5f, 0.0f   // 左上角
+    // };    
+    float vertices2[] = {
+        0.5f, 0.5f, 0.0f,   // 右上角
+        0.5f, -0.5f, 0.0f,  // 右下角
+        -0.5f, -0.5f, 0.0f, // 左下角
+        -0.5f, 0.5f, 0.0f   // 左上角
     };
+    unsigned int indices[] = {
+        // 注意索引从0开始! 
+        // 此例的索引(0,1,2,3)就是顶点数组vertices的下标，
+        // 这样可以由下标代表顶点组合成矩形
+        0, 1, 3, // 第一个三角形
+        1, 2, 3  // 第二个三角形
+    };
+
+    unsigned int EBO;
+    glGenBuffers(1, &EBO);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     // 几个概念: 顶点对象,顶点缓冲区,顶点属性
     unsigned int VBO, VAO;
@@ -117,7 +150,7 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     // 将顶点数据传递给 GPU。这一步将 vertices 数组中的数据复制到当前绑定的缓冲区（即 VBO）
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -148,9 +181,12 @@ int main()
 
         // draw our first triangle
         glUseProgram(shaderProgram);// 使用刚才开发好的着色器程序
-        glBindVertexArray(VAO); 
+        //glBindVertexArray(VAO); 
         // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        //glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0); // no need to unbind it every time 
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
