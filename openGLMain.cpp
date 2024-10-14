@@ -12,21 +12,16 @@
 https://learnopengl-cn.github.io/01%20Getting%20started/04%20Hello%20Triangle/ 
 */
 
+/*
+glfwSetWindowUserPointer(window, &data);
+
+// 在需要时可以检索出数据
+CustomData* retrievedData = (CustomData*)glfwGetWindowUserPointer(window);
+printf("someValue: %d, anotherValue: %f\n", retrievedData->someValue, retrievedData->anotherValue);
+*/
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
-
-const char* vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"void main()\n"
-"{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"}\0";
-const char* fragmentShaderSource = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-"}\n\0";
 
 float r = 1.0f,g = 0.0f,b = 1.0f,a = 1.0f;
 std::random_device rd;  // 获取一个随机数种子
