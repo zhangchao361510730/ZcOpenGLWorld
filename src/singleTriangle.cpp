@@ -24,7 +24,6 @@ bool singleTriangle::init() {
     }
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    //glfwWindowHint(GLFW_SAMPLES, 4);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
@@ -36,17 +35,12 @@ bool singleTriangle::init() {
     }
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwMakeContextCurrent(window);
-
     // 这类似一个函数指针绑定，只不过还强制转化了一下
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-
     glfwSetWindowUserPointer(window, (void*)this);
-
-    // build and compile our shader program
-    // ------------------------------------
     // vertex shader
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -72,8 +66,6 @@ bool singleTriangle::init() {
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
     // link shaders
-    //uint32_t
-    // typedef unsigned int __uint32_t;
     shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);    // 顶点着色器装载程序
     glAttachShader(shaderProgram, fragmentShader);  // 片段着色器装载程序
@@ -136,8 +128,6 @@ void singleTriangle::runDrawProcess() {
         // -----
         processInput(window);
 
-        // render
-        // ------
         glClearColor(r, g, b, a);
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -147,7 +137,6 @@ void singleTriangle::runDrawProcess() {
         // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         glDrawArrays(GL_TRIANGLES, 0, 3);
         // glBindVertexArray(0); // no need to unbind it every time 
-
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
