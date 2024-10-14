@@ -5,6 +5,7 @@
 #include <unistd.h>
 #endif // PLATFORM_UNIX
 #include <iostream>
+#include <random>
 #include"src/globaDefine.h"
 /*
 书签记录，每次结束都更新下面的页数
@@ -27,7 +28,9 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
 "}\n\0";
 
-float r = 1.0f,g = 0.0f,b = 1.0f;
+float r = 1.0f,g = 0.0f,b = 1.0f,a = 1.0f;
+std::random_device rd;  // 获取一个随机数种子
+std::mt19937 gen(rd()); // 使用梅森旋转算法初始化随机数生成器
 int main()
 {
     if (!glfwInit()) {
@@ -77,20 +80,22 @@ int main()
     // check for shader compile errors
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
     if (!success) {
+        // 如果着色器语言编译错误,这里应该会显示
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
     // link shaders
     unsigned int shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
+    glAttachShader(shaderProgram, vertexShader);    // 顶点着色器装载程序
+    glAttachShader(shaderProgram, fragmentShader);  // 片段着色器装载程序
+    glLinkProgram(shaderProgram); // 链接着色器,有点像C++的程序链接
     // check for linking errors
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);// 检查程序链接错误
     if (!success) {
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
     }
+    // 链接完毕编译的着色器就没用了
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
@@ -101,6 +106,7 @@ int main()
          0.0f,  0.5f, 0.0f  // top   
     };
 
+    // 几个概念: 顶点对象,顶点缓冲区,顶点属性
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -108,6 +114,8 @@ int main()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    // 将顶点数据传递给 GPU。这一步将 vertices 数组中的数据复制到当前绑定的缓冲区（即 VBO）
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
@@ -134,12 +142,13 @@ int main()
 
         // render
         // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(r, g, b, a);
         glClear(GL_COLOR_BUFFER_BIT);
 
         // draw our first triangle
-        glUseProgram(shaderProgram);
-        glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+        glUseProgram(shaderProgram);// 使用刚才开发好的着色器程序
+        glBindVertexArray(VAO); 
+        // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         glDrawArrays(GL_TRIANGLES, 0, 3);
         // glBindVertexArray(0); // no need to unbind it every time 
 
@@ -170,11 +179,12 @@ void processInput(GLFWwindow *window) {
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     // 通过鼠标改变窗口大小时会，触发这个函数
     glViewport(0, 0, width, height);
-    r-=0.1f;
-    b-=0.1f;
-    if (r <=0.0f || b <=0.0f) {
-        r = 1.0f;
-        b = 1.0f;
-    }
-    g=1.0f-r-b;
+    std::uniform_real_distribution<float> dis(0.0f, 1.0f); // 定义均匀分布范围
+    r = dis(gen);
+    b = dis(gen);
+    g = dis(gen);
+    a = dis(gen);
+
+    std::cout<<"r "<<r<<" b "<<b<<" g "<<g<<std::endl;
+
 }
