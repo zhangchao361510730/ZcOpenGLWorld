@@ -100,6 +100,7 @@ int main()
     glDeleteShader(fragmentShader);
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
+    // 左边的-0.5, 0.5 ,0.0 是x轴的坐标
     float vertices[] = {
         -0.5f, -0.5f, 0.0f, // left  
          0.5f, -0.5f, 0.0f, // right 
