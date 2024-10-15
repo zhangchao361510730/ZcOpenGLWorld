@@ -4,8 +4,6 @@
 #include"globaDefine.h"
 #include"singleTriangle.h"
 
-extern const char* fragmentShaderSource;
-extern const char* vertexShaderSource; 
 
 
 singleTriangle::singleTriangle(){
