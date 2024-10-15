@@ -11,7 +11,7 @@
 #include"src/multipleTriangle.h"
 
 int main() {
-    multipleTriangle sT;
+    singleTriangle sT;
     sT.InitGlSource();
     sT.runDrawProcess();
 
