@@ -16,11 +16,13 @@ bool multipleTriangle::InitGlSource() {
          0.5f,  0.5f, 0.0f,  // top right
          0.5f, -0.5f, 0.0f,  // bottom right
         -0.5f, -0.5f, 0.0f,  // bottom left
-        -0.5f,  0.5f, 0.0f   // top left 
+        -0.5f,  0.5f, 0.0f,   // top left 
+        -0.8f,  -0.6f, 0.0f,
+        -0.7f,  0.7f, 0.0f   
     };
     uint32_t indices[] = {  // note that we start from 0!
         0, 1, 2,  // first Triangle
-        1, 2, 3   // second Triangle
+        3, 4, 5   // second Triangle
     };
     // 一个绑定顶点两个绑定缓冲
     glGenVertexArrays(1, &VAO);
@@ -55,10 +57,16 @@ void multipleTriangle::runDrawProcess() {
     while(!glfwWindowShouldClose(window)) {
         processInput(window);
         //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClearColor(r,g,b,a);
+        std::uniform_real_distribution<float> dis(0.0f, 1.0f); // 定义均匀分布范围
+        glClearColor(dis(gen), dis(gen),dis(gen),a);
         glClear(GL_COLOR_BUFFER_BIT);
         // draw our first triangle
         glUseProgram(shaderProgram);
+
+        
+        int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+        glUniform4f(vertexColorLocation, dis(gen), dis(gen),dis(gen), 1.0f);
+
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         //glDrawArrays(GL_TRIANGLES, 0, 6);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
