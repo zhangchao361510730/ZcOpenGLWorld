@@ -8,12 +8,11 @@ baseInit::baseInit():gen(std::random_device{}()) {
 
 }
 
-baseInit::~baseInit()
-{
+baseInit::~baseInit() {
+
 }
 
-bool baseInit::InitGlSource()
-{
+bool baseInit::InitGlSource() {
     if (!glfwInit()) {
         std::cout << "Failed to initialize GLFW" << std::endl;
         return false;
@@ -22,7 +21,6 @@ bool baseInit::InitGlSource()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
     window = glfwCreateWindow(windowsWidth, windowsHeight, "jojoOpenGl", NULL, NULL);
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -31,7 +29,7 @@ bool baseInit::InitGlSource()
     }
     glfwSetFramebufferSizeCallback(window, baseInit::framebuffer_size_callback);
     glfwMakeContextCurrent(window);
-    // ÕâÀàËÆÒ»¸öº¯ÊýÖ¸Õë°ó¶¨£¬Ö»²»¹ý»¹Ç¿ÖÆ×ª»¯ÁËÒ»ÏÂ
+    // è¿™ç±»ä¼¼ä¸€ä¸ªå‡½æ•°æŒ‡é’ˆç»‘å®šï¼Œåªä¸è¿‡è¿˜å¼ºåˆ¶è½¬åŒ–äº†ä¸€ä¸‹
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return false;
@@ -45,8 +43,7 @@ bool baseInit::InitGlSource()
     int success;
     char infoLog[512] = { 0 };
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
+    if (!success) {
         glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
@@ -57,22 +54,22 @@ bool baseInit::InitGlSource()
     // check for shader compile errors
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
     if (!success) {
-        // Èç¹û×ÅÉ«Æ÷ÓïÑÔ±àÒë´íÎó,ÕâÀïÓ¦¸Ã»áÏÔÊ¾
+        // å¦‚æžœç€è‰²å™¨è¯­è¨€ç¼–è¯‘é”™è¯¯,è¿™é‡Œåº”è¯¥ä¼šæ˜¾ç¤º
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
     // link shaders
     shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);    // ¶¥µã×ÅÉ«Æ÷×°ÔØ³ÌÐò
-    glAttachShader(shaderProgram, fragmentShader);  // Æ¬¶Î×ÅÉ«Æ÷×°ÔØ³ÌÐò
-    glLinkProgram(shaderProgram); // Á´½Ó×ÅÉ«Æ÷,ÓÐµãÏñC++µÄ³ÌÐòÁ´½Ó
+    glAttachShader(shaderProgram, vertexShader);    // é¡¶ç‚¹ç€è‰²å™¨è£…è½½ç¨‹åº
+    glAttachShader(shaderProgram, fragmentShader);  // ç‰‡æ®µç€è‰²å™¨è£…è½½ç¨‹åº
+    glLinkProgram(shaderProgram); // é“¾æŽ¥ç€è‰²å™¨,æœ‰ç‚¹åƒC++çš„ç¨‹åºé“¾æŽ¥
     // check for linking errors
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);// ¼ì²é³ÌÐòÁ´½Ó´íÎó
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);// æ£€æŸ¥ç¨‹åºé“¾æŽ¥é”™è¯¯
     if (!success) {
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
     }
-    // Á´½ÓÍê±Ï±àÒëµÄ×ÅÉ«Æ÷¾ÍÃ»ÓÃÁË
+    // é“¾æŽ¥å®Œæ¯•ç¼–è¯‘çš„ç€è‰²å™¨å°±æ²¡ç”¨äº†
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 	return true;
@@ -88,7 +85,7 @@ void baseInit::processInput(GLFWwindow* window) {
 void  baseInit::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     baseInit* thiz = (baseInit*)glfwGetWindowUserPointer(window);
     glViewport(0, 0, width, height);
-    std::uniform_real_distribution<float> dis(0.0f, 1.0f); // ¶¨Òå¾ùÔÈ·Ö²¼·¶Î§
+    std::uniform_real_distribution<float> dis(0.0f, 1.0f); // å®šä¹‰å‡åŒ€åˆ†å¸ƒèŒƒå›´
     thiz->r = dis(thiz->gen);
     thiz->b = dis(thiz->gen);
     thiz->g = dis(thiz->gen);

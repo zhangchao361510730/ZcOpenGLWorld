@@ -9,8 +9,6 @@
 #include"src/globaDefine.h"
 #include"src/singleTriangle.h"
 
-
-
 int main() {
     singleTriangle sT;
     sT.InitGlSource();
