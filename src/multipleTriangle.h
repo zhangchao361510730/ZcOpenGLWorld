@@ -1,16 +1,17 @@
 #ifndef multipleTriangle_H_
 #define multipleTriangle_H_
+#include"baseInit.h"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
-class multipleTriangle
-{
+class multipleTriangle:public baseInit {
 private:
-    /* data */
+    uint32_t EBO;
 public:
     multipleTriangle(/* args */);
     ~multipleTriangle();
+
+    bool InitGlSource();
+    void runDrawProcess();
+    bool unInitResource();
 };
 
 #endif

@@ -52,14 +52,6 @@ bool singleTriangle::InitGlSource() {
     return true;    
 }
 
-bool singleTriangle::unInitResource() {
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteProgram(shaderProgram);
-    glfwTerminate();
-    return true;
-}
-
 void singleTriangle::runDrawProcess() {
     while(!glfwWindowShouldClose(window)) {
         // input
@@ -83,3 +75,10 @@ void singleTriangle::runDrawProcess() {
     unInitResource();
 }
 
+bool singleTriangle::unInitResource() {
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shaderProgram);
+    glfwTerminate();
+    return true;
+}
