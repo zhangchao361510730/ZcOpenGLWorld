@@ -9,7 +9,7 @@ public:
     multipleTriangle(/* args */);
     ~multipleTriangle();
 
-    bool InitGlSource();
+    bool InitGlSource()override;
     void runDrawProcess();
     bool unInitResource();
 };

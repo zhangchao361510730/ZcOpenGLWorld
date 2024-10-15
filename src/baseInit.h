@@ -5,12 +5,12 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
+#include"globaDefine.h"
 class baseInit {
 public:
     float r = 1.0f, g = 0.0f, b = 1.0f, a = 1.0f;
     GLFWwindow* window = nullptr;
-    std::mt19937 gen; // Ê¹ÓÃÃ·É­Ðý×ªËã·¨³õÊ¼»¯Ëæ»úÊýÉú³ÉÆ÷
+    std::mt19937 gen; // Ê¹ï¿½ï¿½Ã·É­ï¿½ï¿½×ªï¿½ã·¨ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     uint32_t shaderProgram = 0;
     uint32_t VBO = 0;
     uint32_t VAO = 0;

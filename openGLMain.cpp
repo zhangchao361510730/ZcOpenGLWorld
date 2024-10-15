@@ -8,9 +8,10 @@
 #include <random>
 #include"src/globaDefine.h"
 #include"src/singleTriangle.h"
+#include"src/multipleTriangle.h"
 
 int main() {
-    singleTriangle sT;
+    multipleTriangle sT;
     sT.InitGlSource();
     sT.runDrawProcess();
 
