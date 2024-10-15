@@ -20,5 +20,5 @@ int main() {
 
 /*
 书签记录，每次结束都更新下面的页数
-https://learnopengl-cn.github.io/01%20Getting%20started/04%20Hello%20Triangle/ 
+https://learnopengl-cn.github.io/01%20Getting%20started/05%20Shaders/
 */

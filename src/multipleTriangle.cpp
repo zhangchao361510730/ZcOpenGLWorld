@@ -19,10 +19,9 @@ bool multipleTriangle::InitGlSource() {
         -0.5f,  0.5f, 0.0f   // top left 
     };
     uint32_t indices[] = {  // note that we start from 0!
-        0, 1, 3,  // first Triangle
+        0, 1, 2,  // first Triangle
         1, 2, 3   // second Triangle
     };
-    uint32_t VBO, VAO, EBO;
     // 一个绑定顶点两个绑定缓冲
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -48,13 +47,15 @@ bool multipleTriangle::InitGlSource() {
     // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     glBindVertexArray(0); 
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     return true;
 }
 
 void multipleTriangle::runDrawProcess() {
     while(!glfwWindowShouldClose(window)) {
         processInput(window);
-        glClearColor(r, g, b, a);
+        //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(r,g,b,a);
         glClear(GL_COLOR_BUFFER_BIT);
         // draw our first triangle
         glUseProgram(shaderProgram);
