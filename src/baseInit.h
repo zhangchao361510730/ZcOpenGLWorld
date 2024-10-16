@@ -6,6 +6,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include"globaDefine.h"
+
+class ShaderGLSLTool;
+
 class baseInit {
 public:
     float r = 1.0f, g = 0.0f, b = 1.0f, a = 1.0f;
@@ -14,6 +17,7 @@ public:
     uint32_t shaderProgram = 0;
     uint32_t VBO = 0;
     uint32_t VAO = 0;
+    ShaderGLSLTool* shaderTool_;
 
 	baseInit();
 	~baseInit();

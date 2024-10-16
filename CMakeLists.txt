@@ -22,15 +22,13 @@ elseif (UNIX)
 endif()
 
 file(GLOB SRCFILE ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
-#file(GLOB COMMONSRCFILE ${CMAKE_CURRENT_SOURCE_DIR}/common_util/*.cc)
-#list(APPEND SRCFILE ${COMMONSRCFILE})
-#add_executable(${PROJECT_NAME}_main main.cpp ${SRCFILE})
-
 
 link_directories(${CMAKE_SOURCE_DIR}/linux_libs/lib)
 include_directories(${CMAKE_SOURCE_DIR}/linux_libs/includes)
 
 set(DEPENDS_LIB glfw3)
-
+# 将 CMake 变量传递给 C++
 add_executable(${PROJECT_NAME}_main openGLMain.cpp src/sourceLib/glad.c ${SRCFILE})
+target_compile_definitions(${PROJECT_NAME}_main PRIVATE CMAKE_CURRENT_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
+
 target_link_libraries(${PROJECT_NAME}_main PUBLIC ${DEPENDS_LIB})

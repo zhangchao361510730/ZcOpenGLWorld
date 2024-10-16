@@ -42,11 +42,11 @@ ShaderGLSLTool::ShaderGLSLTool(const char* vertexPath, const char* fragmentPath)
     glCompileShader(fragment);
     checkCompileErrors(fragment, "FRAGMENT");
     // shader Program
-    ID = glCreateProgram();
-    glAttachShader(ID, vertex);
-    glAttachShader(ID, fragment);
-    glLinkProgram(ID);
-    checkCompileErrors(ID, "PROGRAM");
+    attachId = glCreateProgram();
+    glAttachShader(attachId, vertex);
+    glAttachShader(attachId, fragment);
+    glLinkProgram(attachId);
+    checkCompileErrors(attachId, "PROGRAM");
     // delete the shaders as they're linked into our program now and no longer necessary
     glDeleteShader(vertex);
     glDeleteShader(fragment);
