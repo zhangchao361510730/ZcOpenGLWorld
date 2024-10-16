@@ -20,8 +20,8 @@ bool baseInit::InitGlSource() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    std::string path1 = std::string(CMAKE_CURRENT_DIR).append("/glslFile/shader.fs");
-    std::string path2 = std::string(CMAKE_CURRENT_DIR).append("/glslFile/shader.fs");
+    std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/shader.fs");
+    std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/shader.vs");
     
     window = glfwCreateWindow(windowsWidth, windowsHeight, "jojoOpenGl", NULL, NULL);
     if (window == NULL) {
@@ -37,7 +37,7 @@ bool baseInit::InitGlSource() {
         return false;
     }
     glfwSetWindowUserPointer(window, (void*)this);
-    shaderTool_ = new ShaderGLSLTool(path1.c_str(),path2.c_str());
+    shaderTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
     // vertex shader
 	return true;
 }
