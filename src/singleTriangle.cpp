@@ -1,11 +1,8 @@
 
 #include<iostream>
-
 #include"globaDefine.h"
 #include"singleTriangle.h"
-
-extern const char* fragmentShaderSource;
-extern const char* vertexShaderSource; 
+#include"GLLSTool/shaderLanguage.h"
 
 
 singleTriangle::singleTriangle(){
@@ -45,23 +42,23 @@ bool singleTriangle::InitGlSource() {
     glEnableVertexAttribArray(1);
 
     // as we only have a single shader, we could also just activate our shader once beforehand if we want to 
-    glUseProgram(shaderProgram);
+    glUseProgram(shaderTool_->attachId);
 
     return true;    
 }
 
 void singleTriangle::runDrawProcess() {
-    while(!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window))
+    {
         // input
         // -----
         processInput(window);
 
-        // render
-        // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         // render the triangle
+        shaderTool_->use();
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -76,7 +73,7 @@ void singleTriangle::runDrawProcess() {
 bool singleTriangle::unInitResource() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteProgram(shaderProgram);
+    glDeleteProgram(shaderTool_->attachId);
     glfwTerminate();
     return true;
 }

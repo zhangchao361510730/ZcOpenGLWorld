@@ -1,6 +1,5 @@
 #include"multipleTriangle.h"
-extern const char* fragmentShaderSource;
-extern const char* vertexShaderSource; 
+#include"GLLSTool/shaderLanguage.h"
 
 multipleTriangle::multipleTriangle(/* args */) {
 
@@ -55,8 +54,8 @@ void multipleTriangle::runDrawProcess() {
          std::uniform_real_distribution<float> dis(0.0f, 1.0f); // 定义均匀分布范围
         glClear(GL_COLOR_BUFFER_BIT);
         // draw our first triangle
-        glUseProgram(shaderProgram);
-        int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+        glUseProgram(shaderTool_->attachId);
+        int vertexColorLocation = glGetUniformLocation(shaderTool_->attachId, "ourColor");
         glUniform4f(vertexColorLocation, dis(gen), dis(gen),dis(gen), a);
         // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         glBindVertexArray(VAO); 
@@ -74,7 +73,7 @@ bool multipleTriangle::unInitResource() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
-    glDeleteProgram(shaderProgram);
+    glDeleteProgram(shaderTool_->attachId);
     glfwTerminate();
     return true;
 }

@@ -22,6 +22,21 @@ elseif (UNIX)
 endif()
 
 file(GLOB SRCFILE ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+file(GLOB GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/src/GLLSTool/*.cpp)
+list(APPEND SRCFILE ${GLLSTool_})
+#add_executable(${PROJECT_NAME}_main main.cpp ${SRCFILE})
+
+# 打印源代码路径
+message(STATUS "Current Source Directory: ${CMAKE_CURRENT_SOURCE_DIR}")
+
+# 打印构建路径
+message(STATUS "Current Binary Directory: ${CMAKE_CURRENT_BINARY_DIR}")
+
+# 打印 CMake 项目根目录
+message(STATUS "Source Directory: ${CMAKE_SOURCE_DIR}")
+
+# 打印当前 CMakeLists.txt 文件所在的路径
+message(STATUS "Current CMake File Directory: ${CMAKE_CURRENT_LIST_DIR}")
 
 link_directories(${CMAKE_SOURCE_DIR}/linux_libs/lib)
 include_directories(${CMAKE_SOURCE_DIR}/linux_libs/includes)
