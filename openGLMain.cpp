@@ -1,17 +1,20 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
-#ifdef PLATFORM_UNIX
-#include <unistd.h>
-#endif // PLATFORM_UNIX
 #include <iostream>
 #include <random>
+
+#ifdef PLATFORM_UNIX
+#include <unistd.h>
+#endif
+
 #include"src/globaDefine.h"
 #include"src/singleTriangle.h"
 #include"src/multipleTriangle.h"
+#include"src/textureImage.h"
 
 int main() {
-    singleTriangle sT;
+    textureImage sT;
     sT.InitGlSource();
     sT.runDrawProcess();
 
