@@ -11,7 +11,7 @@ public:
     singleTriangle(/* args */);
     ~singleTriangle();
 
-    bool InitGlSource();
+    bool InitGlSource()override;
     void runDrawProcess();
     bool unInitResource();
 

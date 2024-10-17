@@ -15,6 +15,13 @@ singleTriangle::~singleTriangle() {
 
 bool singleTriangle::InitGlSource() {
     baseInit::InitGlSource();
+
+    std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/shader.fs");
+    std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/shader.vs");
+    
+    glfwSetWindowUserPointer(window, (void*)this);
+    shaderTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
+
     float vertices[] = {
         // positions         // colors
          0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
@@ -61,5 +68,6 @@ bool singleTriangle::unInitResource() {
     glDeleteBuffers(1, &VBO);
     glDeleteProgram(shaderTool_->attachId);
     glfwTerminate();
+    delete shaderTool_;
     return true;
 }
