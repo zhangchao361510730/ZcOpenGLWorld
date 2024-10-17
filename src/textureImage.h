@@ -5,6 +5,7 @@ private:
     /* data */
     uint32_t EBO;
     uint32_t texture;
+    uint32_t texture2;
 public:
     textureImage (/* args */);
     ~textureImage ();
