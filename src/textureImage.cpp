@@ -1,10 +1,8 @@
-#include"textureImage.h"
-
-
 #include <iostream>
-
 #define STB_IMAGE_IMPLEMENTATION
 #include"stb_image.h"
+#include"textureImage.h"
+#include"GLLSTool/shaderLanguage.h"
 
 textureImage::textureImage (/* args */) {
 
@@ -61,7 +59,7 @@ bool textureImage::InitGlSource() {
 
     // load and create a texture 
     // -------------------------
-    unsigned int texture;
+
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
     // set the texture wrapping parameters
@@ -88,7 +86,30 @@ bool textureImage::InitGlSource() {
 }
 
 void textureImage::runDrawProcess() {
+    while (!glfwWindowShouldClose(window))
+    {
+        // input
+        // -----
+        processInput(window);
 
+        // render
+        // ------
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // bind Texture
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        // render container
+        shaderTool_->use();
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        // -------------------------------------------------------------------------------
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
 }
 
 bool textureImage::unInitResource() {
