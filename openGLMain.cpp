@@ -23,5 +23,5 @@ int main() {
 
 /*
 书签记录，每次结束都更新下面的页数
-https://learnopengl-cn.github.io/01%20Getting%20started/06%20Textures/
+https://learnopengl-cn.github.io/01%20Getting%20started/08%20Coordinate%20Systems/#3d_1
 */
