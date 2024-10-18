@@ -70,12 +70,7 @@ bool textureImage::InitGlSource() {
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-
-    // load and create a texture 
-    // -------------------------
-
     // texture 1
-    // ---------
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
     // set the texture wrapping parameters
