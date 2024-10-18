@@ -27,8 +27,7 @@ bool baseInit::InitGlSource() {
     // glfw window creation
     // --------------------
     window = glfwCreateWindow(windowsWidth, windowsHeight, "LearnOpenGL", NULL, NULL);
-    if (window == NULL)
-    {
+    if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return -1;
