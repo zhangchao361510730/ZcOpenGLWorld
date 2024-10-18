@@ -1,3 +1,5 @@
+#ifndef textureImage_H_
+#define textureImage_H_
 #include"baseInit.h"
 
 class textureImage :public baseInit {
@@ -15,3 +17,4 @@ public:
     bool unInitResource();
 };
 
+#endif
