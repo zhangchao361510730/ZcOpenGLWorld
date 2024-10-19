@@ -30,7 +30,7 @@ bool baseInit::InitGlSource() {
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
-        return -1;
+        return false;
     }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, baseInit::framebuffer_size_callback);
@@ -39,7 +39,7 @@ bool baseInit::InitGlSource() {
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
+        return false;
     }
 
 

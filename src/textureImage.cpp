@@ -29,7 +29,7 @@ bool textureImage::InitGlSource() {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
+        return false;
     }
 
     // build and compile our shader zprogram
