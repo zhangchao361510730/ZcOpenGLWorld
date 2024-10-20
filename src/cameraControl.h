@@ -10,6 +10,7 @@ class cameraControl:public baseInit {
 public:
 	cameraControl();
 	~cameraControl();
+	bool InitGlSource()override;
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
