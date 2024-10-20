@@ -14,6 +14,17 @@ bool cameraControl::InitGlSource()
 	cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 	cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 	cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	bool firstMouse = true;
+	yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
+	pitch = 0.0f;
+	lastX = 800.0f / 2.0;
+	lastY = 600.0 / 2.0;
+	fov = 45.0f;
+	// timing
+	deltaTime = 0.0f;	// time between current frame and last frame
+	lastFrame = 0.0f;
+
+
 	return false;
 }
 
