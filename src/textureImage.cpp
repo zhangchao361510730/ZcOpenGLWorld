@@ -25,15 +25,12 @@ bool textureImage::InitGlSource() {
     std::string path_picture2 = std::string(CMAKE_CURRENT_DIR).append("/pictureResource/awesomeface.png");
 
     // glad: load all OpenGL function pointers
-    // ---------------------------------------
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return false;
     }
 
     // build and compile our shader zprogram
-    // ------------------------------------
     shaderTool_ = new ShaderGLSLTool(path_vs.c_str(), path_fs.c_str());
     //Shader ourShader(path_vs.c_str(), path_fs.c_str());
 
@@ -158,7 +155,7 @@ void textureImage::runDrawProcess() {
         // ---------------------
         transform = glm::mat4(1.0f); // reset it to identity matrix
         transform = glm::translate(transform, glm::vec3(-0.5f, 0.5f, 0.0f));
-        float scaleAmount = static_cast<float>(sin(glfwGetTime()));
+        float scaleAmount = static_cast<float>(sin(glfwGetTime()));// sin is a periodic function
         transform = glm::scale(transform, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
         glUniformMatrix4fv(transformLoc, 1, GL_FALSE, &transform[0][0]); // this time take the matrix value array's first element as its memory pointer value
 
