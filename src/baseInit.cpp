@@ -33,7 +33,7 @@ bool baseInit::InitGlSource() {
         return false;
     }
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, baseInit::framebuffer_size_callback);
+    
 
     if (setCallbackFun_ != nullptr) {
         setCallbackFun_(this);
@@ -57,12 +57,12 @@ void baseInit::processInput(GLFWwindow* window) {
     }
 }
 
-void  baseInit::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    baseInit* thiz = (baseInit*)glfwGetWindowUserPointer(window);
-    glViewport(0, 0, width, height);
-    std::uniform_real_distribution<float> dis(0.0f, 1.0f); // 定义均匀分布范围
-    thiz->r = dis(thiz->gen);
-    thiz->b = dis(thiz->gen);
-    thiz->g = dis(thiz->gen);
-    thiz->a = dis(thiz->gen);
-}
+// void  baseInit::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+//     baseInit* thiz = (baseInit*)glfwGetWindowUserPointer(window);
+//     glViewport(0, 0, width, height);
+//     std::uniform_real_distribution<float> dis(0.0f, 1.0f); // 定义均匀分布范围
+//     thiz->r = dis(thiz->gen);
+//     thiz->b = dis(thiz->gen);
+//     thiz->g = dis(thiz->gen);
+//     thiz->a = dis(thiz->gen);
+// }

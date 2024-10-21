@@ -19,8 +19,6 @@ textureImage::~textureImage () {
 bool textureImage::InitGlSource() {
     baseInit::InitGlSource();
 
-
-
     // glad: load all OpenGL function pointers
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;

@@ -233,6 +233,7 @@ bool cameraControl::unInitResource() {
 
 void cameraControl::setCallBackControl(void*thiz) {
 	cameraControl* thiz_ = (cameraControl*)thiz;
+    glfwSetFramebufferSizeCallback(thiz_->window, cameraControl::framebuffer_size_callback);
     glfwSetCursorPosCallback(thiz_->window, cameraControl::mouse_callback);
     glfwSetScrollCallback(thiz_->window, cameraControl::scroll_callback);
     glfwSetInputMode(thiz_->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
