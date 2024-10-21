@@ -218,8 +218,7 @@ void cameraControl::scroll_callback(GLFWwindow* window, double xoffset, double y
 
 void cameraControl::runDrawProcess() {
     // render loop
-    while (!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         // per-frame time logic
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
