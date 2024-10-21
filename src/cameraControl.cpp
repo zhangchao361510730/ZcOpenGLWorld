@@ -11,6 +11,7 @@ cameraControl::~cameraControl()
 
 bool cameraControl::InitGlSource()
 {
+	setCallbackFun_ = cameraControl::setCallBackControl;
 	cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 	cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 	cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -40,6 +41,17 @@ void cameraControl::scroll_callback(GLFWwindow* window, double xoffset, double y
 {
 }
 
+void cameraControl::setCallBackControl(void*thiz) {
+	cameraControl* thiz_ = (cameraControl*)thiz;
+    glfwSetCursorPosCallback(thiz_->window, cameraControl::mouse_callback);
+    glfwSetScrollCallback(thiz_->window, cameraControl::scroll_callback);
+
+    // tell GLFW to capture our mouse
+    glfwSetInputMode(thiz_->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
 void cameraControl::processInput(GLFWwindow* window)
 {
 }
+
+

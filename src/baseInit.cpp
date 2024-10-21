@@ -35,6 +35,10 @@ bool baseInit::InitGlSource() {
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, baseInit::framebuffer_size_callback);
 
+    if (setCallbackFun_ != nullptr) {
+        setCallbackFun_(this);
+    }
+
     // glad: load all OpenGL function pointers
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {

@@ -9,6 +9,8 @@
 
 class ShaderGLSLTool;
 
+typedef void(*_setCallBackFun_)(void*);
+
 class baseInit {
 public:
     float r = 1.0f, g = 0.0f, b = 1.0f, a = 1.0f;
@@ -20,6 +22,7 @@ public:
 
 	baseInit();
 	~baseInit();
+    _setCallBackFun_ setCallbackFun_ = nullptr;
 
 	virtual bool InitGlSource();
     void static framebuffer_size_callback(GLFWwindow* window, int width, int height);

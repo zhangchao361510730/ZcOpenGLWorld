@@ -14,6 +14,7 @@ public:
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+	static void setCallBackControl(void*thiz);
 	void processInput(GLFWwindow* window);
 private:
 	glm::vec3 cameraPos;
@@ -25,10 +26,9 @@ private:
 	float lastX;
 	float lastY;
 	float fov;
-
 	// timing
-	float deltaTime = 0.0f;	// time between current frame and last frame
-	float lastFrame = 0.0f;
+	float deltaTime;	// time between current frame and last frame
+	float lastFrame;
 };
 
 
