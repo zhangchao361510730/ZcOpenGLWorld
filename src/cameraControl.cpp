@@ -168,12 +168,47 @@ bool cameraControl::InitGlSource()
 	return false;
 }
 
-void cameraControl::framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
+void cameraControl::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    // make sure the viewport matches the new window dimensions; note that width and 
+    // height will be significantly larger than specified on retina displays.
+    glViewport(0, 0, width, height);
 }
 
-void cameraControl::mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
+void cameraControl::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
+    cameraControl* thiz = (cameraControl*)glfwGetWindowUserPointer(window);
+    float xpos = static_cast<float>(xposIn);
+    float ypos = static_cast<float>(yposIn);
+
+    if (thiz->firstMouse)
+    {
+        thiz->lastX = xpos;
+        thiz->lastY = ypos;
+        thiz->firstMouse = false;
+    }
+
+    float xoffset = xpos - thiz->lastX;
+    float yoffset = thiz->lastY - ypos; // reversed since y-coordinates go from bottom to top
+    thiz->lastX = xpos;
+    thiz->lastY = ypos;
+
+    float sensitivity = 0.1f; // change this value to your liking
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    thiz->yaw += xoffset;
+    thiz->pitch += yoffset;
+
+    // make sure that when pitch is out of bounds, screen doesn't get flipped
+    if (thiz->pitch > 89.0f)
+        thiz->pitch = 89.0f;
+    if (thiz->pitch < -89.0f)
+        thiz->pitch = -89.0f;
+
+    glm::vec3 front;
+    front.x = cos(glm::radians(thiz->yaw)) * cos(glm::radians(thiz->pitch));
+    front.y = sin(glm::radians(thiz->pitch));
+    front.z = sin(glm::radians(thiz->yaw)) * cos(glm::radians(thiz->pitch));
+    thiz->cameraFront = glm::normalize(front);
 }
 
 void cameraControl::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -185,7 +220,15 @@ void cameraControl::runDrawProcess() {
 }
 
 bool cameraControl::unInitResource() {
-	
+    // optional: de-allocate all resources once they've outlived their purpose:
+    // ------------------------------------------------------------------------
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+
+    // glfw: terminate, clearing all previously allocated GLFW resources.
+    // ------------------------------------------------------------------
+    glfwTerminate();
+	return true;
 }
 
 void cameraControl::setCallBackControl(void*thiz) {
@@ -195,8 +238,19 @@ void cameraControl::setCallBackControl(void*thiz) {
     glfwSetInputMode(thiz_->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
-void cameraControl::processInput(GLFWwindow* window)
-{
+void cameraControl::processInput(GLFWwindow* window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    float cameraSpeed = static_cast<float>(2.5 * deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        cameraPos += cameraSpeed * cameraFront;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        cameraPos -= cameraSpeed * cameraFront;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 }
 
 
