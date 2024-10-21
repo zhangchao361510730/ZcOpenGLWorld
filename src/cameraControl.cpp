@@ -29,10 +29,13 @@ bool cameraControl::InitGlSource()
 	deltaTime = 0.0f;
 	lastFrame = 0.0f;
 	baseInit::InitGlSource();
+	    // configure global opengl state
+    // -----------------------------
+    glEnable(GL_DEPTH_TEST);
 
     // build and compile our shader zprogram
-    std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/texture_.fs");
-    std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/texture_.vs");
+    std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/camera.fs");
+    std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/camera.vs");
     std::string path_picture = std::string(CMAKE_CURRENT_DIR).append("/pictureResource/container.jpg");
     std::string path_picture2 = std::string(CMAKE_CURRENT_DIR).append("/pictureResource/awesomeface.png");
     shaderTool_ = new ShaderGLSLTool(path_vs.c_str(), path_fs.c_str());
@@ -102,7 +105,7 @@ bool cameraControl::InitGlSource()
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	//glBufferData(GL_ARRAY_BUFFER, (vertices.size()*sizeof(float)), vertices.data(), GL_STATIC_DRAW);
-    //glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
@@ -110,10 +113,6 @@ bool cameraControl::InitGlSource()
     // texture coord attribute
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-
-
-    // load and create a texture 
-    // -------------------------
 
     // texture 1
     // ---------
