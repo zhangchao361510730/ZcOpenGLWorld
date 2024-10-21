@@ -40,7 +40,7 @@ bool cameraControl::InitGlSource()
     std::string path_picture2 = std::string(CMAKE_CURRENT_DIR).append("/pictureResource/awesomeface.png");
     shaderTool_ = new ShaderGLSLTool(path_vs.c_str(), path_fs.c_str());
     // ------------------------------------------------------------------
-    float vertices[] = {
+    vertices = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
          0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
          0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -104,8 +104,9 @@ bool cameraControl::InitGlSource()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//glBufferData(GL_ARRAY_BUFFER, (vertices.size()*sizeof(float)), vertices.data(), GL_STATIC_DRAW);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    //std::cout<<"(vertices.size()*sizeof(float)) is "<<(vertices.size()*sizeof(float))<<std::endl;
+	glBufferData(GL_ARRAY_BUFFER, (vertices.size()*sizeof(float)), vertices.data(), GL_STATIC_DRAW);
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
@@ -128,18 +129,14 @@ bool cameraControl::InitGlSource()
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
     unsigned char *data = stbi_load(path_picture.c_str(), &width, &height, &nrChannels, 0);
-    if (data)
-    {
+    if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
+    } else {
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
     // texture 2
-    // ---------
     glGenTextures(1, &texture2);
     glBindTexture(GL_TEXTURE_2D, texture2);
     // set the texture wrapping parameters
@@ -150,14 +147,11 @@ bool cameraControl::InitGlSource()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // load image, create texture and generate mipmaps
     data = stbi_load(path_picture2.c_str(), &width, &height, &nrChannels, 0);
-    if (data)
-    {
+    if (data) {
         // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
+    } else {
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
