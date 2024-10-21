@@ -45,7 +45,7 @@ bool baseInit::InitGlSource() {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return false;
     }
-
+    glfwSetWindowUserPointer(window, (void*)this);
 
     // vertex shader
 	return true;
@@ -56,13 +56,3 @@ void baseInit::processInput(GLFWwindow* window) {
         glfwSetWindowShouldClose(window, true);
     }
 }
-
-// void  baseInit::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-//     baseInit* thiz = (baseInit*)glfwGetWindowUserPointer(window);
-//     glViewport(0, 0, width, height);
-//     std::uniform_real_distribution<float> dis(0.0f, 1.0f); // 定义均匀分布范围
-//     thiz->r = dis(thiz->gen);
-//     thiz->b = dis(thiz->gen);
-//     thiz->g = dis(thiz->gen);
-//     thiz->a = dis(thiz->gen);
-// }

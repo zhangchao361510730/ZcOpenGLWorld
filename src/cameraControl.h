@@ -20,6 +20,7 @@ public:
     bool unInitResource();
 private:
 	std::vector<glm::vec3> cubePositions;
+	std::vector<float >vertices;
 	glm::vec3 cameraPos;
 	glm::vec3 cameraFront;
 	glm::vec3 cameraUp;

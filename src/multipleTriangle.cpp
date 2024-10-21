@@ -15,7 +15,6 @@ bool multipleTriangle::InitGlSource() {
     std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/shader.fs");
     std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/shader.vs");
     
-    glfwSetWindowUserPointer(window, (void*)this);
     shaderTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
 
     float vertices[] = {

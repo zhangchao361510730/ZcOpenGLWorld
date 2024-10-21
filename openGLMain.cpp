@@ -12,9 +12,10 @@
 #include"src/singleTriangle.h"
 #include"src/multipleTriangle.h"
 #include"src/textureImage.h"
+#include"src/cameraControl.h"
 
 int main() {
-    textureImage sT;
+    cameraControl sT;
     sT.InitGlSource();
     sT.runDrawProcess();
 
