@@ -16,6 +16,8 @@ public:
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 	static void setCallBackControl(void*thiz);
 	void processInput(GLFWwindow* window);
+    void runDrawProcess();
+    bool unInitResource();
 private:
 	glm::vec3 cameraPos;
 	glm::vec3 cameraFront;
@@ -29,6 +31,10 @@ private:
 	// timing
 	float deltaTime;	// time between current frame and last frame
 	float lastFrame;
+
+    uint32_t EBO;
+    uint32_t texture1;
+    uint32_t texture2;
 };
 
 

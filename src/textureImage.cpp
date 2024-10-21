@@ -1,11 +1,11 @@
 #include <iostream>
-#define STB_IMAGE_IMPLEMENTATION
-#include"stb_image.h"
 #include"textureImage.h"
 #include"GLLSTool/shaderLanguage.h"
 #include"glm/glm.hpp"
 #include"glm/gtc/type_ptr.hpp"
 #include"glm/gtc/matrix_transform.hpp"
+#define STB_IMAGE_IMPLEMENTATION
+#include"stb_image.h"
 
 textureImage::textureImage (/* args */) {
 
@@ -19,10 +19,7 @@ textureImage::~textureImage () {
 bool textureImage::InitGlSource() {
     baseInit::InitGlSource();
 
-    std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/texture_.fs");
-    std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/texture_.vs");
-    std::string path_picture = std::string(CMAKE_CURRENT_DIR).append("/pictureResource/container.jpg");
-    std::string path_picture2 = std::string(CMAKE_CURRENT_DIR).append("/pictureResource/awesomeface.png");
+
 
     // glad: load all OpenGL function pointers
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -31,6 +28,10 @@ bool textureImage::InitGlSource() {
     }
 
     // build and compile our shader zprogram
+    std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/texture_.fs");
+    std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/texture_.vs");
+    std::string path_picture = std::string(CMAKE_CURRENT_DIR).append("/pictureResource/container.jpg");
+    std::string path_picture2 = std::string(CMAKE_CURRENT_DIR).append("/pictureResource/awesomeface.png");
     shaderTool_ = new ShaderGLSLTool(path_vs.c_str(), path_fs.c_str());
     //Shader ourShader(path_vs.c_str(), path_fs.c_str());
 
