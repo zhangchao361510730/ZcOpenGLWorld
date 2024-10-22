@@ -204,6 +204,10 @@ void cameraControl::mouse_callback(GLFWwindow* window, double xposIn, double ypo
     front.x = cos(glm::radians(thiz->yaw)) * cos(glm::radians(thiz->pitch));
     front.y = sin(glm::radians(thiz->pitch));
     front.z = sin(glm::radians(thiz->yaw)) * cos(glm::radians(thiz->pitch));
+    /*
+        这里计算的的三分量,front.x / 模长 = 方向余弦
+        这背后的数学原理参考 mathLearn/math_1.png 和 math_2.png
+    */
     thiz->cameraFront = glm::normalize(front);
 }
 
