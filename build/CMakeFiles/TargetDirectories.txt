@@ -1,3 +1,0 @@
-/home/jojo/2MYCODE/ZcOpenGLWorld/build/CMakeFiles/zhcOpenGl_main.dir
-/home/jojo/2MYCODE/ZcOpenGLWorld/build/CMakeFiles/edit_cache.dir
-/home/jojo/2MYCODE/ZcOpenGLWorld/build/CMakeFiles/rebuild_cache.dir
