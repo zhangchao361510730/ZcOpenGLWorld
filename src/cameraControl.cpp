@@ -213,7 +213,7 @@ void cameraControl::mouse_callback(GLFWwindow* window, double xposIn, double ypo
         这背后的数学原理参考 mathLearn/math_1.png 和 math_2.png
     */
     thiz->cameraFront = glm::normalize(front);
-    //std::cout<<"x is "<<front.x<<" y is "<<front.y<<" z is "<<front.z<<std::endl;
+    //std::cout<<"x is "<<front.x<<" y is "<<front.y<<" z is "<<front.z<<std::endl; aa
 }
 
 void cameraControl::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
