@@ -209,6 +209,8 @@ void cameraControl::mouse_callback(GLFWwindow* window, double xposIn, double ypo
 
 void cameraControl::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     cameraControl* thiz = (cameraControl*)glfwGetWindowUserPointer(window);
+    std::cout<<"xoffset is "<<xoffset<<" yoffset is "<<yoffset<<std::endl;
+    // xoffset基本一直为0, yoffset则向前滚动为+1,向后为-1
     thiz->fov -= (float)yoffset;
     if (thiz->fov < 1.0f)
         thiz->fov = 1.0f;
@@ -241,24 +243,24 @@ void cameraControl::runDrawProcess() {
         shaderTool_->use();
 
         // pass projection matrix to shader (note that in this case it could change every frame)
+        // glm::perspective 
         glm::mat4 projection = glm::perspective(glm::radians(fov), (float)windowsWidth / (float)windowsHeight, 0.1f, 100.0f);
         shaderTool_->setMat4("projection", projection);
 
-        // camera/view transformation
+        // camera/view transformation 这展示了视图矩阵(View)是怎么被创造出来的 
         glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         shaderTool_->setMat4("view", view);
 
         // render boxes
         glBindVertexArray(VAO);
-        for (uint32_t i = 0; i < cubePositions.size(); i++)
-        {
+        for (uint32_t i = 0; i < cubePositions.size(); i++) {
             // calculate the model matrix for each object and pass it to shader before drawing
             glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-            model = glm::translate(model, cubePositions[i]);
+            model = glm::translate(model, cubePositions[i]);// 用模型基础位置加初始矩阵创造出模型矩阵(model)
             float angle = 20.0f * i;
+            //  glm::vec3(1.0f, 0.3f, 0.5f)表示旋转中轴
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
             shaderTool_->setMat4("model", model);
-
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
@@ -270,11 +272,8 @@ void cameraControl::runDrawProcess() {
 }
 
 bool cameraControl::unInitResource() {
-    // optional: de-allocate all resources once they've outlived their purpose:
-    // ------------------------------------------------------------------------
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    // ------------------------------------------------------------------
     glfwTerminate();
 	return true;
 }
@@ -299,7 +298,7 @@ void cameraControl::processInput(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        cameraPos += (glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed);
 }
 
 
