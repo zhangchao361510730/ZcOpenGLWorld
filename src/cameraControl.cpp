@@ -175,8 +175,7 @@ void cameraControl::mouse_callback(GLFWwindow* window, double xposIn, double ypo
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
 
-    if (thiz->firstMouse)
-    {
+    if (thiz->firstMouse) {
         thiz->lastX = xpos;
         thiz->lastY = ypos;
         thiz->firstMouse = false;
@@ -195,31 +194,39 @@ void cameraControl::mouse_callback(GLFWwindow* window, double xposIn, double ypo
     thiz->pitch += yoffset;
 
     // make sure that when pitch is out of bounds, screen doesn't get flipped
-    if (thiz->pitch > 89.0f)
+    if (thiz->pitch > 89.0f) {
         thiz->pitch = 89.0f;
-    if (thiz->pitch < -89.0f)
+    }
+    if (thiz->pitch < -89.0f) {
         thiz->pitch = -89.0f;
+    }
 
     glm::vec3 front;
+    //std::cout<<"glm::radians(thiz->yaw) is "<<glm::radians(thiz->yaw)<<" glm::radians(thiz->pitch) "<<glm::radians(thiz->pitch)<<std::endl;
+    
     front.x = cos(glm::radians(thiz->yaw)) * cos(glm::radians(thiz->pitch));
     front.y = sin(glm::radians(thiz->pitch));
     front.z = sin(glm::radians(thiz->yaw)) * cos(glm::radians(thiz->pitch));
+    //std::cout<<"x is "<<front.x<<" y is "<<front.y<<" z is "<<front.z<<std::endl;
     /*
         这里计算的的三分量,front.x / 模长 = 方向余弦
         这背后的数学原理参考 mathLearn/math_1.png 和 math_2.png
     */
     thiz->cameraFront = glm::normalize(front);
+    //std::cout<<"x is "<<front.x<<" y is "<<front.y<<" z is "<<front.z<<std::endl;
 }
 
 void cameraControl::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     cameraControl* thiz = (cameraControl*)glfwGetWindowUserPointer(window);
-    std::cout<<"xoffset is "<<xoffset<<" yoffset is "<<yoffset<<std::endl;
+    //std::cout<<"xoffset is "<<xoffset<<" yoffset is "<<yoffset<<std::endl;
     // xoffset基本一直为0, yoffset则向前滚动为+1,向后为-1
     thiz->fov -= (float)yoffset;
-    if (thiz->fov < 1.0f)
+    if (thiz->fov < 1.0f) {
         thiz->fov = 1.0f;
-    if (thiz->fov > 45.0f)
+    }
+    if (thiz->fov > 45.0f) {
         thiz->fov = 45.0f;
+    }
 }
 
 void cameraControl::runDrawProcess() {
@@ -232,7 +239,6 @@ void cameraControl::runDrawProcess() {
 
         // input
         processInput(window);
-
         // render
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
