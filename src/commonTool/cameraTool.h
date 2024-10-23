@@ -12,7 +12,6 @@ enum Camera_Movement {
     RIGHT
 };
 
-
 // Default camera values
 const float YAW         = -90.0f;
 const float PITCH       =  0.0f;
@@ -20,8 +19,7 @@ const float SPEED       =  2.5f;
 const float SENSITIVITY =  0.1f;
 const float ZOOM        =  45.0f;
 
-class cameraTool
-{
+class cameraTool {
 private:
     // calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors();
@@ -44,7 +42,7 @@ public:
     cameraTool(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
     // constructor with scalar values
     cameraTool(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
-    ~cameraTool();
+    ~cameraTool() = default;
 
     // returns the view matrix calculated using Euler Angles and the LookAt Matrix
     glm::mat4 GetViewMatrix();

@@ -8,8 +8,7 @@ cameraTool::cameraTool(glm::vec3 position, glm::vec3 up , float yaw , float pitc
         updateCameraVectors();
 }
 
-cameraTool::cameraTool(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
-{
+cameraTool::cameraTool(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM) {
     Position = glm::vec3(posX, posY, posZ);
     WorldUp = glm::vec3(upX, upY, upZ);
     Yaw = yaw;
@@ -54,8 +53,7 @@ void cameraTool::ProcessMouseMovement(float xoffset, float yoffset, GLboolean co
     Yaw   += xoffset;
     Pitch += yoffset;
     // make sure that when pitch is out of bounds, screen doesn't get flipped
-    if (constrainPitch)
-    {
+    if (constrainPitch) {
         if (Pitch > 89.0f)
             Pitch = 89.0f;
         if (Pitch < -89.0f)
