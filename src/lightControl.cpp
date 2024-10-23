@@ -34,6 +34,8 @@ bool lightControl::InitGlSource() {
     std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/basic_lighting.vs");
     std::string path_fs_cube = std::string(CMAKE_CURRENT_DIR).append("/glslFile/light_cube.fs");
     std::string path_vs_cube = std::string(CMAKE_CURRENT_DIR).append("/glslFile/light_cube.vs");
+    std::string texture1 = std::string(CMAKE_CURRENT_DIR).append("/glslFile/light_cube.fs");
+    std::string texture2 = std::string(CMAKE_CURRENT_DIR).append("/glslFile/light_cube.vs");
     // build and compile our shader zprogram
     lightingShader = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
     lightCubeShader = new ShaderGLSLTool(path_vs_cube.c_str(),path_fs_cube.c_str());
@@ -87,7 +89,7 @@ bool lightControl::InitGlSource() {
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
     };
     // positions all containers
-    glm::vec3 cubePositions[] = {
+    cubePositions = {
         glm::vec3( 0.0f,  0.0f,  0.0f),
         glm::vec3( 2.0f,  5.0f, -15.0f),
         glm::vec3(-1.5f, -2.2f, -2.5f),
@@ -100,7 +102,7 @@ bool lightControl::InitGlSource() {
         glm::vec3(-1.3f,  1.0f, -1.5f)
     };
     // positions of the point lights
-    glm::vec3 pointLightPositions[] = {
+    pointLightPositions = {
         glm::vec3( 0.7f,  0.2f,  2.0f),
         glm::vec3( 2.3f, -3.3f, -4.0f),
         glm::vec3(-4.0f,  2.0f, -12.0f),

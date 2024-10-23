@@ -12,6 +12,7 @@ private:
     /* data */
 	std::vector<glm::vec3> cubePositions;
 	std::vector<float>vertices;
+    std::vector<glm::vec3> pointLightPositions;
     uint32_t VBO, cubeVAO;
     uint32_t lightCubeVAO;
 public:
