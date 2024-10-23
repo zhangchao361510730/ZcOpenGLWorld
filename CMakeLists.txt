@@ -22,7 +22,7 @@ elseif (UNIX)
 endif()
 
 file(GLOB SRCFILE ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
-file(GLOB GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/src/GLLSTool/*.cpp)
+file(GLOB GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/src/commonTool/*.cpp)
 list(APPEND SRCFILE ${GLLSTool_})
 #add_executable(${PROJECT_NAME}_main main.cpp ${SRCFILE})
 

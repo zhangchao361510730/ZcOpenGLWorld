@@ -1,5 +1,5 @@
 #include "cameraControl.h"
-#include "GLLSTool/shaderLanguage.h"
+#include "commonTool/shaderLanguage.h"
 //#define STB_IMAGE_IMPLEMENTATION
 #include"stb_image.h"
 #include <glm/glm.hpp>

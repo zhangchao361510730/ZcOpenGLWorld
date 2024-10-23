@@ -1,5 +1,5 @@
 #include"multipleTriangle.h"
-#include"GLLSTool/shaderLanguage.h"
+#include"commonTool/shaderLanguage.h"
 
 multipleTriangle::multipleTriangle(/* args */) {
 

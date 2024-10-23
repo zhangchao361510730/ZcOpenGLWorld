@@ -2,7 +2,7 @@
 #include<iostream>
 #include"globaDefine.h"
 #include"singleTriangle.h"
-#include"GLLSTool/shaderLanguage.h"
+#include"commonTool/shaderLanguage.h"
 
 
 singleTriangle::singleTriangle(){
