@@ -316,6 +316,15 @@ void lightControl::runDrawProcess() {
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+    // optional: de-allocate all resources once they've outlived their purpose:
+    // ------------------------------------------------------------------------
+    glDeleteVertexArrays(1, &cubeVAO);
+    glDeleteVertexArrays(1, &lightCubeVAO);
+    glDeleteBuffers(1, &VBO);
+
+    // glfw: terminate, clearing all previously allocated GLFW resources.
+    // ------------------------------------------------------------------
+    glfwTerminate();
 } 
 
 void lightControl::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
