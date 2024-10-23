@@ -15,9 +15,10 @@
 #include"src/cameraControl.h"
 
 int main() {
-    cameraControl sT;
-    sT.InitGlSource();
-    sT.runDrawProcess();
+
+    baseInit* bI = new cameraControl(); 
+    bI->InitGlSource();
+    bI->runDrawProcess();
 
     return 0;
 }

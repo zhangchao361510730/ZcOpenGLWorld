@@ -16,7 +16,7 @@ public:
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 	static void setCallBackControl(void*thiz);
 	void processInput(GLFWwindow* window);
-    void runDrawProcess();
+    void runDrawProcess()override;
     bool unInitResource();
 private:
 	std::vector<glm::vec3> cubePositions;

@@ -26,6 +26,7 @@ public:
     _setCallBackFun_ setCallbackFun_ = nullptr;
 
 	virtual bool InitGlSource();
+    virtual void runDrawProcess() = 0; 
     //void static framebuffer_size_callback(GLFWwindow* window, int width, int height);
     void processInput(GLFWwindow* window);
 };

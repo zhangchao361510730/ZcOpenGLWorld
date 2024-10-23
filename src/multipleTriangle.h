@@ -10,7 +10,7 @@ public:
     ~multipleTriangle();
 
     bool InitGlSource()override;
-    void runDrawProcess();
+    void runDrawProcess()override;
     bool unInitResource();
 };
 

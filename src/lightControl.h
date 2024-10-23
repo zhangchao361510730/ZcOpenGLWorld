@@ -1,4 +1,7 @@
-class lightControl
+#include"baseInit.h"
+
+
+class lightControl:public baseInit
 {
 private:
     /* data */

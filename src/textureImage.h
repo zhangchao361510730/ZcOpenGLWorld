@@ -13,7 +13,7 @@ public:
     ~textureImage ();
 
     bool InitGlSource()override;
-    void runDrawProcess();
+    void runDrawProcess()override;
     bool unInitResource();
 };
 
