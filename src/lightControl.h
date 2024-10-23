@@ -8,4 +8,6 @@ private:
 public:
     lightControl(/* args */);
     ~lightControl();
+    bool InitGlSource()override;
+    void runDrawProcess()override; 
 };

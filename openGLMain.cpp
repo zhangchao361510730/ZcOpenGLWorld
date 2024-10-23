@@ -13,10 +13,11 @@
 #include"src/multipleTriangle.h"
 #include"src/textureImage.h"
 #include"src/cameraControl.h"
+#include"src/lightControl.h"
 
 int main() {
 
-    baseInit* bI = new cameraControl(); 
+    baseInit* bI = new lightControl(); 
     bI->InitGlSource();
     bI->runDrawProcess();
 
