@@ -209,13 +209,13 @@ void lightControl::runDrawProcess() {
         lightingShader->setFloat("pointLights[2].linear", 0.09f);
         lightingShader->setFloat("pointLights[2].quadratic", 0.032f);
         // point light 4
-        lightingShader_>setVec3("pointLights[3].position", pointLightPositions[3]);
-        lightingShader_>setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-        lightingShader_>setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-        lightingShader_>setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
-        lightingShader_>setFloat("pointLights[3].constant", 1.0f);
-        lightingShader_>setFloat("pointLights[3].linear", 0.09f);
-        lightingShader_>setFloat("pointLights[3].quadratic", 0.032f);
+        lightingShader->setVec3("pointLights[3].position", pointLightPositions[3]);
+        lightingShader->setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+        lightingShader->setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+        lightingShader->setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+        lightingShader->setFloat("pointLights[3].constant", 1.0f);
+        lightingShader->setFloat("pointLights[3].linear", 0.09f);
+        lightingShader->setFloat("pointLights[3].quadratic", 0.032f);
         // spotLight
         lightingShader->setVec3("spotLight.position", camera->Position);
         lightingShader->setVec3("spotLight.direction", camera->Front);
@@ -229,14 +229,14 @@ void lightControl::runDrawProcess() {
         lightingShader->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));     
 
         // view/projection transformations
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        glm::mat4 view = camera.GetViewMatrix();
-        lightingShader.setMat4("projection", projection);
-        lightingShader.setMat4("view", view);
+        glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)windowsWidth / (float)windowsHeight, 0.1f, 100.0f);
+        glm::mat4 view = camera->GetViewMatrix();
+        lightingShader->setMat4("projection", projection);
+        lightingShader->setMat4("view", view);
 
         // world transformation
         glm::mat4 model = glm::mat4(1.0f);
-        lightingShader.setMat4("model", model);
+        lightingShader->setMat4("model", model);
 
         // bind diffuse map
         glActiveTexture(GL_TEXTURE0);
@@ -254,15 +254,15 @@ void lightControl::runDrawProcess() {
             model = glm::translate(model, cubePositions[i]);
             float angle = 20.0f * i;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            lightingShader.setMat4("model", model);
+            lightingShader->setMat4("model", model);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
          // also draw the lamp object(s)
-         lightCubeShader.use();
-         lightCubeShader.setMat4("projection", projection);
-         lightCubeShader.setMat4("view", view);
+         lightCubeShader->use();
+         lightCubeShader->setMat4("projection", projection);
+         lightCubeShader->setMat4("view", view);
     
          // we now draw as many light bulbs as we have point lights.
          glBindVertexArray(lightCubeVAO);
@@ -271,7 +271,7 @@ void lightControl::runDrawProcess() {
              model = glm::mat4(1.0f);
              model = glm::translate(model, pointLightPositions[i]);
              model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
-             lightCubeShader.setMat4("model", model);
+             lightCubeShader->setMat4("model", model);
              glDrawArrays(GL_TRIANGLES, 0, 36);
          }
 
