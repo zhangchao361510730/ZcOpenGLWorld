@@ -12,6 +12,8 @@ private:
     /* data */
 	std::vector<glm::vec3> cubePositions;
 	std::vector<float>vertices;
+    uint32_t VBO, cubeVAO;
+    uint32_t lightCubeVAO;
 public:
     lightControl(/* args */);
     ~lightControl();

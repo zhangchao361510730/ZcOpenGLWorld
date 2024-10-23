@@ -70,7 +70,6 @@ bool lightControl::InitGlSource() {
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
     };
     // first, configure the cube's VAO (and VBO)
-    unsigned int VBO, cubeVAO;
     glGenVertexArrays(1, &cubeVAO);
     glGenBuffers(1, &VBO);
 
@@ -87,7 +86,7 @@ bool lightControl::InitGlSource() {
     glEnableVertexAttribArray(1);
 
     // second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
-    unsigned int lightCubeVAO;
+    
     glGenVertexArrays(1, &lightCubeVAO);
     glBindVertexArray(lightCubeVAO);
 
@@ -116,5 +115,12 @@ void lightControl::scroll_callback(GLFWwindow* window, double xoffset, double yo
 }
 
 void lightControl::setCallBackControl(void*thiz) {
-
+	lightControl* thiz_ = (lightControl*)thiz;
+    if (thiz_ == nullptr) {
+        std::cerr<<__FILE__<<" thiz_ is nullptr"<<std::endl;
+    }
+    glfwSetFramebufferSizeCallback(thiz_->window, lightControl::framebuffer_size_callback);
+    glfwSetCursorPosCallback(thiz_->window, lightControl::mouse_callback);
+    glfwSetScrollCallback(thiz_->window, lightControl::scroll_callback);
+    glfwSetInputMode(thiz_->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
