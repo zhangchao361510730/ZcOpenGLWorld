@@ -11,6 +11,20 @@ lightControl::~lightControl() {
 
 }
 
+void lightControl::processInput(GLFWwindow *window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera->ProcessKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera->ProcessKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera->ProcessKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera->ProcessKeyboard(RIGHT, deltaTime);
+}
+
 bool lightControl::InitGlSource() {
 	setCallbackFun_ = lightControl::setCallBackControl;
 	baseInit::InitGlSource();
@@ -99,19 +113,82 @@ bool lightControl::InitGlSource() {
 }
 
 void lightControl::runDrawProcess() {
+    // render loop
+    while (!glfwWindowShouldClose(window)) {
+        // per-frame time logic
+        float currentFrame = static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+        // input
+        processInput(window);
+        // render
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // be sure to activate shader when setting uniforms/drawing objects
+        lightingShader->use();
+        lightingShader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+        lightingShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        lightingShader->setVec3("lightPos", lightPos);
+        lightingShader->setVec3("viewPos", camera->Position);
+
+        // view/projection transformations
+        glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)windowsWidth / (float)windowsHeight, 0.1f, 100.0f);
+        glm::mat4 view = camera->GetViewMatrix();
+        lightingShader->setMat4("projection", projection);
+        lightingShader->setMat4("view", view);
+
+        // world transformation
+        glm::mat4 model = glm::mat4(1.0f);
+        lightingShader->setMat4("model", model);
+
+        // render the cube
+        glBindVertexArray(cubeVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        // also draw the lamp object
+        lightCubeShader->use();
+        lightCubeShader->setMat4("projection", projection);
+        lightCubeShader->setMat4("view", view);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+        lightCubeShader->setMat4("model", model);
+
+        glBindVertexArray(lightCubeVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
 } 
 
 void lightControl::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-
+    glViewport(0, 0, width, height);
 }
 
-void lightControl::mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+void lightControl::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
+    lightControl* thiz = (lightControl*)glfwGetWindowUserPointer(window);
+    float xpos = static_cast<float>(xposIn);
+    float ypos = static_cast<float>(yposIn);
+    
+    if (thiz->firstMouse) {
+        thiz->lastX = xpos;
+        thiz->lastY = ypos;
+        thiz->firstMouse = false;
+    }
 
+    float xoffset = xpos - thiz->lastX;
+    float yoffset = thiz->lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+    thiz->lastX = xpos;
+    thiz->lastY = ypos;
+
+    thiz->camera->ProcessMouseMovement(xoffset, yoffset);
 }
 
 void lightControl::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-
+    lightControl* thiz = (lightControl*)glfwGetWindowUserPointer(window);
+    thiz->camera->ProcessMouseScroll(static_cast<float>(yoffset));
 }
 
 void lightControl::setCallBackControl(void*thiz) {
