@@ -35,8 +35,8 @@ bool lightControl::InitGlSource() {
     std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/basic_lighting.vs");
     std::string path_fs_cube = std::string(CMAKE_CURRENT_DIR).append("/glslFile/light_cube.fs");
     std::string path_vs_cube = std::string(CMAKE_CURRENT_DIR).append("/glslFile/light_cube.vs");
-    std::string texture1 = std::string(CMAKE_CURRENT_DIR).append("/glslFile/light_cube.fs");
-    std::string texture2 = std::string(CMAKE_CURRENT_DIR).append("/glslFile/light_cube.vs");
+    std::string container2 = std::string(CMAKE_CURRENT_DIR).append("/pictureResource/container2.png");
+    std::string container2_specular = std::string(CMAKE_CURRENT_DIR).append("/pictureResource/container2_specular.png");
     // build and compile our shader zprogram
     lightingShader = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
     lightCubeShader = new ShaderGLSLTool(path_vs_cube.c_str(),path_fs_cube.c_str());
@@ -136,8 +136,8 @@ bool lightControl::InitGlSource() {
 
     // load textures (we now use a utility function to keep the code more organized)
     // -----------------------------------------------------------------------------
-    diffuseMap = loadTexture(texture1.c_str());
-    specularMap = loadTexture(texture1.c_str());
+    diffuseMap = loadTexture(container2.c_str());
+    specularMap = loadTexture(container2_specular.c_str());
 
     // shader configuration
     // --------------------
