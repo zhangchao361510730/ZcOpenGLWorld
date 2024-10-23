@@ -27,6 +27,8 @@ public:
     cameraTool* camera = nullptr;
     ShaderGLSLTool* lightingShader = nullptr;
     ShaderGLSLTool* lightCubeShader = nullptr;
+    uint32_t diffuseMap; 
+    uint32_t specularMap;
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;
     bool firstMouse = true;
