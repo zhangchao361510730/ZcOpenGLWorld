@@ -3,7 +3,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include"baseInit.h"
 
-class Camera;
+class cameraTool;
 class ShaderGLSLTool;
 
 class lightControl:public baseInit
@@ -21,7 +21,7 @@ public:
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 	static void setCallBackControl(void*thiz);
-    Camera* camera = nullptr;
+    cameraTool* camera = nullptr;
     ShaderGLSLTool* lightingShader = nullptr;
     ShaderGLSLTool* lightCubeShader = nullptr;
     float lastX = windowsWidth / 2.0f;

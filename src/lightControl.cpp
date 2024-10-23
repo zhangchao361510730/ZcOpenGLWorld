@@ -14,8 +14,7 @@ lightControl::~lightControl() {
 bool lightControl::InitGlSource() {
 	setCallbackFun_ = lightControl::setCallBackControl;
 	baseInit::InitGlSource();
-	    // configure global opengl state
-    // -----------------------------
+    // configure global opengl state
     glEnable(GL_DEPTH_TEST);
     std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/basic_lighting.fs");
     std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/basic_lighting.vs");
@@ -24,9 +23,9 @@ bool lightControl::InitGlSource() {
     // build and compile our shader zprogram
     lightingShader = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
     lightCubeShader = new ShaderGLSLTool(path_vs_cube.c_str(),path_fs_cube.c_str());
-
+    camera = new cameraTool(glm::vec3(0.0f, 0.0f, 3.0f));
+    lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
     // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
     vertices = {
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
          0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
