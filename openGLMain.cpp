@@ -26,5 +26,5 @@ int main() {
 
 /*
 书签记录，每次结束都更新下面的页数
-https://learnopengl-cn.github.io/02%20Lighting/02%20Basic%20Lighting/
+https://learnopengl-cn.github.io/02%20Lighting/06%20Multiple%20lights/
 */
