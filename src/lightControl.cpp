@@ -17,11 +17,13 @@ bool lightControl::InitGlSource() {
 	    // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
-
+    std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/basic_lighting.fs");
+    std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/basic_lighting.vs");
+    std::string path_fs_cube = std::string(CMAKE_CURRENT_DIR).append("/glslFile/light_cube.fs");
+    std::string path_vs_cube = std::string(CMAKE_CURRENT_DIR).append("/glslFile/light_cube.vs");
     // build and compile our shader zprogram
-    // ------------------------------------
-    Shader lightingShader("2.2.basic_lighting.vs", "2.2.basic_lighting.fs");
-    Shader lightCubeShader("2.2.light_cube.vs", "2.2.light_cube.fs");
+    lightingShader = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
+    lightCubeShader = new ShaderGLSLTool(path_vs_cube.c_str(),path_fs_cube.c_str());
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -74,7 +76,7 @@ bool lightControl::InitGlSource() {
     glGenBuffers(1, &VBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
     glBindVertexArray(cubeVAO);
 
@@ -84,7 +86,6 @@ bool lightControl::InitGlSource() {
     // normal attribute
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-
 
     // second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
     unsigned int lightCubeVAO;

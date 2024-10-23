@@ -1,6 +1,10 @@
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include"baseInit.h"
 
 class Camera;
+class ShaderGLSLTool;
 
 class lightControl:public baseInit
 {
@@ -18,6 +22,8 @@ public:
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 	static void setCallBackControl(void*thiz);
     Camera* camera = nullptr;
+    ShaderGLSLTool* lightingShader = nullptr;
+    ShaderGLSLTool* lightCubeShader = nullptr;
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;
     bool firstMouse = true;
