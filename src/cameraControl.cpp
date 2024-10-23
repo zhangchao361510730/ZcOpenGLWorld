@@ -290,6 +290,9 @@ bool cameraControl::unInitResource() {
 
 void cameraControl::setCallBackControl(void*thiz) {
 	cameraControl* thiz_ = (cameraControl*)thiz;
+    if (thiz_ == nullptr) {
+        std::cerr<<__FILE__<<" thiz_ is nullptr"<<std::endl;
+    }
     glfwSetFramebufferSizeCallback(thiz_->window, cameraControl::framebuffer_size_callback);
     glfwSetCursorPosCallback(thiz_->window, cameraControl::mouse_callback);
     glfwSetScrollCallback(thiz_->window, cameraControl::scroll_callback);
