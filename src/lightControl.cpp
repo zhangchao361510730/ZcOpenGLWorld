@@ -1,6 +1,6 @@
 #include"lightControl.h"
 #include"commonTool/shaderLanguage.h"
-#include"commonTool/caermaTool.h"
+#include"commonTool/cameraTool.h"
 
 lightControl::lightControl(/* args */) {
     
