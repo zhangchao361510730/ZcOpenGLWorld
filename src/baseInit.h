@@ -16,7 +16,7 @@ class baseInit {
 public:
     float r = 1.0f, g = 0.0f, b = 1.0f, a = 1.0f;
     GLFWwindow* window = nullptr;
-    std::mt19937 gen; // ʹ��÷ɭ��ת�㷨��ʼ�������������
+    std::mt19937 gen; 
     uint32_t VBO = 0;
     uint32_t VAO = 0;
     ShaderGLSLTool* shaderTool_;
