@@ -16,11 +16,10 @@
 #include"src/lightControl.h"
 
 int main() {
-
     baseInit* bI = new lightControl(); 
     bI->InitGlSource();
     bI->runDrawProcess();
-
+    delete bI;
     return 0;
 }
 

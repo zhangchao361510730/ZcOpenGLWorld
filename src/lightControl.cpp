@@ -102,7 +102,7 @@ bool lightControl::InitGlSource() {
         glm::vec3( 1.5f,  0.2f, -1.5f),
         glm::vec3(-1.3f,  1.0f, -1.5f)
     };
-    // positions of the point lights
+    // positions of the point lights   
     pointLightPositions = {
         glm::vec3( 0.7f,  0.2f,  2.0f),
         glm::vec3( 2.3f, -3.3f, -4.0f),
@@ -135,12 +135,10 @@ bool lightControl::InitGlSource() {
     glEnableVertexAttribArray(0);
 
     // load textures (we now use a utility function to keep the code more organized)
-    // -----------------------------------------------------------------------------
     diffuseMap = loadTexture(container2.c_str());
     specularMap = loadTexture(container2_specular.c_str());
 
     // shader configuration
-    // --------------------
     lightingShader->use();
     lightingShader->setInt("material.diffuse", 0);
     lightingShader->setInt("material.specular", 1);
@@ -301,16 +299,13 @@ void lightControl::runDrawProcess() {
     
          // we now draw as many light bulbs as we have point lights.
          glBindVertexArray(lightCubeVAO);
-         for (unsigned int i = 0; i < 4; i++)
-         {
+         for (unsigned int i = 0; i < 4; i++) {
              model = glm::mat4(1.0f);
              model = glm::translate(model, pointLightPositions[i]);
              model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
              lightCubeShader->setMat4("model", model);
              glDrawArrays(GL_TRIANGLES, 0, 36);
          }
-
-
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);

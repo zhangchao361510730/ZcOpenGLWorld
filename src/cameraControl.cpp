@@ -30,7 +30,6 @@ bool cameraControl::InitGlSource()
 	lastFrame = 0.0f;
 	baseInit::InitGlSource();
 	    // configure global opengl state
-    // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
     // build and compile our shader zprogram
@@ -39,7 +38,7 @@ bool cameraControl::InitGlSource()
     std::string path_picture = std::string(CMAKE_CURRENT_DIR).append("/pictureResource/container.jpg");
     std::string path_picture2 = std::string(CMAKE_CURRENT_DIR).append("/pictureResource/awesomeface.png");
     shaderTool_ = new ShaderGLSLTool(path_vs.c_str(), path_fs.c_str());
-    // ------------------------------------------------------------------
+
     vertices = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
          0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -275,7 +274,6 @@ void cameraControl::runDrawProcess() {
         }
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
