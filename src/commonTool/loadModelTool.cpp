@@ -1,7 +1,7 @@
 #include"loadModelTool.h"
 
 // constructor, expects a filepath to a 3D model.
-loadModelTool::loadModelTool(string const &path, bool gamma = false) : gammaCorrection(gamma) {
+loadModelTool::loadModelTool(string const &path, bool gamma) : gammaCorrection(gamma) {
     loadModel(path);
 }
 
@@ -163,7 +163,7 @@ vector<Texture> loadModelTool::loadMaterialTextures(aiMaterial *mat, aiTextureTy
     return textures;
 }
 
-uint32_t loadModelTool::TextureFromFile(const char *path, const string &directory, bool gamma) {
+uint32_t loadModelTool::TextureFromFile(const char *path, const string &directory = "", bool gamma) {
     string filename = string(path);
     filename = directory + '/' + filename;
     unsigned int textureID;

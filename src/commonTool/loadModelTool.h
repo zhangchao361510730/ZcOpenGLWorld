@@ -47,5 +47,5 @@ private:
     // the required info is returned as a Texture struct.
     vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName);
 
-    unsigned int TextureFromFile(const char *path, const string &directory, bool gamma);
+    uint32_t TextureFromFile(const char *path, const string &directory, bool gamma = false);
 };

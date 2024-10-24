@@ -42,10 +42,10 @@ link_directories(${CMAKE_SOURCE_DIR}/linux_libs/lib)
 include_directories(${CMAKE_SOURCE_DIR}/linux_libs/includes)
 include_directories(${CMAKE_SOURCE_DIR}/src/sourceLib)
 
-set(DEPENDS_LIB glfw3)
+set(DEPENDS_LIB glfw3 assimp)
 # 将 CMake 变量传递给 C++
 add_executable(${PROJECT_NAME}_main openGLMain.cpp src/sourceLib/glad.c ${SRCFILE})
 #add_executable(${PROJECT_NAME}_main test1.cpp src/sourceLib/glad.c)
 target_compile_definitions(${PROJECT_NAME}_main PRIVATE CMAKE_CURRENT_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 
-target_link_libraries(${PROJECT_NAME}_main PUBLIC ${DEPENDS_LIB})
+target_link_libraries(${PROJECT_NAME}_main PUBLIC ${DEPENDS_LIB} )
