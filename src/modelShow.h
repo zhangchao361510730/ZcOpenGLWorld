@@ -1,13 +1,13 @@
-#ifndef multipleTriangle_H_
-#define multipleTriangle_H_
+#ifndef modelShow_H_
+#define modelShow_H_
 #include"baseInit.h"
 
-class multipleTriangle:public baseInit {
+class modelShow:public baseInit {
 private:
     uint32_t EBO;
 public:
-    multipleTriangle(/* args */);
-    ~multipleTriangle();
+    modelShow(/* args */);
+    ~modelShow();
 
     bool InitGlSource()override;
     void runDrawProcess()override;

@@ -1,15 +1,15 @@
-#include"multipleTriangle.h"
+#include"modelShow.h"
 #include"commonTool/shaderLanguage.h"
 
-multipleTriangle::multipleTriangle(/* args */) {
+modelShow::modelShow(/* args */) {
 
 }
 
-multipleTriangle::~multipleTriangle() {
+modelShow::~modelShow() {
 
 }
 
-bool multipleTriangle::InitGlSource() {
+bool modelShow::InitGlSource() {
     baseInit::InitGlSource();
 
     std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/shader.fs");
@@ -53,7 +53,7 @@ bool multipleTriangle::InitGlSource() {
     return true;
 }
 
-void multipleTriangle::runDrawProcess() {
+void modelShow::runDrawProcess() {
     while(!glfwWindowShouldClose(window)) {
         processInput(window);
         glClearColor(r,g,b, 1.0f);
@@ -75,7 +75,7 @@ void multipleTriangle::runDrawProcess() {
     unInitResource();
 }
 
-bool multipleTriangle::unInitResource() {
+bool modelShow::unInitResource() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
