@@ -25,6 +25,7 @@ public:
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 	static void setCallBackControl(void*thiz);
+    void processInput(GLFWwindow* window)override;
     bool InitGlSource()override;
     void runDrawProcess()override;
     bool unInitResource();

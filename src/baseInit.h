@@ -28,7 +28,7 @@ public:
 	virtual bool InitGlSource();
     virtual void runDrawProcess() = 0; 
     //void static framebuffer_size_callback(GLFWwindow* window, int width, int height);
-    void processInput(GLFWwindow* window);
+    virtual void processInput(GLFWwindow* window) = 0;
 };
 
 

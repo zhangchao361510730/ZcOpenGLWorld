@@ -50,9 +50,3 @@ bool baseInit::InitGlSource() {
     // vertex shader
 	return true;
 }
-
-void baseInit::processInput(GLFWwindow* window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, true);
-    }
-}
