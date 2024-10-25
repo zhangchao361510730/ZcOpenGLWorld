@@ -14,7 +14,6 @@ private:
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;
     bool firstMouse = true;
-    // timing
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
 

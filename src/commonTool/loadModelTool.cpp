@@ -45,7 +45,7 @@ void loadModelTool::processNode(aiNode *node, const aiScene *scene) {
     // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
     for(unsigned int i = 0; i < node->mNumChildren; i++)
     {
-        processNode(node->mChildren[i], scene);
+        processNode(node->mChildren[i], scene);//递归处理节点,加载到网格
     }
 }
 
@@ -97,8 +97,7 @@ meshTool loadModelTool::processMesh(aiMesh *mesh, const aiScene *scene) {
         vertices.push_back(vertex);
     }
     // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
-    for(unsigned int i = 0; i < mesh->mNumFaces; i++)
-    {
+    for(unsigned int i = 0; i < mesh->mNumFaces; i++) {
         aiFace face = mesh->mFaces[i];
         // retrieve all indices of the face and store them in the indices vector
         for(unsigned int j = 0; j < face.mNumIndices; j++) {
