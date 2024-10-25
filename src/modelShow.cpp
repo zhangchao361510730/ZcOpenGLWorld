@@ -24,6 +24,7 @@ bool modelShow::InitGlSource() {
     shaderTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
     camera_ = new cameraTool(glm::vec3(0.0f, 0.0f, 3.0f));
     loadModelTool_ = new loadModelTool(path_model1.c_str());
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     return true;
 }
 

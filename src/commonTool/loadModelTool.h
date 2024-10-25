@@ -20,18 +20,14 @@ class loadModelTool
 private:
     /* data */
 public:
-
-    ~loadModelTool();
-
     // model data 
     std::vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
     std::vector<meshTool>    meshes;
     std::string directory;
     bool gammaCorrection;
-
     // constructor, expects a filepath to a 3D model.
     loadModelTool(std::string const &path, bool gamma = false);
-
+    ~loadModelTool();
     // draws the model, and thus all its meshes
     void runDrawProcess(ShaderGLSLTool &shader);
 
