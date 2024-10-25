@@ -29,10 +29,10 @@ struct KeyScale
 	float timeStamp;
 };
 
-class Bone
+class boneTool
 {
 public:
-	Bone(const std::string& name, int ID, const aiNodeAnim* channel)
+	boneTool(const std::string& name, int ID, const aiNodeAnim* channel)
 		:
 		m_Name(name),
 		m_ID(ID),

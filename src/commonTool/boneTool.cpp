@@ -1,73 +1,125 @@
-#include"cameraTool.h"
-    
-cameraTool::cameraTool(glm::vec3 position, glm::vec3 up , float yaw , float pitch) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM) {
-        Position = position;
-        WorldUp = up;
-        Yaw = yaw;
-        Pitch = pitch;
-        updateCameraVectors();
+#include"boneTool.h"
+
+boneTool::boneTool(const std::string& name, int ID, const aiNodeAnim* channel):m_Name(name),m_ID(ID),m_LocalTransform(1.0f) {
+	m_NumPositions = channel->mNumPositionKeys;
+	for (int positionIndex = 0; positionIndex < m_NumPositions; ++positionIndex) {
+		aiVector3D aiPosition = channel->mPositionKeys[positionIndex].mValue;
+		float timeStamp = channel->mPositionKeys[positionIndex].mTime;
+		KeyPosition data;
+		data.position = AssimpGLMHelpers::GetGLMVec(aiPosition);
+		data.timeStamp = timeStamp;
+		m_Positions.push_back(data);
+	}
+
+	m_NumRotations = channel->mNumRotationKeys;
+	for (int rotationIndex = 0; rotationIndex < m_NumRotations; ++rotationIndex) {
+		aiQuaternion aiOrientation = channel->mRotationKeys[rotationIndex].mValue;
+		float timeStamp = channel->mRotationKeys[rotationIndex].mTime;
+		KeyRotation data;
+		data.orientation = AssimpGLMHelpers::GetGLMQuat(aiOrientation);
+		data.timeStamp = timeStamp;
+		m_Rotations.push_back(data);
+	}
+
+	m_NumScalings = channel->mNumScalingKeys;
+	for (int keyIndex = 0; keyIndex < m_NumScalings; ++keyIndex) {
+		aiVector3D scale = channel->mScalingKeys[keyIndex].mValue;
+		float timeStamp = channel->mScalingKeys[keyIndex].mTime;
+		KeyScale data;
+		data.scale = AssimpGLMHelpers::GetGLMVec(scale);
+		data.timeStamp = timeStamp;
+		m_Scales.push_back(data);
+	}
+	}
+	
+void boneTool::Update(float animationTime)
+{
+	glm::mat4 translation = InterpolatePosition(animationTime);
+	glm::mat4 rotation = InterpolateRotation(animationTime);
+	glm::mat4 scale = InterpolateScaling(animationTime);
+	m_LocalTransform = translation * rotation * scale;
+}
+glm::mat4 boneTool::GetLocalTransform() { 
+    return m_LocalTransform;
 }
 
-cameraTool::cameraTool(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM) {
-    Position = glm::vec3(posX, posY, posZ);
-    WorldUp = glm::vec3(upX, upY, upZ);
-    Yaw = yaw;
-    Pitch = pitch;
-    updateCameraVectors();
+std::string boneTool::GetBoneName() const { 
+    return m_Name; 
 }
 
-void cameraTool::updateCameraVectors() {
-    // calculate the new Front vector
-    glm::vec3 front;
-    front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-    front.y = sin(glm::radians(Pitch));
-    front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-    Front = glm::normalize(front);
-    // also re-calculate the Right and Up vector
-    Right = glm::normalize(glm::cross(Front, WorldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-    Up    = glm::normalize(glm::cross(Right, Front));
+int boneTool::GetBoneID() { 
+    return m_ID; 
+}
+	
+int boneTool::GetPositionIndex(float animationTime) {
+	for (int index = 0; index < m_NumPositions - 1; ++index)
+	{
+		if (animationTime < m_Positions[index + 1].timeStamp)
+			return index;
+	}
+	assert(0);
 }
 
-// returns the view matrix calculated using Euler Angles and the LookAt Matrix
-glm::mat4 cameraTool::GetViewMatrix() {
-    return glm::lookAt(Position, Position + Front, Up);
+int boneTool::GetRotationIndex(float animationTime) {
+	for (int index = 0; index < m_NumRotations - 1; ++index) {
+		if (animationTime < m_Rotations[index + 1].timeStamp)
+			return index;
+	}
+	assert(0);
 }
 
-// processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
-void cameraTool::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
-    float velocity = MovementSpeed * deltaTime;
-    if (direction == FORWARD)
-        Position += Front * velocity;
-    if (direction == BACKWARD)
-        Position -= Front * velocity;
-    if (direction == LEFT)
-        Position -= Right * velocity;
-    if (direction == RIGHT)
-        Position += Right * velocity;
+int boneTool::GetScaleIndex(float animationTime) {
+	for (int index = 0; index < m_NumScalings - 1; ++index)
+	{
+		if (animationTime < m_Scales[index + 1].timeStamp)
+			return index;
+	}
+	assert(0);
 }
 
-// processes input received from a mouse input system. Expects the offset value in both the x and y direction.
-void cameraTool::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch) {
-    xoffset *= MouseSensitivity;
-    yoffset *= MouseSensitivity;
-    Yaw   += xoffset;
-    Pitch += yoffset;
-    // make sure that when pitch is out of bounds, screen doesn't get flipped
-    if (constrainPitch) {
-        if (Pitch > 89.0f)
-            Pitch = 89.0f;
-        if (Pitch < -89.0f)
-            Pitch = -89.0f;
-    }
-    // update Front, Right and Up Vectors using the updated Euler angles
-    updateCameraVectors();
+float boneTool::GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime) {
+	float scaleFactor = 0.0f;
+	float midWayLength = animationTime - lastTimeStamp;
+	float framesDiff = nextTimeStamp - lastTimeStamp;
+	scaleFactor = midWayLength / framesDiff;
+	return scaleFactor;
 }
 
-// processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
-void cameraTool::ProcessMouseScroll(float yoffset) {
-    Zoom -= (float)yoffset;
-    if (Zoom < 1.0f)
-        Zoom = 1.0f;
-    if (Zoom > 45.0f)
-        Zoom = 45.0f;
+glm::mat4 boneTool::InterpolatePosition(float animationTime) {
+	if (1 == m_NumPositions)
+		return glm::translate(glm::mat4(1.0f), m_Positions[0].position);
+	int p0Index = GetPositionIndex(animationTime);
+	int p1Index = p0Index + 1;
+	float scaleFactor = GetScaleFactor(m_Positions[p0Index].timeStamp,
+		m_Positions[p1Index].timeStamp, animationTime);
+	glm::vec3 finalPosition = glm::mix(m_Positions[p0Index].position, m_Positions[p1Index].position
+		, scaleFactor);
+	return glm::translate(glm::mat4(1.0f), finalPosition);
+}
+
+glm::mat4 boneTool::InterpolateRotation(float animationTime) {
+	if (1 == m_NumRotations) {
+		auto rotation = glm::normalize(m_Rotations[0].orientation);
+		return glm::toMat4(rotation);
+	}
+	int p0Index = GetRotationIndex(animationTime);
+	int p1Index = p0Index + 1;
+	float scaleFactor = GetScaleFactor(m_Rotations[p0Index].timeStamp,
+		m_Rotations[p1Index].timeStamp, animationTime);
+	glm::quat finalRotation = glm::slerp(m_Rotations[p0Index].orientation, m_Rotations[p1Index].orientation
+		, scaleFactor);
+	finalRotation = glm::normalize(finalRotation);
+	return glm::toMat4(finalRotation);
+}
+
+glm::mat4 boneTool::InterpolateScaling(float animationTime) {
+	if (1 == m_NumScalings)
+		return glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
+	int p0Index = GetScaleIndex(animationTime);
+	int p1Index = p0Index + 1;
+	float scaleFactor = GetScaleFactor(m_Scales[p0Index].timeStamp,
+		m_Scales[p1Index].timeStamp, animationTime);
+	glm::vec3 finalScale = glm::mix(m_Scales[p0Index].scale, m_Scales[p1Index].scale
+		, scaleFactor);
+	return glm::scale(glm::mat4(1.0f), finalScale);
 }
