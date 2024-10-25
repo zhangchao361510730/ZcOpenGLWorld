@@ -10,7 +10,7 @@
 
 #include"src/globaDefine.h"
 #include"src/singleTriangle.h"
-#include"src/multipleTriangle.h"
+#include"src/modelShow.h"
 #include"src/textureImage.h"
 #include"src/cameraControl.h"
 #include"src/lightControl.h"

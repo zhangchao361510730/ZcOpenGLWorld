@@ -1,4 +1,6 @@
 #include"modelShow.h"
+#include"commonTool/meshTool.h"
+#include"commonTool/cameraTool.h"
 #include"commonTool/shaderLanguage.h"
 
 modelShow::modelShow(/* args */) {
@@ -9,13 +11,24 @@ modelShow::~modelShow() {
 
 }
 
-bool modelShow::InitGlSource() {
-    baseInit::InitGlSource();
+void modelShow::setCallBackControl(void*) {
 
+}
+
+bool modelShow::InitGlSource() {
+	setCallbackFun_ = modelShow::setCallBackControl;
+	baseInit::InitGlSource();
+    // configure global opengl state
+    glEnable(GL_DEPTH_TEST);
     std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/shader.fs");
     std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/shader.vs");
-    
-    shaderTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
+    std::string path_model1 = std::string(CMAKE_CURRENT_DIR).append("/modelResource/nanosuit/nanosuit.obj");
+
+    // build and compile our shader zprogram
+    ShaderGLSLTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
+    //lightCubeShader = new ShaderGLSLTool(path_vs_cube.c_str(),path_fs_cube.c_str());
+    camera_ = new cameraTool(glm::vec3(0.0f, 0.0f, 3.0f));
+    lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
 
     float vertices[] = {
          0.5f,  0.5f, 0.0f,  // top right
