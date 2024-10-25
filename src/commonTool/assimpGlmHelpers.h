@@ -13,15 +13,9 @@ class AssimpGLMHelpers
 public:
 	static glm::mat4 ConvertMatrixToGLMFormat(const aiMatrix4x4& from);
 
-	static inline glm::vec3 GetGLMVec(const aiVector3D& vec) 
-	{ 
-		return glm::vec3(vec.x, vec.y, vec.z); 
-	}
+	static inline glm::vec3 GetGLMVec(const aiVector3D& vec);
 
-	static inline glm::quat GetGLMQuat(const aiQuaternion& pOrientation)
-	{
-		return glm::quat(pOrientation.w, pOrientation.x, pOrientation.y, pOrientation.z);
-	}
+	static inline glm::quat GetGLMQuat(const aiQuaternion& pOrientation);
 };
 
 
