@@ -330,19 +330,15 @@ void lightControl::mouse_callback(GLFWwindow* window, double xposIn, double ypos
     lightControl* thiz = (lightControl*)glfwGetWindowUserPointer(window);
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
-    
     if (thiz->firstMouse) {
         thiz->lastX = xpos;
         thiz->lastY = ypos;
         thiz->firstMouse = false;
     }
-
     float xoffset = xpos - thiz->lastX;
     float yoffset = thiz->lastY - ypos; // reversed since y-coordinates go from bottom to top
-
     thiz->lastX = xpos;
     thiz->lastY = ypos;
-
     thiz->camera->ProcessMouseMovement(xoffset, yoffset);
 }
 

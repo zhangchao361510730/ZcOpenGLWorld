@@ -11,10 +11,6 @@ modelShow::~modelShow() {
 
 }
 
-void modelShow::setCallBackControl(void*) {
-
-}
-
 bool modelShow::InitGlSource() {
 	setCallbackFun_ = modelShow::setCallBackControl;
 	baseInit::InitGlSource();
@@ -29,6 +25,42 @@ bool modelShow::InitGlSource() {
     camera_ = new cameraTool(glm::vec3(0.0f, 0.0f, 3.0f));
     loadModelTool_ = new loadModelTool(path_model1.c_str());
     return true;
+}
+
+void modelShow::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
+}
+
+void modelShow::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
+    modelShow* thiz = (modelShow*)glfwGetWindowUserPointer(window);
+    float xpos = static_cast<float>(xposIn);
+    float ypos = static_cast<float>(yposIn);
+    if (thiz->firstMouse) {
+        thiz->lastX = xpos;
+        thiz->lastY = ypos;
+        thiz->firstMouse = false;
+    }
+    float xoffset = xpos - thiz->lastX;
+    float yoffset = thiz->lastY - ypos; // reversed since y-coordinates go from bottom to top
+    thiz->lastX = xpos;
+    thiz->lastY = ypos;
+    thiz->camera_->ProcessMouseMovement(xoffset, yoffset);
+}
+
+void modelShow::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+    modelShow* thiz = (modelShow*)glfwGetWindowUserPointer(window);
+    thiz->camera_->ProcessMouseScroll(static_cast<float>(yoffset));
+}
+
+void modelShow::setCallBackControl(void*thiz) {
+	modelShow* thiz_ = (modelShow*)thiz;
+    if (thiz_ == nullptr) {
+        std::cerr<<__FILE__<<" thiz_ is nullptr"<<std::endl;
+    }
+    glfwSetFramebufferSizeCallback(thiz_->window, modelShow::framebuffer_size_callback);
+    glfwSetCursorPosCallback(thiz_->window, modelShow::mouse_callback);
+    glfwSetScrollCallback(thiz_->window, modelShow::scroll_callback);
+    glfwSetInputMode(thiz_->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void modelShow::runDrawProcess() {
