@@ -10,8 +10,7 @@ class modelShow:public baseInit {
 private:
     uint32_t EBO;
     cameraTool* camera_;
-    loadModelTool* meshTool_;
-    ShaderGLSLTool* ShaderGLSLTool_;
+    loadModelTool* loadModelTool_;
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;
     bool firstMouse = true;

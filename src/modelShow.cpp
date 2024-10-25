@@ -18,39 +18,45 @@ void modelShow::setCallBackControl(void*) {
 bool modelShow::InitGlSource() {
 	setCallbackFun_ = modelShow::setCallBackControl;
 	baseInit::InitGlSource();
-    // configure global opengl state
-    glEnable(GL_DEPTH_TEST);
-    std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/shader.fs");
-    std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/shader.vs");
-    std::string path_model1 = std::string(CMAKE_CURRENT_DIR).append("/modelResource/nanosuit/nanosuit.obj");
-
-    // build and compile our shader zprogram
-    ShaderGLSLTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
-    camera_ = new cameraTool(glm::vec3(0.0f, 0.0f, 3.0f));
-    meshTool_ = new loadModelTool(path_model1.c_str());
-
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
     stbi_set_flip_vertically_on_load(true);
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glEnable(GL_DEPTH_TEST);
+    std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/model_loading.fs");
+    std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/model_loading.vs");
+    std::string path_model1 = std::string(CMAKE_CURRENT_DIR).append("/modelResource/nanosuit/nanosuit.obj");
+    // build and compile our shader zprogram
+    shaderTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
+    camera_ = new cameraTool(glm::vec3(0.0f, 0.0f, 3.0f));
+    loadModelTool_ = new loadModelTool(path_model1.c_str());
     return true;
 }
 
 void modelShow::runDrawProcess() {
-    while(!glfwWindowShouldClose(window)) {
+    // render loop
+    while (!glfwWindowShouldClose(window)) {
+        // per-frame time logic
+        float currentFrame = static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+        // input
         processInput(window);
-        glClearColor(r,g,b, 1.0f);
-         std::uniform_real_distribution<float> dis(0.0f, 1.0f); // 定义均匀分布范围
-        glClear(GL_COLOR_BUFFER_BIT);
-        // draw our first triangle
-        glUseProgram(shaderTool_->attachId);
-        int vertexColorLocation = glGetUniformLocation(shaderTool_->attachId, "ourColor");
-        glUniform4f(vertexColorLocation, dis(gen), dis(gen),dis(gen), a);
-        // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        glBindVertexArray(VAO); 
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        // glBindVertexArray(0); 
-        // no need to unbind it every time 
+        // render
+        glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // don't forget to enable shader before setting uniforms
+        shaderTool_->use();
+        // view/projection transformations
+        glm::mat4 projection = glm::perspective(glm::radians(camera_->Zoom), (float)windowsWidth / (float)windowsHeight, 0.1f, 100.0f);
+        glm::mat4 view = camera_->GetViewMatrix();
+        shaderTool_->setMat4("projection", projection);
+        shaderTool_->setMat4("view", view);
+        // render the loaded model
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+        shaderTool_->setMat4("model", model);
+        loadModelTool_->runDrawProcess(*shaderTool_);
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
