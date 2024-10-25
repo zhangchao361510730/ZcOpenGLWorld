@@ -16,7 +16,7 @@
 #include"src/lightControl.h"
 
 int main() {
-    baseInit* bI = new lightControl(); 
+    baseInit* bI = new modelShow(); 
     bI->InitGlSource();
     bI->runDrawProcess();
     delete bI;

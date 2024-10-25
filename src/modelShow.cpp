@@ -1,5 +1,5 @@
 #include"modelShow.h"
-#include"commonTool/meshTool.h"
+#include"commonTool/loadModelTool.h"
 #include"commonTool/cameraTool.h"
 #include"commonTool/shaderLanguage.h"
 
@@ -26,42 +26,11 @@ bool modelShow::InitGlSource() {
 
     // build and compile our shader zprogram
     ShaderGLSLTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
-    //lightCubeShader = new ShaderGLSLTool(path_vs_cube.c_str(),path_fs_cube.c_str());
     camera_ = new cameraTool(glm::vec3(0.0f, 0.0f, 3.0f));
-    lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
+    meshTool_ = new loadModelTool(path_model1.c_str());
 
-    float vertices[] = {
-         0.5f,  0.5f, 0.0f,  // top right
-         0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f,  // bottom left
-        -0.5f,  0.5f, 0.0f,   // top left 
-        -0.8f,  -0.6f, 0.0f,
-        -0.7f,  0.7f, 0.0f   
-    };
-    uint32_t indices[] = {  // note that we start from 0!
-        0, 1, 2,  // first Triangle
-        3, 4, 5   // second Triangle
-    };
-    // 一个绑定顶点两个绑定缓冲
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-    glBindBuffer(GL_ARRAY_BUFFER, 0); 
-
-    glBindVertexArray(0); 
+    // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
+    stbi_set_flip_vertically_on_load(true);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     return true;
 }

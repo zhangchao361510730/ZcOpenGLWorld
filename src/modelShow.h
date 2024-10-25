@@ -2,17 +2,16 @@
 #define modelShow_H_
 #include"baseInit.h"
 
-class camera;
-class meshTool;
+class cameraTool;
+class loadModelTool;
 class ShaderGLSLTool;
 
 class modelShow:public baseInit {
 private:
     uint32_t EBO;
-    camera* camera_;
-    meshTool* meshTool_;
+    cameraTool* camera_;
+    loadModelTool* meshTool_;
     ShaderGLSLTool* ShaderGLSLTool_;
-
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;
     bool firstMouse = true;
