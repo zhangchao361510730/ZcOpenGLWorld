@@ -25,5 +25,5 @@ int main() {
 
 /*
 书签记录，每次结束都更新下面的页数
-https://learnopengl-cn.github.io/02%20Lighting/06%20Multiple%20lights/
+https://learnopengl-cn.github.io/08%20Guest%20Articles/2020/01%20Skeletal%20Animation/#_1
 */
