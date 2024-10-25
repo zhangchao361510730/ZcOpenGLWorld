@@ -52,8 +52,7 @@ int boneTool::GetBoneID() {
 }
 	
 int boneTool::GetPositionIndex(float animationTime) {
-	for (int index = 0; index < m_NumPositions - 1; ++index)
-	{
+	for (int index = 0; index < m_NumPositions - 1; ++index) {
 		if (animationTime < m_Positions[index + 1].timeStamp)
 			return index;
 	}
