@@ -9,11 +9,11 @@
 #endif
 
 #include"src/globaDefine.h"
-#include"src/singleTriangle.h"
-#include"src/modelShow.h"
-#include"src/textureImage.h"
-#include"src/cameraControl.h"
-#include"src/lightControl.h"
+#include"singleTriangle.h"
+#include"modelShow.h"
+#include"textureImage.h"
+#include"cameraControl.h"
+#include"lightControl.h"
 
 int main() {
     baseInit* bI = new modelShow(); 
