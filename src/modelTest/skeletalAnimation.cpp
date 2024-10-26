@@ -57,6 +57,7 @@ void skeletalAnimation::setCallBackControl(void*thiz) {
 	skeletalAnimation* thiz_ = (skeletalAnimation*)thiz;
     if (thiz_ == nullptr) {
         std::cerr<<__FILE__<<" thiz_ is nullptr"<<std::endl;
+        return;
     }
     glfwSetFramebufferSizeCallback(thiz_->window, skeletalAnimation::framebuffer_size_callback);
     glfwSetCursorPosCallback(thiz_->window, skeletalAnimation::mouse_callback);
