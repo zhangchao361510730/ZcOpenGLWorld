@@ -1,40 +1,38 @@
 #include"modelBindAnimation.h"
     // constructor, expects a filepath to a 3D model.
-    modelBindAnimation::modelBindAnimation(string const &path, bool gamma = false) : gammaCorrection(gamma)
-    {
-        loadModel(path);
-    }
+modelBindAnimation::modelBindAnimation(string const &path, bool gamma = false) : gammaCorrection(gamma) {
+    loadModel(path);
+}
 
     // draws the model, and thus all its meshes
-    void modelBindAnimation::Draw(ShaderGLSLTool &shader)
-    {
-        for(unsigned int i = 0; i < meshes.size(); i++)
-            meshes[i].runDrawProcess(shader);
-    }
+void modelBindAnimation::Draw(ShaderGLSLTool &shader) {
+    for(unsigned int i = 0; i < meshes.size(); i++)
+        meshes[i].runDrawProcess(shader);
+}
     
-	std::map<string, BoneInfo>& modelBindAnimation::GetBoneInfoMap() { return m_BoneInfoMap; }
-	int& modelBindAnimation::GetBoneCount() { return m_BoneCounter; }
-	
+std::map<string, BoneInfo>& modelBindAnimation::GetBoneInfoMap() { 
+	return m_BoneInfoMap; 
+}
 
+int& modelBindAnimation::GetBoneCount() { 
+	return m_BoneCounter; 
+}
 
-    // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
-    void modelBindAnimation::loadModel(string const &path)
-    {
-        // read file via ASSIMP
-        Assimp::Importer importer;
-        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
-        // check for errors
-        if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
-        {
-            cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
-            return;
-        }
-        // retrieve the directory path of the filepath
-        directory = path.substr(0, path.find_last_of('/'));
-
-        // process ASSIMP's root node recursively
-        processNode(scene->mRootNode, scene);
+// loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
+void modelBindAnimation::loadModel(string const &path) {
+    // read file via ASSIMP
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
+    // check for errors
+    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+        cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
+        return;
     }
+    // retrieve the directory path of the filepath
+    directory = path.substr(0, path.find_last_of('/'));
+    // process ASSIMP's root node recursively
+    processNode(scene->mRootNode, scene);
+}
 
     // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
 void modelBindAnimation::processNode(aiNode *node, const aiScene *scene) {
