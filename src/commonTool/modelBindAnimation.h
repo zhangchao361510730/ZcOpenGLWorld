@@ -20,8 +20,7 @@
 #include"meshTool.h"
 #include"shaderLanguage.h"
 
-class modelBindAnimation 
-{
+class modelBindAnimation {
 public:
     // model data 
     vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
