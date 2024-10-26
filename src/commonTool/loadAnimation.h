@@ -28,10 +28,10 @@ public:
 	loadAnimation(const std::string& animationPath, modelBindAnimation* model);
 	~loadAnimation() = default;
 	boneTool* FindBone(const std::string& name);
-	inline float GetTicksPerSecond();
-	inline float GetDuration();
-	inline const AssimpNodeData& GetRootNode();
-	inline const std::map<std::string,BoneInfo>& GetBoneIDMap();
+	float GetTicksPerSecond();
+	float GetDuration();
+	const AssimpNodeData& GetRootNode();
+	const std::map<std::string,BoneInfo>& GetBoneIDMap();
 private:
 	void ReadMissingBones(const aiAnimation* animation, modelBindAnimation& model);
 	void ReadHierarchyData(AssimpNodeData& dest, const aiNode* src);

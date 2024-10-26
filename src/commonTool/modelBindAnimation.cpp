@@ -1,6 +1,6 @@
 #include"modelBindAnimation.h"
     // constructor, expects a filepath to a 3D model.
-modelBindAnimation::modelBindAnimation(string const &path, bool gamma = false) : gammaCorrection(gamma) {
+modelBindAnimation::modelBindAnimation(string const &path, bool gamma) : gammaCorrection(gamma) {
     loadModel(path);
 }
 
@@ -136,7 +136,7 @@ void modelBindAnimation::ExtractBoneWeightForVertices(std::vector<Vertex>& verti
 }
 
 
-uint32_t modelBindAnimation::TextureFromFile(const char* path, const string& directory, bool gamma = false) {
+uint32_t modelBindAnimation::TextureFromFile(const char* path, const string& directory, bool gamma) {
 	string filename = string(path);
 	filename = directory + '/' + filename;
 	uint32_t textureID;
