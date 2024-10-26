@@ -15,7 +15,7 @@
 	}
 
 
-	Bone* FindBone(const std::string& name)
+	Bone* loadAnimation::FindBone(const std::string& name)
 	{
 		auto iter = std::find_if(m_Bones.begin(), m_Bones.end(),
 			[&](const Bone& Bone)
@@ -28,17 +28,14 @@
 	}
 
 	
-	inline float GetTicksPerSecond() { return m_TicksPerSecond; }
-	inline float GetDuration() { return m_Duration;}
-	inline const AssimpNodeData& GetRootNode() { return m_RootNode; }
-	inline const std::map<std::string,BoneInfo>& GetBoneIDMap() 
-	{ 
+	float loadAnimation::GetTicksPerSecond() { return m_TicksPerSecond; }
+	float loadAnimation::GetDuration() { return m_Duration;}
+	const AssimpNodeData& loadAnimation::GetRootNode() { return m_RootNode; }
+	const std::map<std::string,BoneInfo>& loadAnimation::GetBoneIDMap() { 
 		return m_BoneInfoMap;
 	}
 
-private:
-	void ReadMissingBones(const aiAnimation* animation, Model& model)
-	{
+	void loadAnimation::ReadMissingBones(const aiAnimation* animation, Model& model) {
 		int size = animation->mNumChannels;
 
 		auto& boneInfoMap = model.GetBoneInfoMap();//getting m_BoneInfoMap from Model class
@@ -62,7 +59,7 @@ private:
 		m_BoneInfoMap = boneInfoMap;
 	}
 
-	void ReadHierarchyData(AssimpNodeData& dest, const aiNode* src)
+	void loadAnimation::ReadHierarchyData(AssimpNodeData& dest, const aiNode* src)
 	{
 		assert(src);
 
@@ -77,12 +74,6 @@ private:
 			dest.children.push_back(newData);
 		}
 	}
-	float m_Duration;
-	int m_TicksPerSecond;
-	std::vector<Bone> m_Bones;
-	AssimpNodeData m_RootNode;
-	std::map<std::string, BoneInfo> m_BoneInfoMap;
-};
 
 
 

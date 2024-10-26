@@ -1,7 +1,7 @@
 #include"animationTool.h"
 
 
-	animationTool::animationTool(Animation* animation)
+	animationTool::animationTool(loadAnimation* animation)
 	{
 		m_CurrentTime = 0.0;
 		m_CurrentAnimation = animation;
@@ -23,7 +23,7 @@
 		}
 	}
 
-	void animationTool::PlayAnimation(Animation* pAnimation)
+	void animationTool::PlayAnimation(loadAnimation* pAnimation)
 	{
 		m_CurrentAnimation = pAnimation;
 		m_CurrentTime = 0.0f;
