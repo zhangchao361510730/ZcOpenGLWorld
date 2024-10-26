@@ -14,8 +14,7 @@ loadAnimation::loadAnimation(const std::string& animationPath, Model* model) {
 }
 
 
-Bone* loadAnimation::FindBone(const std::string& name)
-{
+Bone* loadAnimation::FindBone(const std::string& name) {
 	auto iter = std::find_if(m_Bones.begin(), m_Bones.end(),[&](const Bone& Bone) {
 			return Bone.GetBoneName() == name;
 		}

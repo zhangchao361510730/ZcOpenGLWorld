@@ -9,19 +9,18 @@
 #include <assimp/scene.h>
 #include <learnopengl/bone.h>
 #include <functional>
-#include <learnopengl/animdata.h>
-#include <learnopengl/model_animation.h>
+//#include <learnopengl/model_animation.h>
 
-struct AssimpNodeData
-{
+#include"animdata.h"
+
+struct AssimpNodeData {
 	glm::mat4 transformation;
 	std::string name;
 	int childrenCount;
 	std::vector<AssimpNodeData> children;
 };
 
-class loadAnimation
-{
+class loadAnimation {
 public:
 	loadAnimation() = default;
 	loadAnimation(const std::string& animationPath, Model* model);
