@@ -1,6 +1,6 @@
 #include"loadAnimation.h"
 
-loadAnimation::loadAnimation(const std::string& animationPath, Model* model) {
+loadAnimation::loadAnimation(const std::string& animationPath, modelBindAnimation* model) {
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(animationPath, aiProcess_Triangulate);
 	assert(scene && scene->mRootNode);
@@ -14,9 +14,9 @@ loadAnimation::loadAnimation(const std::string& animationPath, Model* model) {
 }
 
 
-Bone* loadAnimation::FindBone(const std::string& name) {
-	auto iter = std::find_if(m_Bones.begin(), m_Bones.end(),[&](const Bone& Bone) {
-			return Bone.GetBoneName() == name;
+boneTool* loadAnimation::FindBone(const std::string& name) {
+	auto iter = std::find_if(m_Bones.begin(), m_Bones.end(),[&](const boneTool& boneTool) {
+			return boneTool.GetBoneName() == name;
 		}
 	);
 	if (iter == m_Bones.end()) return nullptr;
@@ -40,10 +40,10 @@ const std::map<std::string,BoneInfo>& loadAnimation::GetBoneIDMap() {
 	return m_BoneInfoMap;
 }
 
-void loadAnimation::ReadMissingBones(const aiAnimation* animation, Model& model) {
+void loadAnimation::ReadMissingBones(const aiAnimation* animation, modelBindAnimation& model) {
 	int size = animation->mNumChannels;
-	auto& boneInfoMap = model.GetBoneInfoMap();//getting m_BoneInfoMap from Model class
-	int& boneCount = model.GetBoneCount(); //getting the m_BoneCounter from Model class
+	auto& boneInfoMap = model.GetBoneInfoMap();//getting m_BoneInfoMap from modelBindAnimation class
+	int& boneCount = model.GetBoneCount(); //getting the m_BoneCounter from modelBindAnimation class
 	//reading channels(bones engaged in an animation and their keyframes)
 	for (int i = 0; i < size; i++) {
 		auto channel = animation->mChannels[i];
@@ -53,7 +53,7 @@ void loadAnimation::ReadMissingBones(const aiAnimation* animation, Model& model)
 			boneInfoMap[boneName].id = boneCount;
 			boneCount++;
 		}
-		m_Bones.push_back(Bone(channel->mNodeName.data,
+		m_Bones.push_back(boneTool(channel->mNodeName.data,
 			boneInfoMap[channel->mNodeName.data].id, channel));
 	}
 	m_BoneInfoMap = boneInfoMap;
