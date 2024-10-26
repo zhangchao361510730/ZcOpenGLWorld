@@ -1,124 +1,238 @@
-#include"boneTool.h"
+#include"modelBindAnimation.h"
+    // constructor, expects a filepath to a 3D model.
+    modelBindAnimation::modelBindAnimation(string const &path, bool gamma = false) : gammaCorrection(gamma)
+    {
+        loadModel(path);
+    }
 
-boneTool::boneTool(const std::string& name, int ID, const aiNodeAnim* channel):m_Name(name),m_ID(ID),m_LocalTransform(1.0f) {
-	m_NumPositions = channel->mNumPositionKeys;
-	for (int positionIndex = 0; positionIndex < m_NumPositions; ++positionIndex) {
-		aiVector3D aiPosition = channel->mPositionKeys[positionIndex].mValue;
-		float timeStamp = channel->mPositionKeys[positionIndex].mTime;
-		KeyPosition data;
-		data.position = AssimpGLMHelpers::GetGLMVec(aiPosition);
-		data.timeStamp = timeStamp;
-		m_Positions.push_back(data);
-	}
-
-	m_NumRotations = channel->mNumRotationKeys;
-	for (int rotationIndex = 0; rotationIndex < m_NumRotations; ++rotationIndex) {
-		aiQuaternion aiOrientation = channel->mRotationKeys[rotationIndex].mValue;
-		float timeStamp = channel->mRotationKeys[rotationIndex].mTime;
-		KeyRotation data;
-		data.orientation = AssimpGLMHelpers::GetGLMQuat(aiOrientation);
-		data.timeStamp = timeStamp;
-		m_Rotations.push_back(data);
-	}
-
-	m_NumScalings = channel->mNumScalingKeys;
-	for (int keyIndex = 0; keyIndex < m_NumScalings; ++keyIndex) {
-		aiVector3D scale = channel->mScalingKeys[keyIndex].mValue;
-		float timeStamp = channel->mScalingKeys[keyIndex].mTime;
-		KeyScale data;
-		data.scale = AssimpGLMHelpers::GetGLMVec(scale);
-		data.timeStamp = timeStamp;
-		m_Scales.push_back(data);
-	}
-	}
+    // draws the model, and thus all its meshes
+    void modelBindAnimation::Draw(ShaderGLSLTool &shader)
+    {
+        for(unsigned int i = 0; i < meshes.size(); i++)
+            meshes[i].runDrawProcess(shader);
+    }
+    
+	std::map<string, BoneInfo>& modelBindAnimation::GetBoneInfoMap() { return m_BoneInfoMap; }
+	int& modelBindAnimation::GetBoneCount() { return m_BoneCounter; }
 	
-void boneTool::Update(float animationTime)
-{
-	glm::mat4 translation = InterpolatePosition(animationTime);
-	glm::mat4 rotation = InterpolateRotation(animationTime);
-	glm::mat4 scale = InterpolateScaling(animationTime);
-	m_LocalTransform = translation * rotation * scale;
-}
-glm::mat4 boneTool::GetLocalTransform() { 
-    return m_LocalTransform;
-}
 
-std::string boneTool::GetBoneName() const { 
-    return m_Name; 
-}
 
-int boneTool::GetBoneID() { 
-    return m_ID; 
-}
-	
-int boneTool::GetPositionIndex(float animationTime) {
-	for (int index = 0; index < m_NumPositions - 1; ++index) {
-		if (animationTime < m_Positions[index + 1].timeStamp)
-			return index;
-	}
-	assert(0);
-}
+    // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
+    void modelBindAnimation::loadModel(string const &path)
+    {
+        // read file via ASSIMP
+        Assimp::Importer importer;
+        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
+        // check for errors
+        if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+        {
+            cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
+            return;
+        }
+        // retrieve the directory path of the filepath
+        directory = path.substr(0, path.find_last_of('/'));
 
-int boneTool::GetRotationIndex(float animationTime) {
-	for (int index = 0; index < m_NumRotations - 1; ++index) {
-		if (animationTime < m_Rotations[index + 1].timeStamp)
-			return index;
-	}
-	assert(0);
-}
+        // process ASSIMP's root node recursively
+        processNode(scene->mRootNode, scene);
+    }
 
-int boneTool::GetScaleIndex(float animationTime) {
-	for (int index = 0; index < m_NumScalings - 1; ++index)
+    // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
+    void modelBindAnimation::processNode(aiNode *node, const aiScene *scene)
+    {
+        // process each mesh located at the current node
+        for(unsigned int i = 0; i < node->mNumMeshes; i++)
+        {
+            // the node object only contains indices to index the actual objects in the scene. 
+            // the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
+            aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+            meshes.push_back(processMesh(mesh, scene));
+        }
+        // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
+        for(unsigned int i = 0; i < node->mNumChildren; i++)
+        {
+            processNode(node->mChildren[i], scene);
+        }
+
+    }
+
+	void modelBindAnimation::SetVertexBoneDataToDefault(Vertex& vertex)
 	{
-		if (animationTime < m_Scales[index + 1].timeStamp)
-			return index;
+		for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
+		{
+			vertex.m_BoneIDs[i] = -1;
+			vertex.m_Weights[i] = 0.0f;
+		}
 	}
-	assert(0);
-}
 
-float boneTool::GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime) {
-	float scaleFactor = 0.0f;
-	float midWayLength = animationTime - lastTimeStamp;
-	float framesDiff = nextTimeStamp - lastTimeStamp;
-	scaleFactor = midWayLength / framesDiff;
-	return scaleFactor;
-}
 
-glm::mat4 boneTool::InterpolatePosition(float animationTime) {
-	if (1 == m_NumPositions)
-		return glm::translate(glm::mat4(1.0f), m_Positions[0].position);
-	int p0Index = GetPositionIndex(animationTime);
-	int p1Index = p0Index + 1;
-	float scaleFactor = GetScaleFactor(m_Positions[p0Index].timeStamp,
-		m_Positions[p1Index].timeStamp, animationTime);
-	glm::vec3 finalPosition = glm::mix(m_Positions[p0Index].position, m_Positions[p1Index].position
-		, scaleFactor);
-	return glm::translate(glm::mat4(1.0f), finalPosition);
-}
+	meshTool modelBindAnimation::processMesh(aiMesh* mesh, const aiScene* scene)
+	{
+		vector<Vertex> vertices;
+		vector<unsigned int> indices;
+		vector<Texture> textures;
 
-glm::mat4 boneTool::InterpolateRotation(float animationTime) {
-	if (1 == m_NumRotations) {
-		auto rotation = glm::normalize(m_Rotations[0].orientation);
-		return glm::toMat4(rotation);
+		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+		{
+			Vertex vertex;
+			SetVertexBoneDataToDefault(vertex);
+			vertex.Position = AssimpGLMHelpers::GetGLMVec(mesh->mVertices[i]);
+			vertex.Normal = AssimpGLMHelpers::GetGLMVec(mesh->mNormals[i]);
+			
+			if (mesh->mTextureCoords[0])
+			{
+				glm::vec2 vec;
+				vec.x = mesh->mTextureCoords[0][i].x;
+				vec.y = mesh->mTextureCoords[0][i].y;
+				vertex.TexCoords = vec;
+			}
+			else
+				vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+
+			vertices.push_back(vertex);
+		}
+		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+		{
+			aiFace face = mesh->mFaces[i];
+			for (unsigned int j = 0; j < face.mNumIndices; j++)
+				indices.push_back(face.mIndices[j]);
+		}
+		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+		vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+		vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+		std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+		std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+
+		ExtractBoneWeightForVertices(vertices,mesh,scene);
+
+		return meshTool(vertices, indices, textures);
 	}
-	int p0Index = GetRotationIndex(animationTime);
-	int p1Index = p0Index + 1;
-	float scaleFactor = GetScaleFactor(m_Rotations[p0Index].timeStamp,
-		m_Rotations[p1Index].timeStamp, animationTime);
-	glm::quat finalRotation = glm::slerp(m_Rotations[p0Index].orientation, m_Rotations[p1Index].orientation
-		, scaleFactor);
-	finalRotation = glm::normalize(finalRotation);
-	return glm::toMat4(finalRotation);
-}
 
-glm::mat4 boneTool::InterpolateScaling(float animationTime) {
-	if (1 == m_NumScalings)
-		return glm::scale(glm::mat4(1.0f), m_Scales[0].scale);
-	int p0Index = GetScaleIndex(animationTime);
-	int p1Index = p0Index + 1;
-	float scaleFactor = GetScaleFactor(m_Scales[p0Index].timeStamp,
-		m_Scales[p1Index].timeStamp, animationTime);
-	glm::vec3 finalScale = glm::mix(m_Scales[p0Index].scale, m_Scales[p1Index].scale
-		, scaleFactor);
-	return glm::scale(glm::mat4(1.0f), finalScale);
-}
+	void modelBindAnimation::SetVertexBoneData(Vertex& vertex, int boneID, float weight)
+	{
+		for (int i = 0; i < MAX_BONE_INFLUENCE; ++i)
+		{
+			if (vertex.m_BoneIDs[i] < 0)
+			{
+				vertex.m_Weights[i] = weight;
+				vertex.m_BoneIDs[i] = boneID;
+				break;
+			}
+		}
+	}
+
+
+	void modelBindAnimation::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh, const aiScene* scene)
+	{
+		auto& boneInfoMap = m_BoneInfoMap;
+		int& boneCount = m_BoneCounter;
+
+		for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex)
+		{
+			int boneID = -1;
+			std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
+			if (boneInfoMap.find(boneName) == boneInfoMap.end())
+			{
+				BoneInfo newBoneInfo;
+				newBoneInfo.id = boneCount;
+				newBoneInfo.offset = AssimpGLMHelpers::ConvertMatrixToGLMFormat(mesh->mBones[boneIndex]->mOffsetMatrix);
+				boneInfoMap[boneName] = newBoneInfo;
+				boneID = boneCount;
+				boneCount++;
+			}
+			else
+			{
+				boneID = boneInfoMap[boneName].id;
+			}
+			assert(boneID != -1);
+			auto weights = mesh->mBones[boneIndex]->mWeights;
+			int numWeights = mesh->mBones[boneIndex]->mNumWeights;
+
+			for (int weightIndex = 0; weightIndex < numWeights; ++weightIndex)
+			{
+				int vertexId = weights[weightIndex].mVertexId;
+				float weight = weights[weightIndex].mWeight;
+				assert(vertexId <= vertices.size());
+				SetVertexBoneData(vertices[vertexId], boneID, weight);
+			}
+		}
+	}
+
+
+	unsigned int modelBindAnimation::TextureFromFile(const char* path, const string& directory, bool gamma = false)
+	{
+		string filename = string(path);
+		filename = directory + '/' + filename;
+
+		unsigned int textureID;
+		glGenTextures(1, &textureID);
+
+		int width, height, nrComponents;
+		unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+		if (data)
+		{
+			GLenum format;
+			if (nrComponents == 1)
+				format = GL_RED;
+			else if (nrComponents == 3)
+				format = GL_RGB;
+			else if (nrComponents == 4)
+				format = GL_RGBA;
+
+			glBindTexture(GL_TEXTURE_2D, textureID);
+			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+			glGenerateMipmap(GL_TEXTURE_2D);
+
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+			stbi_image_free(data);
+		}
+		else
+		{
+			std::cout << "Texture failed to load at path: " << path << std::endl;
+			stbi_image_free(data);
+		}
+
+		return textureID;
+	}
+    
+    // checks all material textures of a given type and loads the textures if they're not loaded yet.
+    // the required info is returned as a Texture struct.
+    vector<Texture> modelBindAnimation::loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName)
+    {
+        vector<Texture> textures;
+        for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+        {
+            aiString str;
+            mat->GetTexture(type, i, &str);
+            // check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
+            bool skip = false;
+            for(unsigned int j = 0; j < textures_loaded.size(); j++)
+            {
+                if(std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
+                {
+                    textures.push_back(textures_loaded[j]);
+                    skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
+                    break;
+                }
+            }
+            if(!skip)
+            {   // if texture hasn't been loaded already, load it
+                Texture texture;
+                texture.id = TextureFromFile(str.C_Str(), this->directory);
+                texture.type = typeName;
+                texture.path = str.C_Str();
+                textures.push_back(texture);
+                textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
+            }
+        }
+        return textures;
+    }
+};
