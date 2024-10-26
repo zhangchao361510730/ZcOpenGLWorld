@@ -43,7 +43,7 @@ message(STATUS "Source Directory: ${CMAKE_SOURCE_DIR}")
 message(STATUS "Current CMake File Directory: ${CMAKE_CURRENT_LIST_DIR}")
 
 link_directories(${CMAKE_SOURCE_DIR}/linux_libs/lib)
-include_directories(${CMAKE_SOURCE_DIR}/linux_libs/includes)
+#include_directories(${CMAKE_SOURCE_DIR}/linux_libs/includes)
 include_directories(${CMAKE_SOURCE_DIR}/src/sourceLib)
 include_directories(${CMAKE_SOURCE_DIR}/src/lightTest)
 include_directories(${CMAKE_SOURCE_DIR}/src/modelTest)
