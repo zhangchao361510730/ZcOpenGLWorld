@@ -6,8 +6,7 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 #include <learnopengl/animation.h>
-#include <learnopengl/bone.h>
-
+#include"boneTool.h"
 class Animator
 {
 public:
