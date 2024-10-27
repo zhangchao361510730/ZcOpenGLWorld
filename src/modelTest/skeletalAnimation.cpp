@@ -24,9 +24,9 @@ bool skeletalAnimation::InitGlSource() {
     std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/vampire/dancing_vampire.dae");
     // build and compile our shader zprogram
     
-    modelBindAnimation* modelBindA_ = new modelBindAnimation(animationPath.c_str());
-    loadAnimation* loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
-    animationTool* animationTool_ = new animationTool(loadAnimation_);
+    modelBindA_ = new modelBindAnimation(animationPath.c_str());
+    loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
+    animationTool_ = new animationTool(loadAnimation_);
     shaderTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
     camera_ = new cameraTool(glm::vec3(0.0f, 0.0f, 3.0f));
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -108,7 +108,7 @@ void skeletalAnimation::runDrawProcess() {
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
         shaderTool_->setMat4("model", model);
-        loadModelTool_->runDrawProcess(*shaderTool_);
+        modelBindA_->Draw(*shaderTool_);
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         glfwSwapBuffers(window);
         glfwPollEvents();

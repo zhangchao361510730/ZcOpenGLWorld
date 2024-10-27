@@ -4,13 +4,18 @@
 
 class cameraTool;
 class loadModelTool;
-class ShaderGLSLTool;
+class modelBindAnimation;
+class loadAnimation;
+class animationTool;
 
 class skeletalAnimation:public baseInit {
 private:
     uint32_t EBO;
     cameraTool* camera_;
     loadModelTool* loadModelTool_;
+    modelBindAnimation* modelBindA_;
+    loadAnimation* loadAnimation_;
+    animationTool* animationTool_;
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;
     bool firstMouse = true;
