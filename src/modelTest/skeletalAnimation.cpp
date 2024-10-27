@@ -1,7 +1,9 @@
 #include"skeletalAnimation.h"
-#include"commonTool/loadModelTool.h"
 #include"commonTool/cameraTool.h"
+#include"commonTool/animationTool.h"
 #include"commonTool/shaderLanguage.h"
+#include"commonTool/modelBindAnimation.h"
+#include"commonTool/loadModelTool.h"
 
 skeletalAnimation::skeletalAnimation(/* args */) {
 
@@ -17,13 +19,16 @@ bool skeletalAnimation::InitGlSource() {
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
     stbi_set_flip_vertically_on_load(true);
     glEnable(GL_DEPTH_TEST);
-    std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/model_loading.fs");
-    std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/model_loading.vs");
-    std::string path_model1 = std::string(CMAKE_CURRENT_DIR).append("/modelResource/nanosuit/nanosuit.obj");
+    std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.fs");
+    std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");
+    std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/vampire/dancing_vampire.dae");
     // build and compile our shader zprogram
+    
+    modelBindAnimation* modelBindA_ = new modelBindAnimation(animationPath.c_str());
+    loadAnimation* loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
+    animationTool* animationTool_ = new animationTool(loadAnimation_);
     shaderTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
     camera_ = new cameraTool(glm::vec3(0.0f, 0.0f, 3.0f));
-    loadModelTool_ = new loadModelTool(path_model1.c_str());
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     return true;
 }

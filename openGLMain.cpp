@@ -14,9 +14,10 @@
 #include"textureImage.h"
 #include"cameraControl.h"
 #include"lightControl.h"
+#include"skeletalAnimation.h"
 
 int main() {
-    baseInit* bI = new modelShow(); 
+    baseInit* bI = new skeletalAnimation(); 
     bI->InitGlSource();
     bI->runDrawProcess();
     delete bI;
