@@ -86,30 +86,50 @@ void skeletalAnimation::processInput(GLFWwindow *window) {
 
 void skeletalAnimation::runDrawProcess() {
     // render loop
-    while (!glfwWindowShouldClose(window)) {
+    // render loop
+    // -----------
+    while (!glfwWindowShouldClose(window))
+    {
         // per-frame time logic
-        float currentFrame = static_cast<float>(glfwGetTime());
+        // --------------------
+        float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+
         // input
+        // -----
         processInput(window);
+        animationTool_->UpdateAnimation(deltaTime);
+
         // render
+        // ------
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         // don't forget to enable shader before setting uniforms
         shaderTool_->use();
+
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera_->Zoom), (float)windowsWidth / (float)windowsHeight, 0.1f, 100.0f);
         glm::mat4 view = camera_->GetViewMatrix();
         shaderTool_->setMat4("projection", projection);
         shaderTool_->setMat4("view", view);
+
+        auto transforms = animationTool_->GetFinalBoneMatrices();
+        for (int i = 0; i < transforms.size(); ++i)
+            shaderTool_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+
+
         // render the loaded model
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+        model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
         shaderTool_->setMat4("model", model);
         modelBindA_->Draw(*shaderTool_);
+
+
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
