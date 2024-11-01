@@ -15,7 +15,7 @@ std::map<string, BoneInfo>& modelBindAnimation::GetBoneInfoMap() {
 }
 
 int& modelBindAnimation::GetBoneCount() { 
-	return m_BoneCounter; 
+	return m_BoneCounter;
 }
 
 // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
@@ -25,7 +25,7 @@ void modelBindAnimation::loadModel(string const &path) {
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
     // check for errors
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
+        cout << __FILE__<<":"<<__LINE__ <<" ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
         return;
     }
     // retrieve the directory path of the filepath

@@ -21,7 +21,7 @@ bool skeletalAnimation::InitGlSource() {
     glEnable(GL_DEPTH_TEST);
     std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.fs");
     std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");
-    std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/vampire/dancing_vampire.dae");
+    std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/Drop_Kick/Drop_Kick.dae");
     // build and compile our shader zprogram
     
     modelBindA_ = new modelBindAnimation(animationPath.c_str());
@@ -71,8 +71,9 @@ void skeletalAnimation::setCallBackControl(void*thiz) {
 }
 
 void skeletalAnimation::processInput(GLFWwindow *window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
+    }
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         camera_->ProcessKeyboard(FORWARD, deltaTime);
@@ -86,26 +87,21 @@ void skeletalAnimation::processInput(GLFWwindow *window) {
 
 void skeletalAnimation::runDrawProcess() {
     // render loop
-    // render loop
     // -----------
-    while (!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         // per-frame time logic
         // --------------------
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-
         // input
         // -----
         processInput(window);
         animationTool_->UpdateAnimation(deltaTime);
-
         // render
         // ------
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         // don't forget to enable shader before setting uniforms
         shaderTool_->use();
 
@@ -116,18 +112,15 @@ void skeletalAnimation::runDrawProcess() {
         shaderTool_->setMat4("view", view);
 
         auto transforms = animationTool_->GetFinalBoneMatrices();
-        for (int i = 0; i < transforms.size(); ++i)
+        for (int i = 0; i < transforms.size(); ++i) {
             shaderTool_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
-
-
+        }
         // render the loaded model
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
         shaderTool_->setMat4("model", model);
         modelBindA_->Draw(*shaderTool_);
-
-
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);

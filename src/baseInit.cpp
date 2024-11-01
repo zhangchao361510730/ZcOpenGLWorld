@@ -33,8 +33,6 @@ bool baseInit::InitGlSource() {
         return false;
     }
     glfwMakeContextCurrent(window);
-    
-
     if (setCallbackFun_ != nullptr) {
         setCallbackFun_(this);
     }
