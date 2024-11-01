@@ -19,7 +19,7 @@
 int main() {
     baseInit* bI = new skeletalAnimation(); 
     bI->InitGlSource();
-    bI->runDrawProcess();
+    //bI->runDrawProcess();
     delete bI;
     return 0;
 }
