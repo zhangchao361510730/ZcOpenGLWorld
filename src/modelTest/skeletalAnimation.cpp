@@ -21,7 +21,7 @@ bool skeletalAnimation::InitGlSource() {
     glEnable(GL_DEPTH_TEST);
     std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.fs");
     std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");
-    std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/Drop_Kick/Drop_Kick.dae");
+    std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/Capoeira/Capoeira.dae");
     // build and compile our shader zprogram
     
     modelBindA_ = new modelBindAnimation(animationPath.c_str());
