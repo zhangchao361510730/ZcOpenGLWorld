@@ -14,7 +14,6 @@ typedef void(*_setCallBackFun_)(void*);
 
 class baseInit {
 public:
-    float r = 1.0f, g = 0.0f, b = 1.0f, a = 1.0f;
     GLFWwindow* window = nullptr;
     std::mt19937 gen; 
     uint32_t VBO = 0;

@@ -28,8 +28,8 @@ private:
 	mainLoop* parten_;
 	std::vector<glm::mat4> m_FinalBoneMatrices;
 	loadAnimation* m_CurrentAnimation;
-	float m_CurrentTime;
-	float m_DeltaTime;
+	//float m_CurrentTime;
+	//float m_DeltaTime;
 
 };
 #endif

@@ -2,7 +2,7 @@
 #include"mainLoop.h"
 
 animationTool::animationTool(loadAnimation* animation,mainLoop* parten):parten_(parten) {
-	m_CurrentTime = 0.0;
+	//m_CurrentTime = 0.0;
 	m_CurrentAnimation = animation;
 	m_FinalBoneMatrices.reserve(100);
 	for (int i = 0; i < 100; i++) {
@@ -11,17 +11,18 @@ animationTool::animationTool(loadAnimation* animation,mainLoop* parten):parten_(
 }
 
 void animationTool::UpdateAnimation(float dt) {
-	m_DeltaTime = dt;
-	if (m_CurrentAnimation) {
-		m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * dt;
-		m_CurrentTime = fmod(m_CurrentTime, m_CurrentAnimation->GetDuration());// 得到时间刻度
-		CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
+	if (parten_->isAnimating) {
+		if (m_CurrentAnimation) {
+			parten_->m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * dt;
+			parten_->m_CurrentTime = fmod(parten_->m_CurrentTime, m_CurrentAnimation->GetDuration());// 得到时间刻度
+			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
+		}
 	}
 }
 
 void animationTool::PlayAnimation(loadAnimation* pAnimation) {
 	m_CurrentAnimation = pAnimation;
-	m_CurrentTime = 0.0f;
+	//m_CurrentTime = 0.0f;
 }
 
 void animationTool::CalculateBoneTransform(const AssimpNodeData* node, glm::mat4 parentTransform) {
@@ -29,7 +30,7 @@ void animationTool::CalculateBoneTransform(const AssimpNodeData* node, glm::mat4
 	glm::mat4 nodeTransform = node->transformation;
 	boneTool* boneTool = m_CurrentAnimation->FindBone(nodeName);
 	if (boneTool) {
-		boneTool->Update(m_CurrentTime);
+		boneTool->Update(parten_->m_CurrentTime );
 		nodeTransform = boneTool->GetLocalTransform();
 	}
 	glm::mat4 globalTransformation = parentTransform * nodeTransform;

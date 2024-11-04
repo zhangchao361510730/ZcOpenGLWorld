@@ -19,10 +19,11 @@ private:
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;
     bool firstMouse = true;
-    float deltaTime = 0.0f;
+    float m_DeltaTime = 0.0f;
     float lastFrame = 0.0f;
     bool isAnimating = false;
-    float animationTime = 0.0f;
+    float m_CurrentTime = 0.0f;
+    friend class animationTool;
     //float deltaTime = 0.0f; // 用于计算时间增量
 
 public:

@@ -31,7 +31,7 @@ bool mainLoop::InitGlSource() {
     loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
     animationTool_ = new animationTool(loadAnimation_,this);
     shaderTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
-    camera_ = new cameraTool(glm::vec3(0.0f, 10.0f, 3.0f));
+    camera_ = new cameraTool(glm::vec3(0.0f, 0.0f, 3.0f));
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     return true;
 }
@@ -79,20 +79,20 @@ void mainLoop::processInput(GLFWwindow *window) {
     }
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera_->ProcessKeyboard(FORWARD, deltaTime);
+        camera_->ProcessKeyboard(FORWARD, m_DeltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera_->ProcessKeyboard(BACKWARD, deltaTime);
+        camera_->ProcessKeyboard(BACKWARD, m_DeltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera_->ProcessKeyboard(LEFT, deltaTime);
+        camera_->ProcessKeyboard(LEFT, m_DeltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera_->ProcessKeyboard(RIGHT, deltaTime);
+        camera_->ProcessKeyboard(RIGHT, m_DeltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
         isAnimating = true;
     }
     if (glfwGetKey(window, GLFW_KEY_X) == GLFW_RELEASE) {
         isAnimating = false;
-        animationTime = 0.0f; // 重置动画时间
+        m_CurrentTime = 0.0f; // 重置动画时间
     }
 }
 
@@ -103,12 +103,12 @@ void mainLoop::runDrawProcess() {
         // per-frame time logic
         // --------------------
         float currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
+        m_DeltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         
         // input
         processInput(window);
-        animationTool_->UpdateAnimation(deltaTime);
+        animationTool_->UpdateAnimation(m_DeltaTime);
         
         // render
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
