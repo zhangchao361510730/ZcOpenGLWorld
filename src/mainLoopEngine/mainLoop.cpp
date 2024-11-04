@@ -23,8 +23,8 @@ bool mainLoop::InitGlSource() {
     glEnable(GL_DEPTH_TEST);
     std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.fs");
     std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");
-    std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/Flair/Flair.dae");
-    //std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
+    //std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/Flair/Flair.dae");
+    std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
     
     // Hip_Hop_Dancing.fbx
     modelBindA_ = new modelBindAnimation(animationPath.c_str());
@@ -131,7 +131,8 @@ void mainLoop::runDrawProcess() {
         // render the loaded model
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
+        //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
+        model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
         shaderTool_->setMat4("model", model);
         modelBindA_->Draw(*shaderTool_);
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
