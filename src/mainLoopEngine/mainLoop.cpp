@@ -62,20 +62,34 @@ void mainLoop::scroll_callback(GLFWwindow* window, double xoffset, double yoffse
 }
 
 void mainLoop::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    // if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-    //     glfwSetWindowShouldClose(window, true); // 按下 ESC 键关闭窗口
-    // }
+    mainLoop* thiz = (mainLoop*)glfwGetWindowUserPointer(window);
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true); // 按下 ESC 键关闭窗口
+    }
 
-    // if (key == GLFW_KEY_X) {
-    //     if (action == GLFW_PRESS) {
-    //         std::cout << "X key pressed" << std::endl;
-    //         // 可以在此处开始动画
-    //     }
-    //     else if (action == GLFW_RELEASE) {
-    //         std::cout << "X key released" << std::endl;
-    //         // 可以在此处停止或重置动画
-    //     }
-    // }
+    if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+        thiz->camera_->ProcessKeyboard(FORWARD, thiz->m_DeltaTime);
+        std::cout<<"thiz->m_DeltaTime is "<<thiz->m_DeltaTime<<std::endl;
+    }
+    if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+        thiz->camera_->ProcessKeyboard(BACKWARD, thiz->m_DeltaTime);
+    }
+    if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+        thiz->camera_->ProcessKeyboard(LEFT, thiz->m_DeltaTime);
+    }
+    if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+        thiz->camera_->ProcessKeyboard(RIGHT, thiz->m_DeltaTime);
+    }
+
+    if (key == GLFW_KEY_X) {
+        if (action == GLFW_PRESS) {
+            thiz->isAnimating = true;
+        }
+        else if (action == GLFW_RELEASE) {
+            thiz->isAnimating = false;
+            thiz->m_CurrentTime = 0.0f; // 重置动画时间
+        }
+    }
 }
 
 void mainLoop::setCallBackControl(void*thiz) {
@@ -126,7 +140,7 @@ void mainLoop::runDrawProcess() {
         lastFrame = currentFrame;
         
         // input
-        processInput(window);
+        //processInput(window);
         animationTool_->UpdateAnimation(m_DeltaTime);
         
         // render
