@@ -4,7 +4,7 @@
 #include"commonTool/shaderLanguage.h"
 #include"commonTool/modelBindAnimation.h"
 #include"commonTool/loadModelTool.h"
-#include"commonTool/printTool.h"
+
 
 
 mainLoop::mainLoop(/* args */) {
@@ -23,7 +23,7 @@ bool mainLoop::InitGlSource() {
     glEnable(GL_DEPTH_TEST);
     std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.fs");
     std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");
-    std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/Hip_Hop_Dancing/Hip_Hop_Dancing.dae");
+    std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/Flair/Flair.dae");
     //std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
     
     // Hip_Hop_Dancing.fbx
