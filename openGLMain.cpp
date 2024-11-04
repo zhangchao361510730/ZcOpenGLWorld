@@ -9,11 +9,7 @@
 #endif
 
 #include"src/globaDefine.h"
-#include"singleTriangle.h"
 #include"modelShow.h"
-#include"textureImage.h"
-#include"cameraControl.h"
-#include"lightControl.h"
 #include"skeletalAnimation.h"
 
 int main() {

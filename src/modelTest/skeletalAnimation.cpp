@@ -4,6 +4,8 @@
 #include"commonTool/shaderLanguage.h"
 #include"commonTool/modelBindAnimation.h"
 #include"commonTool/loadModelTool.h"
+#include"commonTool/printTool.h"
+
 
 skeletalAnimation::skeletalAnimation(/* args */) {
 
@@ -21,8 +23,9 @@ bool skeletalAnimation::InitGlSource() {
     glEnable(GL_DEPTH_TEST);
     std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.fs");
     std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");
-    //std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/Capoeira/Capoeira.dae");
-    std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
+    std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/Hip_Hop_Dancing/Hip_Hop_Dancing.dae");
+    //std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
+    
     // Hip_Hop_Dancing.fbx
     // build and compile our shader zprogram
     
@@ -30,7 +33,7 @@ bool skeletalAnimation::InitGlSource() {
     loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
     animationTool_ = new animationTool(loadAnimation_);
     shaderTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
-    camera_ = new cameraTool(glm::vec3(0.0f, 0.0f, 3.0f));
+    camera_ = new cameraTool(glm::vec3(0.0f, 10.0f, 3.0f));
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     return true;
 }
@@ -110,6 +113,8 @@ void skeletalAnimation::runDrawProcess() {
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera_->Zoom), (float)windowsWidth / (float)windowsHeight, 0.1f, 100.0f);
         glm::mat4 view = camera_->GetViewMatrix();
+
+        //printMatrix(view);
         shaderTool_->setMat4("projection", projection);
         shaderTool_->setMat4("view", view);
 

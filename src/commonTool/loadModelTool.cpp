@@ -1,4 +1,7 @@
 #include"loadModelTool.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include"stb_image.h"
+
 
 // constructor, expects a filepath to a 3D model.
 loadModelTool::loadModelTool(string const &path, bool gamma) : gammaCorrection(gamma) {

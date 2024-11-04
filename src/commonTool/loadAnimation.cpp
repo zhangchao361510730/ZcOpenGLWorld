@@ -2,6 +2,8 @@
 
 loadAnimation::loadAnimation(const std::string& animationPath, modelBindAnimation* model) {
 	Assimp::Importer importer;
+	    // 加载 FBX 文件
+    //const aiScene* scene = importer.ReadFile(animationPath,aiProcess_Triangulate|aiProcess_FlipUVs |aiProcess_CalcTangentSpace); 
 	const aiScene *scene = importer.ReadFile(animationPath, aiProcess_Triangulate);
 	assert(scene && scene->mRootNode);
 	auto animation = scene->mAnimations[0];

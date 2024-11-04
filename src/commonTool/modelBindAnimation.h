@@ -35,6 +35,7 @@ public:
 	int& GetBoneCount();
 private:
 	std::map<string, BoneInfo> m_BoneInfoMap;
+    void printModelDimensions(const aiScene* scene);
 	int m_BoneCounter = 0;
     // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
     void loadModel(string const &path);

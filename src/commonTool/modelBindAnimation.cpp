@@ -6,7 +6,7 @@ modelBindAnimation::modelBindAnimation(string const &path, bool gamma) : gammaCo
 
     // draws the model, and thus all its meshes
 void modelBindAnimation::Draw(ShaderGLSLTool &shader) {
-    for(unsigned int i = 0; i < meshes.size(); i++)
+    for(uint32_t i = 0; i < meshes.size(); i++)
         meshes[i].runDrawProcess(shader);
 }
     
@@ -18,6 +18,45 @@ int& modelBindAnimation::GetBoneCount() {
 	return m_BoneCounter;
 }
 
+void modelBindAnimation::printModelDimensions(const aiScene* scene) {
+    if (!scene || scene->mNumMeshes == 0) {
+        std::cerr << "No meshes found in the scene." << std::endl;
+        return;
+    }
+
+    // 初始化边界框
+    aiVector3D min = aiVector3D(FLT_MAX, FLT_MAX, FLT_MAX);
+    aiVector3D max = aiVector3D(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+
+    // 遍历所有网格
+    for (uint32_t i = 0; i < scene->mNumMeshes; i++) {
+        aiMesh* mesh = scene->mMeshes[i];
+
+        for (uint32_t j = 0; j < mesh->mNumVertices; j++) {
+            const aiVector3D& vertex = mesh->mVertices[j];
+
+            // 更新边界框
+            min.x = std::min(min.x, vertex.x);
+            min.y = std::min(min.y, vertex.y);
+            min.z = std::min(min.z, vertex.z);
+            max.x = std::max(max.x, vertex.x);
+            max.y = std::max(max.y, vertex.y);
+            max.z = std::max(max.z, vertex.z);
+        }
+    }
+
+    // 计算尺寸
+    aiVector3D dimensions = max - min;
+
+    // 打印信息
+    std::cout << "Model dimensions:" << std::endl;
+    std::cout << "Width: " << dimensions.x << std::endl;
+    std::cout << "Height: " << dimensions.y << std::endl;
+    std::cout << "Depth: " << dimensions.z << std::endl;
+    std::cout << "Bounding box min: (" << min.x << ", " << min.y << ", " << min.z << ")" << std::endl;
+    std::cout << "Bounding box max: (" << max.x << ", " << max.y << ", " << max.z << ")" << std::endl;
+}
+
 // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
 void modelBindAnimation::loadModel(string const &path) {
     // read file via ASSIMP
@@ -25,7 +64,8 @@ void modelBindAnimation::loadModel(string const &path) {
 
 	//const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
-    // check for errors
+    //this->printModelDimensions(scene);
+	// check for errors
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         cout << __FILE__<<":"<<__LINE__ <<" ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
         return;
@@ -34,19 +74,20 @@ void modelBindAnimation::loadModel(string const &path) {
     directory = path.substr(0, path.find_last_of('/'));
     // process ASSIMP's root node recursively
     processNode(scene->mRootNode, scene);
+	
 }
 
     // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
 void modelBindAnimation::processNode(aiNode *node, const aiScene *scene) {
     // process each mesh located at the current node
-    for(unsigned int i = 0; i < node->mNumMeshes; i++) {
+    for(uint32_t i = 0; i < node->mNumMeshes; i++) {
         // the node object only contains indices to index the actual objects in the scene. 
         // the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         meshes.push_back(processMesh(mesh, scene));
     }
     // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
-    for(unsigned int i = 0; i < node->mNumChildren; i++) {
+    for(uint32_t i = 0; i < node->mNumChildren; i++) {
         processNode(node->mChildren[i], scene);
     }
 }
@@ -60,9 +101,9 @@ void modelBindAnimation::SetVertexBoneDataToDefault(Vertex& vertex) {
 
 meshTool modelBindAnimation::processMesh(aiMesh* mesh, const aiScene* scene) {
 	vector<Vertex> vertices;
-	vector<unsigned int> indices;
+	vector<uint32_t> indices;
 	vector<Texture> textures;
-	for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+	for (uint32_t i = 0; i < mesh->mNumVertices; i++) {
 		Vertex vertex;
 		SetVertexBoneDataToDefault(vertex);
 		vertex.Position = AssimpGLMHelpers::GetGLMVec(mesh->mVertices[i]);
@@ -79,9 +120,9 @@ meshTool modelBindAnimation::processMesh(aiMesh* mesh, const aiScene* scene) {
 			
 		vertices.push_back(vertex);
 	}
-	for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+	for (uint32_t i = 0; i < mesh->mNumFaces; i++) {
 		aiFace face = mesh->mFaces[i];
-		for (unsigned int j = 0; j < face.mNumIndices; j++)
+		for (uint32_t j = 0; j < face.mNumIndices; j++)
 			indices.push_back(face.mIndices[j]);
 	}
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
@@ -171,12 +212,12 @@ uint32_t modelBindAnimation::TextureFromFile(const char* path, const string& dir
     // the required info is returned as a Texture struct.
 vector<Texture> modelBindAnimation::loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName) {
     vector<Texture> textures;
-    for(unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
+    for(uint32_t i = 0; i < mat->GetTextureCount(type); i++) {
         aiString str;
         mat->GetTexture(type, i, &str);
         // check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
         bool skip = false;
-        for(unsigned int j = 0; j < textures_loaded.size(); j++) {
+        for(uint32_t j = 0; j < textures_loaded.size(); j++) {
             if(std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
             {
                 textures.push_back(textures_loaded[j]);
