@@ -25,7 +25,7 @@ file(GLOB SRCFILE ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 file(GLOB GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/src/commonTool/*.cpp)
 list(APPEND SRCFILE ${GLLSTool_})
 
-file(GLOB GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/src/modelLoad/*.cpp)
+file(GLOB GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/src/mainLoopEngine/*.cpp)
 list(APPEND SRCFILE ${GLLSTool_})
 #add_executable(${PROJECT_NAME}_main main.cpp ${SRCFILE})
 
@@ -44,8 +44,7 @@ message(STATUS "Current CMake File Directory: ${CMAKE_CURRENT_LIST_DIR}")
 link_directories(${CMAKE_SOURCE_DIR}/linux_libs/lib)
 include_directories(${CMAKE_SOURCE_DIR}/linux_libs/includes)
 include_directories(${CMAKE_SOURCE_DIR}/src/sourceLib)
-include_directories(${CMAKE_SOURCE_DIR}/src/modelLoad)
-include_directories(${CMAKE_SOURCE_DIR}/src/modelTest)
+include_directories(${CMAKE_SOURCE_DIR}/src/mainLoopEngine)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
 set(DEPENDS_LIB glfw3 assimp)

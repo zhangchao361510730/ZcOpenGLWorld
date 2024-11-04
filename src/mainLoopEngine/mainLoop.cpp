@@ -1,4 +1,4 @@
-#include"skeletalAnimation.h"
+#include"mainLoop.h"
 #include"commonTool/cameraTool.h"
 #include"commonTool/animationTool.h"
 #include"commonTool/shaderLanguage.h"
@@ -27,8 +27,6 @@ bool skeletalAnimation::InitGlSource() {
     //std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
     
     // Hip_Hop_Dancing.fbx
-    // build and compile our shader zprogram
-    
     modelBindA_ = new modelBindAnimation(animationPath.c_str());
     loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
     animationTool_ = new animationTool(loadAnimation_);
@@ -88,6 +86,14 @@ void skeletalAnimation::processInput(GLFWwindow *window) {
         camera_->ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera_->ProcessKeyboard(RIGHT, deltaTime);
+
+    if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
+        isAnimating = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_X) == GLFW_RELEASE) {
+        isAnimating = false;
+        animationTime = 0.0f; // 重置动画时间
+    }
 }
 
 void skeletalAnimation::runDrawProcess() {
@@ -99,12 +105,12 @@ void skeletalAnimation::runDrawProcess() {
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+        
         // input
-        // -----
         processInput(window);
         animationTool_->UpdateAnimation(deltaTime);
+        
         // render
-        // ------
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // don't forget to enable shader before setting uniforms

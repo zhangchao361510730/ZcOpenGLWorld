@@ -21,6 +21,9 @@ private:
     bool firstMouse = true;
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
+    bool isAnimating = false;
+    float animationTime = 0.0f;
+    //float deltaTime = 0.0f; // 用于计算时间增量
 
 public:
     skeletalAnimation(/* args */);

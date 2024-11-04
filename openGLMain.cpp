@@ -9,8 +9,7 @@
 #endif
 
 #include"src/globaDefine.h"
-#include"modelShow.h"
-#include"skeletalAnimation.h"
+#include"mainLoop.h"
 
 int main() {
     baseInit* bI = new skeletalAnimation(); 

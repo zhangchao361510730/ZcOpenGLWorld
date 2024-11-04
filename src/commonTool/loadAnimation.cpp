@@ -66,8 +66,7 @@ void loadAnimation::ReadHierarchyData(AssimpNodeData& dest, const aiNode* src) {
 	dest.name = src->mName.data;
 	dest.transformation = AssimpGLMHelpers::ConvertMatrixToGLMFormat(src->mTransformation);
 	dest.childrenCount = src->mNumChildren;
-	for (int i = 0; i < src->mNumChildren; i++)
-	{
+	for (int i = 0; i < src->mNumChildren; i++) {
 		AssimpNodeData newData;
 		ReadHierarchyData(newData, src->mChildren[i]);
 		dest.children.push_back(newData);

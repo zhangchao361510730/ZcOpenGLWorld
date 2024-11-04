@@ -14,7 +14,7 @@ void animationTool::UpdateAnimation(float dt) {
 	m_DeltaTime = dt;
 	if (m_CurrentAnimation) {
 		m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * dt;
-		m_CurrentTime = fmod(m_CurrentTime, m_CurrentAnimation->GetDuration());
+		m_CurrentTime = fmod(m_CurrentTime, m_CurrentAnimation->GetDuration());// 得到时间刻度
 		CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
 	}
 }
