@@ -1,7 +1,7 @@
 #include"animationTool.h"
+#include"mainLoop.h"
 
-
-animationTool::animationTool(loadAnimation* animation) {
+animationTool::animationTool(loadAnimation* animation,mainLoop* parten):parten_(parten) {
 	m_CurrentTime = 0.0;
 	m_CurrentAnimation = animation;
 	m_FinalBoneMatrices.reserve(100);

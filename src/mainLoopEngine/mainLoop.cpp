@@ -7,16 +7,16 @@
 #include"commonTool/printTool.h"
 
 
-skeletalAnimation::skeletalAnimation(/* args */) {
+mainLoop::mainLoop(/* args */) {
 
 }
 
-skeletalAnimation::~skeletalAnimation() {
+mainLoop::~mainLoop() {
 
 }
 
-bool skeletalAnimation::InitGlSource() {
-	setCallbackFun_ = skeletalAnimation::setCallBackControl;
+bool mainLoop::InitGlSource() {
+	setCallbackFun_ = mainLoop::setCallBackControl;
 	baseInit::InitGlSource();
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
     stbi_set_flip_vertically_on_load(true);
@@ -29,19 +29,19 @@ bool skeletalAnimation::InitGlSource() {
     // Hip_Hop_Dancing.fbx
     modelBindA_ = new modelBindAnimation(animationPath.c_str());
     loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
-    animationTool_ = new animationTool(loadAnimation_);
+    animationTool_ = new animationTool(loadAnimation_,this);
     shaderTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
     camera_ = new cameraTool(glm::vec3(0.0f, 10.0f, 3.0f));
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     return true;
 }
 
-void skeletalAnimation::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+void mainLoop::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-void skeletalAnimation::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
-    skeletalAnimation* thiz = (skeletalAnimation*)glfwGetWindowUserPointer(window);
+void mainLoop::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
+    mainLoop* thiz = (mainLoop*)glfwGetWindowUserPointer(window);
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
     if (thiz->firstMouse) {
@@ -56,24 +56,24 @@ void skeletalAnimation::mouse_callback(GLFWwindow* window, double xposIn, double
     thiz->camera_->ProcessMouseMovement(xoffset, yoffset);
 }
 
-void skeletalAnimation::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-    skeletalAnimation* thiz = (skeletalAnimation*)glfwGetWindowUserPointer(window);
+void mainLoop::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+    mainLoop* thiz = (mainLoop*)glfwGetWindowUserPointer(window);
     thiz->camera_->ProcessMouseScroll(static_cast<float>(yoffset));
 }
 
-void skeletalAnimation::setCallBackControl(void*thiz) {
-	skeletalAnimation* thiz_ = (skeletalAnimation*)thiz;
+void mainLoop::setCallBackControl(void*thiz) {
+	mainLoop* thiz_ = (mainLoop*)thiz;
     if (thiz_ == nullptr) {
         std::cerr<<__FILE__<<" thiz_ is nullptr"<<std::endl;
         return;
     }
-    glfwSetFramebufferSizeCallback(thiz_->window, skeletalAnimation::framebuffer_size_callback);
-    glfwSetCursorPosCallback(thiz_->window, skeletalAnimation::mouse_callback);
-    glfwSetScrollCallback(thiz_->window, skeletalAnimation::scroll_callback);
+    glfwSetFramebufferSizeCallback(thiz_->window, mainLoop::framebuffer_size_callback);
+    glfwSetCursorPosCallback(thiz_->window, mainLoop::mouse_callback);
+    glfwSetScrollCallback(thiz_->window, mainLoop::scroll_callback);
     glfwSetInputMode(thiz_->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
-void skeletalAnimation::processInput(GLFWwindow *window) {
+void mainLoop::processInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
@@ -96,7 +96,7 @@ void skeletalAnimation::processInput(GLFWwindow *window) {
     }
 }
 
-void skeletalAnimation::runDrawProcess() {
+void mainLoop::runDrawProcess() {
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window)) {
@@ -142,7 +142,7 @@ void skeletalAnimation::runDrawProcess() {
     unInitResource();
 }
 
-bool skeletalAnimation::unInitResource() {
+bool mainLoop::unInitResource() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);

@@ -8,7 +8,7 @@ class modelBindAnimation;
 class loadAnimation;
 class animationTool;
 
-class skeletalAnimation:public baseInit {
+class mainLoop:public baseInit {
 private:
     uint32_t EBO;
     cameraTool* camera_;
@@ -26,8 +26,8 @@ private:
     //float deltaTime = 0.0f; // 用于计算时间增量
 
 public:
-    skeletalAnimation(/* args */);
-    ~skeletalAnimation();
+    mainLoop(/* args */);
+    ~mainLoop();
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
