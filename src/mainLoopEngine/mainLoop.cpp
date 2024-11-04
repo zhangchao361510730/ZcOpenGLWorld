@@ -31,7 +31,7 @@ bool mainLoop::InitGlSource() {
     loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
     animationTool_ = new animationTool(loadAnimation_,this);
     shaderTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
-    camera_ = new cameraTool(glm::vec3(0.0f, 0.0f, 3.0f));
+    camera_ = new cameraTool(glm::vec3(0.0f, 5.0f, 10.0f));
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     return true;
 }
@@ -61,6 +61,23 @@ void mainLoop::scroll_callback(GLFWwindow* window, double xoffset, double yoffse
     thiz->camera_->ProcessMouseScroll(static_cast<float>(yoffset));
 }
 
+void mainLoop::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    // if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+    //     glfwSetWindowShouldClose(window, true); // 按下 ESC 键关闭窗口
+    // }
+
+    // if (key == GLFW_KEY_X) {
+    //     if (action == GLFW_PRESS) {
+    //         std::cout << "X key pressed" << std::endl;
+    //         // 可以在此处开始动画
+    //     }
+    //     else if (action == GLFW_RELEASE) {
+    //         std::cout << "X key released" << std::endl;
+    //         // 可以在此处停止或重置动画
+    //     }
+    // }
+}
+
 void mainLoop::setCallBackControl(void*thiz) {
 	mainLoop* thiz_ = (mainLoop*)thiz;
     if (thiz_ == nullptr) {
@@ -70,10 +87,12 @@ void mainLoop::setCallBackControl(void*thiz) {
     glfwSetFramebufferSizeCallback(thiz_->window, mainLoop::framebuffer_size_callback);
     glfwSetCursorPosCallback(thiz_->window, mainLoop::mouse_callback);
     glfwSetScrollCallback(thiz_->window, mainLoop::scroll_callback);
+    glfwSetKeyCallback(thiz_->window,mainLoop::keyCallback);
     glfwSetInputMode(thiz_->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void mainLoop::processInput(GLFWwindow *window) {
+    
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }

@@ -32,6 +32,7 @@ public:
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+    static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void setCallBackControl(void*thiz);
     void processInput(GLFWwindow* window)override;
     bool InitGlSource()override;
