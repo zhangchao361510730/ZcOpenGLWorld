@@ -27,7 +27,7 @@ private:
     friend class animationTool;
     void loadSkyVertices();
     uint32_t skyboxVAO, skyboxVBO;
-    //float deltaTime = 0.0f; // 用于计算时间增量
+    uint32_t cubemapTexture;
 
 public:
     mainLoop(/* args */);

@@ -55,7 +55,7 @@ bool mainLoop::InitGlSource() {
         std::string(CMAKE_CURRENT_DIR).append("pictureResource/skybox/front.jpg"),
         std::string(CMAKE_CURRENT_DIR).append("pictureResource/skybox/back.jpg")
     };
-    unsigned int cubemapTexture = loadCubemap(faces);
+    cubemapTexture = loadCubemap(faces);
     return true;
 }
 
@@ -209,22 +209,21 @@ void mainLoop::runDrawProcess() {
         
         // input
         //processInput(window);
+
+
+
+
+
+
         animationTool_->UpdateAnimation(m_DeltaTime);
-        
         // render
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        // don't forget to enable shader before setting uniforms
         shaderModel_->use();
-
-        // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera_->Zoom), (float)windowsWidth / (float)windowsHeight, 0.1f, 100.0f);
         glm::mat4 view = camera_->GetViewMatrix();
-
-        //printMatrix(view);
         shaderModel_->setMat4("projection", projection);
         shaderModel_->setMat4("view", view);
-
         auto transforms = animationTool_->GetFinalBoneMatrices();
         for (int i = 0; i < transforms.size(); ++i) {
             shaderModel_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
@@ -238,6 +237,22 @@ void mainLoop::runDrawProcess() {
         modelBindA_->Draw(*shaderModel_);
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
+
+
+        // draw skybox as last
+        glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+        shaderSkyBox_->use();
+        view = glm::mat4(glm::mat3(camera_->GetViewMatrix())); // remove translation from the view matrix
+        shaderSkyBox_->setMat4("view", view);
+        shaderSkyBox_->setMat4("projection", projection);
+        // skybox cube
+        glBindVertexArray(skyboxVAO);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+        glDepthFunc(GL_LESS); // set depth function back to default
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
