@@ -242,7 +242,7 @@ void mainLoop::processInput(GLFWwindow *window) {
     }
     if (glfwGetKey(window, GLFW_KEY_X) == GLFW_RELEASE) {
         isAnimating = false;
-        m_CurrentTime = 0.0f; // 重置动画时间
+        //m_CurrentTime = 0.0f; // 重置动画时间
     }
 }
 
