@@ -17,7 +17,7 @@ bool mainLoop::InitGlSource() {
 	setCallbackFun_ = mainLoop::setCallBackControl;
 	baseInit::InitGlSource();
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-    stbi_set_flip_vertically_on_load(true);
+    //
     glEnable(GL_DEPTH_TEST);
     std::string SkyBoxPath_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/skybox.fs");
     std::string SkyBoxPath_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/skybox.vs");
@@ -26,16 +26,7 @@ bool mainLoop::InitGlSource() {
     //std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/Flair/Flair.dae");
     std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
     
-    // Hip_Hop_Dancing.fbx
-    modelBindA_ = new modelBindAnimation(animationPath.c_str());
-    loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
-    animationTool_ = new animationTool(loadAnimation_,this);
-    shaderModel_ = new ShaderGLSLTool(ModelPath_vs.c_str(),ModelPath_fs.c_str());
-    shaderSkyBox_ = new ShaderGLSLTool(SkyBoxPath_vs.c_str(),SkyBoxPath_fs.c_str());
-    camera_ = new cameraTool(glm::vec3(0.0f, 5.0f, 10.0f));
-
     loadSkyVertices();
-
     glGenVertexArrays(1, &skyboxVAO);
     glGenBuffers(1, &skyboxVBO);
     glBindVertexArray(skyboxVAO);
@@ -44,19 +35,77 @@ bool mainLoop::InitGlSource() {
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-    // load textures
     vector<std::string> faces
     {
-        std::string(CMAKE_CURRENT_DIR).append("pictureResource/skybox/right.jpg"),
-        std::string(CMAKE_CURRENT_DIR).append("pictureResource/skybox/left.jpg"),
-        std::string(CMAKE_CURRENT_DIR).append("pictureResource/skybox/top.jpg"),
-        std::string(CMAKE_CURRENT_DIR).append("pictureResource/skybox/bottom.jpg"),
-        std::string(CMAKE_CURRENT_DIR).append("pictureResource/skybox/front.jpg"),
-        std::string(CMAKE_CURRENT_DIR).append("pictureResource/skybox/back.jpg")
+        std::string(CMAKE_CURRENT_DIR).append("/pictureResource/skybox/right.jpg"),
+        std::string(CMAKE_CURRENT_DIR).append("/pictureResource/skybox/left.jpg"),
+        std::string(CMAKE_CURRENT_DIR).append("/pictureResource/skybox/top.jpg"),
+        std::string(CMAKE_CURRENT_DIR).append("/pictureResource/skybox/bottom.jpg"),
+        std::string(CMAKE_CURRENT_DIR).append("/pictureResource/skybox/front.jpg"),
+        std::string(CMAKE_CURRENT_DIR).append("/pictureResource/skybox/back.jpg")
     };
     cubemapTexture = loadCubemap(faces);
+
+
+    stbi_set_flip_vertically_on_load(true);// load model need 
+    modelBindA_ = new modelBindAnimation(animationPath.c_str());
+    loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
+    animationTool_ = new animationTool(loadAnimation_,this);
+    shaderModel_ = new ShaderGLSLTool(ModelPath_vs.c_str(),ModelPath_fs.c_str());
+    shaderSkyBox_ = new ShaderGLSLTool(SkyBoxPath_vs.c_str(),SkyBoxPath_fs.c_str());
+    camera_ = new cameraTool(glm::vec3(0.0f, 5.0f, 10.0f));
     return true;
+}
+
+void mainLoop::runDrawProcess() {
+    // render loop
+    while (!glfwWindowShouldClose(window)) {
+        // per-frame time logic
+        float currentFrame = glfwGetTime();
+        m_DeltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+        
+        // input
+        processInput(window);
+        animationTool_->UpdateAnimation(m_DeltaTime);
+        // render
+        glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        shaderModel_->use();
+        glm::mat4 projection = glm::perspective(glm::radians(camera_->Zoom), (float)windowsWidth / (float)windowsHeight, 0.1f, 100.0f);
+        glm::mat4 view = camera_->GetViewMatrix();
+        shaderModel_->setMat4("projection", projection);
+        shaderModel_->setMat4("view", view);
+        auto transforms = animationTool_->GetFinalBoneMatrices();
+        for (int i = 0; i < transforms.size(); ++i) {
+            shaderModel_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+        }
+        // render the loaded model
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f)); // translate it down so it's at the center of the scene
+        //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
+        model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
+        shaderModel_->setMat4("model", model);
+        modelBindA_->Draw(*shaderModel_);
+
+        // draw skybox as last
+        glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+        shaderSkyBox_->use();
+        view = glm::mat4(glm::mat3(camera_->GetViewMatrix())); // remove translation from the view matrix
+        shaderSkyBox_->setMat4("view", view);
+        shaderSkyBox_->setMat4("projection", projection);
+        // skybox cube
+        glBindVertexArray(skyboxVAO);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+        glDepthFunc(GL_LESS); // set depth function back to default
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+    unInitResource();
 }
 
 void mainLoop::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -86,22 +135,22 @@ void mainLoop::scroll_callback(GLFWwindow* window, double xoffset, double yoffse
 
 void mainLoop::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     mainLoop* thiz = (mainLoop*)glfwGetWindowUserPointer(window);
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, true); // 按下 ESC 键关闭窗口
-    }
+    // if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+    //     glfwSetWindowShouldClose(window, true); // 按下 ESC 键关闭窗口
+    // }
     
-    if (key == GLFW_KEY_W || action == GLFW_PRESS) {
-        thiz->camera_->ProcessKeyboard(FORWARD, thiz->m_DeltaTime);
-    }
-    if (key == GLFW_KEY_S || action == GLFW_PRESS) {
-        thiz->camera_->ProcessKeyboard(BACKWARD, thiz->m_DeltaTime);
-    }
-    if (key == GLFW_KEY_A || action == GLFW_PRESS) {
-        thiz->camera_->ProcessKeyboard(LEFT, thiz->m_DeltaTime);
-    }
-    if (key == GLFW_KEY_D || action == GLFW_PRESS) {
-        thiz->camera_->ProcessKeyboard(RIGHT, thiz->m_DeltaTime);
-    }
+    // if (key == GLFW_KEY_W || action == GLFW_PRESS) {
+    //     thiz->camera_->ProcessKeyboard(FORWARD, thiz->m_DeltaTime);
+    // }
+    // if (key == GLFW_KEY_S || action == GLFW_PRESS) {
+    //     thiz->camera_->ProcessKeyboard(BACKWARD, thiz->m_DeltaTime);
+    // }
+    // if (key == GLFW_KEY_A || action == GLFW_PRESS) {
+    //     thiz->camera_->ProcessKeyboard(LEFT, thiz->m_DeltaTime);
+    // }
+    // if (key == GLFW_KEY_D || action == GLFW_PRESS) {
+    //     thiz->camera_->ProcessKeyboard(RIGHT, thiz->m_DeltaTime);
+    // }
 
     if (key == GLFW_KEY_X) {
         if (action == GLFW_PRESS) {
@@ -197,73 +246,19 @@ void mainLoop::processInput(GLFWwindow *window) {
     }
 }
 
-void mainLoop::runDrawProcess() {
-    // render loop
-    // -----------
-    while (!glfwWindowShouldClose(window)) {
-        // per-frame time logic
-        // --------------------
-        float currentFrame = glfwGetTime();
-        m_DeltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
-        
-        // input
-        //processInput(window);
 
-
-
-
-
-
-        animationTool_->UpdateAnimation(m_DeltaTime);
-        // render
-        glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        shaderModel_->use();
-        glm::mat4 projection = glm::perspective(glm::radians(camera_->Zoom), (float)windowsWidth / (float)windowsHeight, 0.1f, 100.0f);
-        glm::mat4 view = camera_->GetViewMatrix();
-        shaderModel_->setMat4("projection", projection);
-        shaderModel_->setMat4("view", view);
-        auto transforms = animationTool_->GetFinalBoneMatrices();
-        for (int i = 0; i < transforms.size(); ++i) {
-            shaderModel_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
-        }
-        // render the loaded model
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f)); // translate it down so it's at the center of the scene
-        //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
-        model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
-        shaderModel_->setMat4("model", model);
-        modelBindA_->Draw(*shaderModel_);
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
-
-
-        // draw skybox as last
-        glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-        shaderSkyBox_->use();
-        view = glm::mat4(glm::mat3(camera_->GetViewMatrix())); // remove translation from the view matrix
-        shaderSkyBox_->setMat4("view", view);
-        shaderSkyBox_->setMat4("projection", projection);
-        // skybox cube
-        glBindVertexArray(skyboxVAO);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
-        glDepthFunc(GL_LESS); // set depth function back to default
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-    unInitResource();
-}
 
 bool mainLoop::unInitResource() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
     glDeleteProgram(shaderModel_->attachId);
+
+    glDeleteVertexArrays(1, &skyboxVAO);
+    glDeleteBuffers(1, &skyboxVBO);
+    glDeleteProgram(shaderSkyBox_->attachId);
+
+
     glfwTerminate();
     delete shaderModel_;
     return true;
