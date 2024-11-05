@@ -27,17 +27,16 @@ list(APPEND SRCFILE ${GLLSTool_})
 
 file(GLOB GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/src/mainLoopEngine/*.cpp)
 list(APPEND SRCFILE ${GLLSTool_})
-#add_executable(${PROJECT_NAME}_main main.cpp ${SRCFILE})
+
+file(GLOB GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/src/skyBox_/*.cpp)
+list(APPEND SRCFILE ${GLLSTool_})
 
 # 打印源代码路径
 message(STATUS "Current Source Directory: ${CMAKE_CURRENT_SOURCE_DIR}")
-
 # 打印构建路径
 message(STATUS "Current Binary Directory: ${CMAKE_CURRENT_BINARY_DIR}")
-
 # 打印 CMake 项目根目录
 message(STATUS "Source Directory: ${CMAKE_SOURCE_DIR}")
-
 # 打印当前 CMakeLists.txt 文件所在的路径
 message(STATUS "Current CMake File Directory: ${CMAKE_CURRENT_LIST_DIR}")
 
@@ -45,7 +44,8 @@ link_directories(${CMAKE_SOURCE_DIR}/linux_libs/lib)
 include_directories(${CMAKE_SOURCE_DIR}/linux_libs/includes)
 include_directories(${CMAKE_SOURCE_DIR}/src/sourceLib)
 include_directories(${CMAKE_SOURCE_DIR}/src/mainLoopEngine)
-include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(${CMAKE_SOURCE_DIR}/src/skyBox_)
+include_directories(${CMAKE_SOURCE_DIR}/src/commonTool)
 
 set(DEPENDS_LIB glfw3 assimp)
 # 将 CMake 变量传递给 C++

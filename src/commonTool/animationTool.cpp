@@ -10,17 +10,15 @@ animationTool::animationTool(loadAnimation* animation,mainLoop* parten):parten_(
 	}
 }
 
-
-
 void animationTool::UpdateAnimation(float dt) {
-	// if (parten_->isAnimating) {
+	 if (parten_->isAnimating) {
 		if (m_CurrentAnimation) {
 			parten_->m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * dt;
 			//std::cout<<"parten_->m_CurrentTime "<<parten_->m_CurrentTime<<std::endl;
 			parten_->m_CurrentTime = fmod(parten_->m_CurrentTime, m_CurrentAnimation->GetDuration());// 得到时间刻度
 			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
 		}
-	//}
+	 }
 }
 
 void animationTool::PlayAnimation(loadAnimation* pAnimation) {

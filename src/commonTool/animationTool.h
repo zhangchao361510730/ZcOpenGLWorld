@@ -6,8 +6,8 @@
 #include <vector>
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
-#include"commonTool/boneTool.h"
-#include"commonTool/loadAnimation.h"
+#include"boneTool.h"
+#include"loadAnimation.h"
 
 class mainLoop;
 
