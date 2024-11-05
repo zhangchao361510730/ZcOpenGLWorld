@@ -81,7 +81,7 @@ void mainLoop::runDrawProcess() {
         }
         // render the loaded model
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::translate(model, glm::vec3(0.0f, -0.4f, -15.0f)); // translate it down so it's at the center of the scene
         //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
         model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
         shaderModel_->setMat4("model", model);
