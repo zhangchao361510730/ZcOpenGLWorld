@@ -1,11 +1,9 @@
 #include"mainLoop.h"
 #include"cameraTool.h"
 #include"animationTool.h"
+#include"loadModelTool.h"
 #include"shaderLanguage.h"
 #include"modelBindAnimation.h"
-#include"loadModelTool.h"
-
-
 
 mainLoop::mainLoop(/* args */) {
 
@@ -21,8 +19,10 @@ bool mainLoop::InitGlSource() {
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
     stbi_set_flip_vertically_on_load(true);
     glEnable(GL_DEPTH_TEST);
-    std::string path_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.fs");
-    std::string path_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");
+    std::string SkyBoxPath_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/skybox.fs");
+    std::string SkyBoxPath_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/skybox.vs");
+    std::string ModelPath_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.fs");
+    std::string ModelPath_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");
     //std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/Flair/Flair.dae");
     std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
     
@@ -30,7 +30,8 @@ bool mainLoop::InitGlSource() {
     modelBindA_ = new modelBindAnimation(animationPath.c_str());
     loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
     animationTool_ = new animationTool(loadAnimation_,this);
-    shaderTool_ = new ShaderGLSLTool(path_vs.c_str(),path_fs.c_str());
+    shaderModel_ = new ShaderGLSLTool(ModelPath_vs.c_str(),ModelPath_fs.c_str());
+    shaderSkyBox_ = new ShaderGLSLTool(SkyBoxPath_vs.c_str(),SkyBoxPath_fs.c_str());
     camera_ = new cameraTool(glm::vec3(0.0f, 5.0f, 10.0f));
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     return true;
@@ -146,27 +147,27 @@ void mainLoop::runDrawProcess() {
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // don't forget to enable shader before setting uniforms
-        shaderTool_->use();
+        shaderModel_->use();
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera_->Zoom), (float)windowsWidth / (float)windowsHeight, 0.1f, 100.0f);
         glm::mat4 view = camera_->GetViewMatrix();
 
         //printMatrix(view);
-        shaderTool_->setMat4("projection", projection);
-        shaderTool_->setMat4("view", view);
+        shaderModel_->setMat4("projection", projection);
+        shaderModel_->setMat4("view", view);
 
         auto transforms = animationTool_->GetFinalBoneMatrices();
         for (int i = 0; i < transforms.size(); ++i) {
-            shaderTool_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+            shaderModel_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
         }
         // render the loaded model
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, -0.4f, 0.0f)); // translate it down so it's at the center of the scene
         //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
         model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
-        shaderTool_->setMat4("model", model);
-        modelBindA_->Draw(*shaderTool_);
+        shaderModel_->setMat4("model", model);
+        modelBindA_->Draw(*shaderModel_);
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -179,8 +180,8 @@ bool mainLoop::unInitResource() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
-    glDeleteProgram(shaderTool_->attachId);
+    glDeleteProgram(shaderModel_->attachId);
     glfwTerminate();
-    delete shaderTool_;
+    delete shaderModel_;
     return true;
 }

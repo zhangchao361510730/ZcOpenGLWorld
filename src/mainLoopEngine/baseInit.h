@@ -18,7 +18,8 @@ public:
     std::mt19937 gen; 
     uint32_t VBO = 0;
     uint32_t VAO = 0;
-    ShaderGLSLTool* shaderTool_;
+    ShaderGLSLTool* shaderModel_;
+    ShaderGLSLTool* shaderSkyBox_;
 
 	baseInit();
 	~baseInit();
