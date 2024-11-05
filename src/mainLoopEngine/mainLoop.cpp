@@ -87,7 +87,7 @@ void mainLoop::keyCallback(GLFWwindow* window, int key, int scancode, int action
         }
         else if (action == GLFW_RELEASE) {
             thiz->isAnimating = false;
-            thiz->m_CurrentTime = 0.0f; // 重置动画时间
+            //thiz->m_CurrentTime = 0.0f; // 重置动画时间
         }
     }
 }
