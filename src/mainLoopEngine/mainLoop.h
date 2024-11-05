@@ -26,6 +26,7 @@ private:
     float m_CurrentTime = 0.0f;
     friend class animationTool;
     void loadSkyVertices();
+    uint32_t skyboxVAO, skyboxVBO;
     //float deltaTime = 0.0f; // 用于计算时间增量
 
 public:
@@ -36,6 +37,7 @@ public:
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void setCallBackControl(void*thiz);
+    uint32_t loadCubemap(std::vector<std::string> &faces);
     void processInput(GLFWwindow* window)override;
     bool InitGlSource()override;
     void runDrawProcess()override;

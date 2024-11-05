@@ -35,7 +35,27 @@ bool mainLoop::InitGlSource() {
     camera_ = new cameraTool(glm::vec3(0.0f, 5.0f, 10.0f));
 
     loadSkyVertices();
+
+    glGenVertexArrays(1, &skyboxVAO);
+    glGenBuffers(1, &skyboxVBO);
+    glBindVertexArray(skyboxVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+    glBufferData(GL_ARRAY_BUFFER, skyboxVertices.size()*sizeof(float), skyboxVertices.data(), GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    // load textures
+    vector<std::string> faces
+    {
+        std::string(CMAKE_CURRENT_DIR).append("pictureResource/skybox/right.jpg"),
+        std::string(CMAKE_CURRENT_DIR).append("pictureResource/skybox/left.jpg"),
+        std::string(CMAKE_CURRENT_DIR).append("pictureResource/skybox/top.jpg"),
+        std::string(CMAKE_CURRENT_DIR).append("pictureResource/skybox/bottom.jpg"),
+        std::string(CMAKE_CURRENT_DIR).append("pictureResource/skybox/front.jpg"),
+        std::string(CMAKE_CURRENT_DIR).append("pictureResource/skybox/back.jpg")
+    };
+    unsigned int cubemapTexture = loadCubemap(faces);
     return true;
 }
 
@@ -232,4 +252,38 @@ bool mainLoop::unInitResource() {
     glfwTerminate();
     delete shaderModel_;
     return true;
+}
+
+uint32_t mainLoop::loadCubemap(vector<std::string> &faces) {
+    uint32_t textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+    int width, height, nrComponents;
+    for (uint32_t i = 0; i < faces.size(); i++)
+    {
+        unsigned char *data = stbi_load(faces[i].c_str(), &width, &height, &nrComponents, 0);
+        if (data) {
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            stbi_image_free(data);
+        } else {
+            std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+            stbi_image_free(data);
+        }
+    }
+    
+    //  缩小过滤器 与  放大过滤器 都设置为线性过滤
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+/*
+GL_TEXTURE_CUBE_MAP：指明操作的是立方体贴图纹理。
+GL_TEXTURE_WRAP_S：表示设置的是 S轴方向的包裹方式，即纹理坐标的横向-纵向-深度-处理方式。
+GL_CLAMP_TO_EDGE：表示纹理坐标超出范围时，纹理会被 固定为边缘的像素值，避免出现拉伸或重复纹理的效果。通常用于避免纹理接缝的现象。
+*/
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    return textureID;
 }
