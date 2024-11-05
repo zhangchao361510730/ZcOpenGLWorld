@@ -1,7 +1,7 @@
 #include"baseInit.h"
 #include"globaDefine.h"
 
-#include"commonTool/shaderLanguage.h"
+#include"shaderLanguage.h"
 #include<string>
 
 baseInit::baseInit():gen(std::random_device{}()) {

@@ -8,7 +8,7 @@
 #include <unistd.h>
 #endif
 
-#include"src/globaDefine.h"
+#include"globaDefine.h"
 #include"mainLoop.h"
 
 int main() {

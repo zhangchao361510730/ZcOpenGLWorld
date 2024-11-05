@@ -1,9 +1,9 @@
 #include"mainLoop.h"
-#include"commonTool/cameraTool.h"
-#include"commonTool/animationTool.h"
-#include"commonTool/shaderLanguage.h"
-#include"commonTool/modelBindAnimation.h"
-#include"commonTool/loadModelTool.h"
+#include"cameraTool.h"
+#include"animationTool.h"
+#include"shaderLanguage.h"
+#include"modelBindAnimation.h"
+#include"loadModelTool.h"
 
 
 
