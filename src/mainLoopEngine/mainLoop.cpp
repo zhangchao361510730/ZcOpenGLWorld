@@ -64,8 +64,7 @@ void mainLoop::runDrawProcess() {
         float currentFrame = glfwGetTime();
         m_DeltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        
-        // input
+
         processInput(window);
         animationTool_->UpdateAnimation(m_DeltaTime);
         // render
@@ -89,18 +88,17 @@ void mainLoop::runDrawProcess() {
         modelBindA_->Draw(*shaderModel_);
 
         // draw skybox as last
-        glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+        glDepthFunc(GL_LEQUAL); 
         shaderSkyBox_->use();
         view = glm::mat4(glm::mat3(camera_->GetViewMatrix())); // remove translation from the view matrix
         shaderSkyBox_->setMat4("view", view);
         shaderSkyBox_->setMat4("projection", projection);
-        // skybox cube
         glBindVertexArray(skyboxVAO);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
-        glDepthFunc(GL_LESS); // set depth function back to default
+        glDepthFunc(GL_LESS);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
