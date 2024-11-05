@@ -67,17 +67,17 @@ void mainLoop::keyCallback(GLFWwindow* window, int key, int scancode, int action
         glfwSetWindowShouldClose(window, true); // 按下 ESC 键关闭窗口
     }
     std::cout<<"1 thiz->m_DeltaTime is "<<thiz->m_DeltaTime<<std::endl;
-    if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+    if (key == GLFW_KEY_W || action == GLFW_PRESS) {
         thiz->camera_->ProcessKeyboard(FORWARD, thiz->m_DeltaTime);
         std::cout<<"2 thiz->m_DeltaTime is "<<thiz->m_DeltaTime<<std::endl;
     }
-    if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+    if (key == GLFW_KEY_S || action == GLFW_PRESS) {
         thiz->camera_->ProcessKeyboard(BACKWARD, thiz->m_DeltaTime);
     }
-    if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+    if (key == GLFW_KEY_A || action == GLFW_PRESS) {
         thiz->camera_->ProcessKeyboard(LEFT, thiz->m_DeltaTime);
     }
-    if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+    if (key == GLFW_KEY_D || action == GLFW_PRESS) {
         thiz->camera_->ProcessKeyboard(RIGHT, thiz->m_DeltaTime);
     }
 
