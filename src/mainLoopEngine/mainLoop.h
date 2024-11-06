@@ -18,7 +18,6 @@ private:
     modelBindAnimation* modelBindA_;
     loadAnimation* loadAnimation_;
     animationTool* animationTool_;
-    std::vector<float>skyboxVertices;
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;
     bool firstMouse = true;
@@ -27,9 +26,6 @@ private:
     bool isAnimating = false;
     float m_CurrentTime = 0.0f;
     friend class animationTool;
-    void loadSkyVertices();
-    uint32_t skyboxVAO, skyboxVBO;
-    uint32_t cubemapTexture;
 
 public:
     mainLoop(/* args */);

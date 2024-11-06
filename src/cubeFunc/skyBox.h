@@ -21,6 +21,7 @@ public:
     void loadSkyVertices();
     void runDrawProcess(glm::mat4 &view,glm::mat4 &projection);
     uint32_t loadCubemap(std::vector<std::string> &faces);
+    void unInitResource();
     ~skyBox();
 
 };

@@ -22,17 +22,8 @@ bool mainLoop::InitGlSource() {
     glEnable(GL_DEPTH_TEST);
     std::string ModelPath_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.fs");
     std::string ModelPath_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");
-    //std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/Flair/Flair.dae");
     std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
     
-    loadSkyVertices();
-    glGenVertexArrays(1, &skyboxVAO);
-    glGenBuffers(1, &skyboxVBO);
-    glBindVertexArray(skyboxVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-    glBufferData(GL_ARRAY_BUFFER, skyboxVertices.size()*sizeof(float), skyboxVertices.data(), GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     camera_ = new cameraTool(glm::vec3(0.0f, 5.0f, 10.0f));
     skyB_ = new skyBox();
@@ -179,16 +170,11 @@ void mainLoop::processInput(GLFWwindow *window) {
 }
 
 
-
 bool mainLoop::unInitResource() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
     glDeleteProgram(shaderModel_->attachId);
-
-    glDeleteVertexArrays(1, &skyboxVAO);
-    glDeleteBuffers(1, &skyboxVBO);
-    glDeleteProgram(shaderSkyBox_->attachId);
 
     glfwTerminate();
     delete shaderModel_;

@@ -54,6 +54,12 @@ void skyBox::runDrawProcess(glm::mat4 &view,glm::mat4 &projection) {
     glDepthFunc(GL_LESS);
 }
 
+void skyBox::unInitResource() {
+    glDeleteVertexArrays(1, &skyboxVAO);
+    glDeleteBuffers(1, &skyboxVBO);
+    glDeleteProgram(shaderSkyBox_->attachId);
+}
+
 uint32_t skyBox::loadCubemap(std::vector<std::string> &faces) {
     uint32_t textureID;
     glGenTextures(1, &textureID);
