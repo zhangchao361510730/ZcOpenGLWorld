@@ -75,9 +75,11 @@ void mainLoop::runDrawProcess() {
         modelBindA_->Draw(*shaderModel_);
 
         glm::mat4 model2 = glm::mat4(1.0f);
+        model2 = glm::translate(model2, glm::vec3(1.0f, 0.0f, 0.0f));  // 平移
+        model2 = glm::scale(model2, glm::vec3(2.0f, 2.0f, 2.0f));      // 缩放
         reflectionBox_->runDrawProcess(model2,view,projection);
 
-        
+
         skyB_->runDrawProcess(view,projection);
 
         glfwSwapBuffers(window);
