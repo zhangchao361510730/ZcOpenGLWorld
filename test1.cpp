@@ -1,66 +1,81 @@
-#include <GL/glut.h>
-#include<iostream>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include"globaDefine.h"
+// 顶点数据：按钮的四个角
+float vertices[] = {
+    // 位置              // 颜色
+    0.0f, 0.0f,          0.2f, 0.6f, 0.8f,  // 左下角
+    1.0f, 0.0f,          0.2f, 0.6f, 0.8f,  // 右下角
+    1.0f, 1.0f,          0.2f, 0.6f, 0.8f,  // 右上角
+    0.0f, 1.0f,          0.2f, 0.6f, 0.8f   // 左上角
+};
 
-int windowWidth = 800, windowHeight = 600; // 假设窗口尺寸为 800x600
+// 索引数组，指定顶点顺序
+unsigned int indices[] = {
+    0, 1, 2, // 第一个三角形
+    0, 2, 3  // 第二个三角形
+};
 
-void setupOrthoProjection() {
-    glMatrixMode(GL_PROJECTION); // 选择投影矩阵模式
-    glLoadIdentity(); // 重置投影矩阵
+// 设置一个矩阵和着色器
+GLuint VAO, VBO, EBO, shaderProgram;
 
-    // 设置正交投影，确保坐标系统的原点在左下角，单位为像素
-    glOrtho(0, windowWidth, windowHeight, 0, -1, 1);
-
-    glMatrixMode(GL_MODELVIEW); // 切换回模型视图矩阵
-    glLoadIdentity(); // 重置模型视图矩阵
+void setupShader() {
+    // 创建并编译着色器
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    
+    // (着色器加载、编译代码省略)
+    
+    // 链接着色器程序
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+    glUseProgram(shaderProgram);
 }
 
 void drawButton() {
-    float buttonX = 100.0f, buttonY = 100.0f;  // 按钮的左上角位置
-    float buttonWidth = 150.0f, buttonHeight = 50.0f; // 按钮的宽度和高度
+    // 使用着色器程序
+    glUseProgram(shaderProgram);
+    
+    // 设置正交投影
+    glm::mat4 projection = glm::ortho(0.0f, (float)windowsWidth, (float)windowsHeight, 0.0f);
+    GLuint projLoc = glGetUniformLocation(shaderProgram, "projection");
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-    glColor3f(0.2f, 0.6f, 0.8f); // 设置按钮的颜色
+    // 创建 VAO 和 VBO
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
 
-    glBegin(GL_QUADS);  // 绘制矩形（按钮）
-        glVertex2f(buttonX, buttonY);  // 左上角
-        glVertex2f(buttonX + buttonWidth, buttonY);  // 右上角
-        glVertex2f(buttonX + buttonWidth, buttonY + buttonHeight);  // 右下角
-        glVertex2f(buttonX, buttonY + buttonHeight);  // 左下角
-    glEnd();
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    // 绘制按钮
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    glBindVertexArray(0);
 }
 
-void mouseCallback(int button, int state, int x, int y) {
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) { // 检查是否是鼠标左键按下
-        // 由于OpenGL坐标系统的y轴向上，而窗口的y坐标是向下的，需要进行转换
-        y = windowHeight - y; // 转换y坐标为OpenGL坐标系
+void render() {
+    glClear(GL_COLOR_BUFFER_BIT);
 
-        // 检查点击位置是否在按钮范围内
-        if (x >= 100 && x <= 250 && y >= 100 && y <= 150) {
-            // 按钮被点击
-            printf("Button clicked!\n");
-            // 在这里可以执行按钮点击后的操作
-        }
-    }
-}
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT); // 清除屏幕
-
-    drawButton(); // 绘制按钮
-
-    glFlush(); // 渲染并显示
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(windowWidth, windowHeight);
-    glutCreateWindow("Fixed 2D Button");
-
-    setupOrthoProjection();  // 设置正交投影
-
-    glutDisplayFunc(display);  // 注册绘制回调函数
-    glutMouseFunc(mouseCallback); // 注册鼠标回调函数
-
-    glutMainLoop();  // 进入主循环
-    return 0;
+    // 绘制按钮
+    drawButton();
+    
+    glfwSwapBuffers(window);
+    glfwPollEvents();
 }

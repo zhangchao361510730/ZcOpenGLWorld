@@ -6,7 +6,8 @@
 #include"loadModelTool.h"
 #include"shaderLanguage.h"
 #include"modelBindAnimation.h"
-
+#include <GLFW/glfw3.h>
+#include <GL/gl.h>
 mainLoop::mainLoop(/* args */) {
 
 }
@@ -79,7 +80,6 @@ void mainLoop::runDrawProcess() {
 #define scValue 6.0f
         model2 = glm::scale(model2, glm::vec3(scValue, scValue, scValue));      // 缩放
         reflectionBox_->runDrawProcess(model2,view,projection);
-
 
         skyB_->runDrawProcess(view,projection);
 
