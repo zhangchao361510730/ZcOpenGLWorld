@@ -1,6 +1,6 @@
 #include"reflectionBox.h"
 #include<string>
-
+#include"globaDefine.h"
 reflectionBox::reflectionBox(/* args */) {
 
 }
@@ -9,6 +9,7 @@ reflectionBox::~reflectionBox() {
     
 }
 
+
 bool reflectionBox::InitReflectionBox() {
     // cube VAO
     loadVertices();
@@ -16,7 +17,7 @@ bool reflectionBox::InitReflectionBox() {
     glGenBuffers(1, &cubeVBO);
     glBindVertexArray(cubeVAO);
     glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, cubeVertices.size()*sizeof(float), cubeVertices.data(), GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(1);
@@ -31,32 +32,17 @@ bool reflectionBox::InitReflectionBox() {
 }
 
 void reflectionBox::setCameraPtr(cameraTool* camera_) {
-
+    this->camera = camera_;
 }
 
-/*
-        // draw scene as normal
-        shader.use();
-        glm::mat4 model = glm::mat4(1.0f);
-        glm::mat4 view = camera.GetViewMatrix();
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        shader.setMat4("model", model);
-        shader.setMat4("view", view);
-        shader.setMat4("projection", projection);
-        shader.setVec3("cameraPos", camera.Position);
-        // cubes
-        glBindVertexArray(cubeVAO);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
-*/
+#include"printTool.hpp"
 
 void reflectionBox::runDrawProcess(glm::mat4 &model,glm::mat4 &view,glm::mat4 &projection) {
         shaderReflectionBox_->use();
         shaderReflectionBox_->setMat4("model", model);
         shaderReflectionBox_->setMat4("view", view);
         shaderReflectionBox_->setMat4("projection", projection);
+        //printVec3(camera->Position);
         shaderReflectionBox_->setVec3("cameraPos", camera->Position);
         // cubes
         glBindVertexArray(cubeVAO);

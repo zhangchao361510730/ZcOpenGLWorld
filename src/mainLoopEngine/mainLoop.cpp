@@ -32,6 +32,7 @@ bool mainLoop::InitGlSource() {
     skyB_->initSkyBox();// cubemapTexture
 
     reflectionBox_ = new reflectionBox();
+    reflectionBox_->setCameraPtr(camera_);
     reflectionBox_->cubemapTexture = skyB_->cubemapTexture;
     reflectionBox_->InitReflectionBox();
 
@@ -73,6 +74,10 @@ void mainLoop::runDrawProcess() {
         shaderModel_->setMat4("model", model);
         modelBindA_->Draw(*shaderModel_);
 
+        glm::mat4 model2 = glm::mat4(1.0f);
+        reflectionBox_->runDrawProcess(model2,view,projection);
+
+        
         skyB_->runDrawProcess(view,projection);
 
         glfwSwapBuffers(window);
@@ -108,22 +113,7 @@ void mainLoop::scroll_callback(GLFWwindow* window, double xoffset, double yoffse
 
 void mainLoop::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     mainLoop* thiz = (mainLoop*)glfwGetWindowUserPointer(window);
-    // if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-    //     glfwSetWindowShouldClose(window, true); // 按下 ESC 键关闭窗口
-    // }
-    
-    // if (key == GLFW_KEY_W || action == GLFW_PRESS) {
-    //     thiz->camera_->ProcessKeyboard(FORWARD, thiz->m_DeltaTime);
-    // }
-    // if (key == GLFW_KEY_S || action == GLFW_PRESS) {
-    //     thiz->camera_->ProcessKeyboard(BACKWARD, thiz->m_DeltaTime);
-    // }
-    // if (key == GLFW_KEY_A || action == GLFW_PRESS) {
-    //     thiz->camera_->ProcessKeyboard(LEFT, thiz->m_DeltaTime);
-    // }
-    // if (key == GLFW_KEY_D || action == GLFW_PRESS) {
-    //     thiz->camera_->ProcessKeyboard(RIGHT, thiz->m_DeltaTime);
-    // }
+
 
     if (key == GLFW_KEY_X) {
         if (action == GLFW_PRESS) {
@@ -135,7 +125,6 @@ void mainLoop::keyCallback(GLFWwindow* window, int key, int scancode, int action
         }
     }
 }
-
 
 void mainLoop::setCallBackControl(void*thiz) {
 	mainLoop* thiz_ = (mainLoop*)thiz;
