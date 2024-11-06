@@ -2,15 +2,17 @@
 #define skeletalAnimation_H_
 #include"baseInit.h"
 
+class skyBox;
 class cameraTool;
 class loadModelTool;
-class modelBindAnimation;
 class loadAnimation;
 class animationTool;
+class modelBindAnimation;
 
 class mainLoop:public baseInit {
 private:
     uint32_t EBO;
+    skyBox * skyB_;
     cameraTool* camera_;
     loadModelTool* loadModelTool_;
     modelBindAnimation* modelBindA_;

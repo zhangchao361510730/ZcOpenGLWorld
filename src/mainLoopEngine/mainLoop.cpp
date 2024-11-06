@@ -256,7 +256,6 @@ bool mainLoop::unInitResource() {
     glDeleteBuffers(1, &skyboxVBO);
     glDeleteProgram(shaderSkyBox_->attachId);
 
-
     glfwTerminate();
     delete shaderModel_;
     return true;
