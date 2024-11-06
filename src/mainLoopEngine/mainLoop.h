@@ -39,7 +39,6 @@ public:
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void setCallBackControl(void*thiz);
-    uint32_t loadCubemap(std::vector<std::string> &faces);
     void processInput(GLFWwindow* window)override;
     bool InitGlSource()override;
     void runDrawProcess()override;
