@@ -12,16 +12,18 @@ private:
     cameraTool* camera_;
     uint32_t skyboxVAO;
     uint32_t skyboxVBO;
-    uint32_t cubemapTexture;
+    
     std::vector<float>skyboxVertices;
 public:
     skyBox();
-    void setCameraPtr(cameraTool* camera_);
+
     bool initSkyBox();
     void loadSkyVertices();
+    void setCameraPtr(cameraTool* camera_);
     void runDrawProcess(glm::mat4 &view,glm::mat4 &projection);
     uint32_t loadCubemap(std::vector<std::string> &faces);
     void unInitResource();
+    uint32_t cubemapTexture;
     ~skyBox();
 
 };

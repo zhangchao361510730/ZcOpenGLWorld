@@ -7,6 +7,7 @@ class cameraTool;
 class loadModelTool;
 class loadAnimation;
 class animationTool;
+class reflectionBox;
 class modelBindAnimation;
 
 class mainLoop:public baseInit {
@@ -18,6 +19,7 @@ private:
     modelBindAnimation* modelBindA_;
     loadAnimation* loadAnimation_;
     animationTool* animationTool_;
+    reflectionBox* reflectionBox_;
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;
     bool firstMouse = true;

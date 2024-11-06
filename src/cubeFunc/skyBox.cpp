@@ -37,6 +37,9 @@ bool skyBox::initSkyBox() {
 
     cubemapTexture = loadCubemap(faces);
     shaderSkyBox_ = new ShaderGLSLTool(SkyBoxPath_vs.c_str(),SkyBoxPath_fs.c_str());
+
+    shaderSkyBox_->use();
+    shaderSkyBox_->setInt("skybox", 0);
     return true;
 }
 

@@ -1,6 +1,7 @@
 #include"skyBox.h"
 #include"mainLoop.h"
 #include"cameraTool.h"
+#include"reflectionBox.h"
 #include"animationTool.h"
 #include"loadModelTool.h"
 #include"shaderLanguage.h"
@@ -28,15 +29,17 @@ bool mainLoop::InitGlSource() {
     camera_ = new cameraTool(glm::vec3(0.0f, 5.0f, 10.0f));
     skyB_ = new skyBox();
     skyB_->setCameraPtr(camera_);
-    skyB_->initSkyBox();
+    skyB_->initSkyBox();// cubemapTexture
+
+    reflectionBox_ = new reflectionBox();
+    reflectionBox_->cubemapTexture = skyB_->cubemapTexture;
+    reflectionBox_->InitReflectionBox();
+
     stbi_set_flip_vertically_on_load(true);// load model need 
     modelBindA_ = new modelBindAnimation(animationPath.c_str());
     loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
     animationTool_ = new animationTool(loadAnimation_,this);
     shaderModel_ = new ShaderGLSLTool(ModelPath_vs.c_str(),ModelPath_fs.c_str());
-
-    shaderModel_->use();
-    shaderModel_->setInt("skybox", 0);
     return true;
 }
 
