@@ -75,8 +75,9 @@ void mainLoop::runDrawProcess() {
         modelBindA_->Draw(*shaderModel_);
 
         glm::mat4 model2 = glm::mat4(1.0f);
-        model2 = glm::translate(model2, glm::vec3(1.0f, 0.0f, 0.0f));  // 平移
-        model2 = glm::scale(model2, glm::vec3(2.0f, 2.0f, 2.0f));      // 缩放
+        model2 = glm::translate(model2, glm::vec3(0.0f, -4.0f, -16.0f));  // 平移 y + 向上   z - 向前
+#define scValue 6.0f
+        model2 = glm::scale(model2, glm::vec3(scValue, scValue, scValue));      // 缩放
         reflectionBox_->runDrawProcess(model2,view,projection);
 
 
