@@ -35,6 +35,8 @@ bool mainLoop::InitGlSource() {
     animationTool_ = new animationTool(loadAnimation_,this);
     shaderModel_ = new ShaderGLSLTool(ModelPath_vs.c_str(),ModelPath_fs.c_str());
 
+    shaderModel_->use();
+    shaderModel_->setInt("skybox", 0);
     return true;
 }
 
