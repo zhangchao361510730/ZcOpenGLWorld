@@ -116,8 +116,6 @@ void mainLoop::scroll_callback(GLFWwindow* window, double xoffset, double yoffse
 
 void mainLoop::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     mainLoop* thiz = (mainLoop*)glfwGetWindowUserPointer(window);
-
-
     if (key == GLFW_KEY_X) {
         if (action == GLFW_PRESS) {
             thiz->isAnimating = true;

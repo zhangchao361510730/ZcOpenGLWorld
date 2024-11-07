@@ -28,7 +28,6 @@ private:
     bool isAnimating = false;
     float m_CurrentTime = 0.0f;
     friend class animationTool;
-
 public:
     mainLoop(/* args */);
     ~mainLoop();
