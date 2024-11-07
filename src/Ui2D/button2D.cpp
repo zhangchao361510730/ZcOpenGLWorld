@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
+#include <GLFW/glfw3.h>
 button2D::button2D(/* args */) {
 
 }
@@ -13,27 +13,12 @@ button2D::~button2D() {
 }
 
 bool button2D::InitButton2D() {
-    loadVertices();
-    std::string Button2DPath_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/button2D.fs");
-    std::string Button2DPath_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/button2D.vs");
-    shaderSkyBox_ = new ShaderGLSLTool(Button2DPath_vs.c_str(),Button2DPath_fs.c_str());
-    // 创建 VAO 和 VBO
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+    glfwSwapInterval(1); // 开启垂直同步
 
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(float), vertices.data(), GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size()*sizeof(uint32_t), indices.data(), GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+    // 初始化 ImGui 上下文
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
     return true;
 }
 
