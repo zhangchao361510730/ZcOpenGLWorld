@@ -11,9 +11,9 @@ private:
     std::vector<uint32_t> indices;
     ShaderGLSLTool * shaderSkyBox_;
     uint32_t VAO,VBO,EBO;
+    void loadVertices();
 public:
     bool InitButton2D();
-    void loadVertices();
     void runDrawProcess();
     button2D(/* args */);
     ~button2D();

@@ -1,6 +1,7 @@
 #include"skyBox.h"
 #include"mainLoop.h"
 #include"cameraTool.h"
+#include"button2D.h"
 #include"reflectionBox.h"
 #include"animationTool.h"
 #include"loadModelTool.h"
@@ -32,6 +33,10 @@ bool mainLoop::InitGlSource() {
 
     
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    button2D_ = new button2D();
+    button2D_->InitButton2D();
+
+    
     camera_ = new cameraTool(glm::vec3(0.0f, 5.0f, 10.0f));
     skyB_ = new skyBox();
     skyB_->setCameraPtr(camera_);
@@ -53,6 +58,7 @@ bool mainLoop::InitGlSource() {
 void mainLoop::runDrawProcess() {
     // render loop
     while (!glfwWindowShouldClose(window)) {
+       
         // per-frame time logic
         float currentFrame = glfwGetTime();
         m_DeltaTime = currentFrame - lastFrame;
@@ -65,6 +71,8 @@ void mainLoop::runDrawProcess() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shaderModel_->use();
         glm::mat4 projection = glm::perspective(glm::radians(camera_->Zoom), (float)windowsWidth / (float)windowsHeight, 0.1f, 100.0f);
+        //glm::mat4 projection = glm::ortho(0.0f, (float)windowsWidth, (float)windowsHeight, 0.0f);
+
         glm::mat4 view = camera_->GetViewMatrix();
         shaderModel_->setMat4("projection", projection);
         shaderModel_->setMat4("view", view);
@@ -86,7 +94,9 @@ void mainLoop::runDrawProcess() {
         model2 = glm::scale(model2, glm::vec3(scValue, scValue, scValue));      // 缩放
         reflectionBox_->runDrawProcess(model2,view,projection);
 
-        skyB_->runDrawProcess(view,projection);
+        skyB_->runDrawProcess(view,projection); 
+
+        button2D_->runDrawProcess();
 
         glfwSwapBuffers(window);
         glfwPollEvents();

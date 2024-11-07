@@ -3,6 +3,7 @@
 #include"baseInit.h"
 
 class skyBox;
+class button2D;
 class cameraTool;
 class loadModelTool;
 class loadAnimation;
@@ -14,6 +15,7 @@ class mainLoop:public baseInit {
 private:
     uint32_t EBO;
     skyBox * skyB_;
+    button2D * button2D_;
     cameraTool* camera_;
     loadModelTool* loadModelTool_;
     modelBindAnimation* modelBindA_;

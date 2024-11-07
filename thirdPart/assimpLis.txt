@@ -1,1 +1,1 @@
-https://codeload.github.com/assimp/assimp/tar.gz/refs/tags/v3.1.1
+https://github.com/assimp/assimp/archive/refs/tags/v5.4.3.tar.gz
