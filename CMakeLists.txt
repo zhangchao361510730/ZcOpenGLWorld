@@ -31,6 +31,9 @@ list(APPEND SRCFILE ${GLLSTool_})
 file(GLOB GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/src/cubeFunc/*.cpp)
 list(APPEND SRCFILE ${GLLSTool_})
 
+file(GLOB GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/src/Ui2D/*.cpp)
+list(APPEND SRCFILE ${GLLSTool_})
+
 # 打印源代码路径
 message(STATUS "Current Source Directory: ${CMAKE_CURRENT_SOURCE_DIR}")
 # 打印构建路径
@@ -46,7 +49,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src/sourceLib)
 include_directories(${CMAKE_SOURCE_DIR}/src/mainLoopEngine)
 include_directories(${CMAKE_SOURCE_DIR}/src/cubeFunc)
 include_directories(${CMAKE_SOURCE_DIR}/src/commonTool)
-
+include_directories(${CMAKE_SOURCE_DIR}/src/Ui2D)
 
 #-lGL -lGLU -lglut
 set(DEPENDS_LIB glfw3 assimp glut GLU GL)

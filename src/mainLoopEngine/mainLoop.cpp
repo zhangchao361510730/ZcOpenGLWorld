@@ -6,8 +6,10 @@
 #include"loadModelTool.h"
 #include"shaderLanguage.h"
 #include"modelBindAnimation.h"
-#include <GLFW/glfw3.h>
-#include <GL/gl.h>
+
+
+
+
 mainLoop::mainLoop(/* args */) {
 
 }
@@ -25,6 +27,9 @@ bool mainLoop::InitGlSource() {
     std::string ModelPath_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.fs");
     std::string ModelPath_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");
     std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
+
+    //glm::mat4 projection = glm::ortho(0.0f, (float)windowsWidth, (float)windowsHeight, 0.0f);
+
     
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     camera_ = new cameraTool(glm::vec3(0.0f, 5.0f, 10.0f));
