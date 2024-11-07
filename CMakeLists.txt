@@ -34,6 +34,16 @@ list(APPEND SRCFILE ${GLLSTool_})
 file(GLOB GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/src/Ui2D/*.cpp)
 list(APPEND SRCFILE ${GLLSTool_})
 
+set(GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/thirdPart/imguiLib/imgui.cpp 
+			  ${CMAKE_CURRENT_SOURCE_DIR}/thirdPart/imguiLib/imgui_draw.cpp
+			  ${CMAKE_CURRENT_SOURCE_DIR}/thirdPart/imguiLib/imgui_tables.cpp
+			  ${CMAKE_CURRENT_SOURCE_DIR}/thirdPart/imguiLib/imgui_widgets.cpp
+			  ${CMAKE_CURRENT_SOURCE_DIR}/thirdPart/imguiLib/backends/imgui_impl_glfw.cpp
+			  ${CMAKE_CURRENT_SOURCE_DIR}/thirdPart/imguiLib/backends/imgui_impl_opengl3.cpp)
+list(APPEND SRCFILE ${GLLSTool_})
+
+# imgui_tables.cpp imgui_widgets.cpp backends/imgui_impl_glfw.cpp backends/imgui_impl_opengl3.cpp
+
 # 打印源代码路径
 message(STATUS "Current Source Directory: ${CMAKE_CURRENT_SOURCE_DIR}")
 # 打印构建路径
@@ -50,12 +60,14 @@ include_directories(${CMAKE_SOURCE_DIR}/src/mainLoopEngine)
 include_directories(${CMAKE_SOURCE_DIR}/src/cubeFunc)
 include_directories(${CMAKE_SOURCE_DIR}/src/commonTool)
 include_directories(${CMAKE_SOURCE_DIR}/src/Ui2D)
+include_directories(${CMAKE_SOURCE_DIR}/thirdPart/imguiLib)
+include_directories(${CMAKE_SOURCE_DIR}/thirdPart/imguiLib/backends)
 
 #-lGL -lGLU -lglut
 set(DEPENDS_LIB glfw3 assimp glut GLU GL)
 # 将 CMake 变量传递给 C++
 #add_executable(${PROJECT_NAME}_main openGLMain.cpp src/sourceLib/glad.c ${SRCFILE})
-add_executable(${PROJECT_NAME}_main test1.cpp src/sourceLib/glad.c)
+add_executable(${PROJECT_NAME}_main test1.cpp src/sourceLib/glad.c ${SRCFILE})
 target_compile_definitions(${PROJECT_NAME}_main PRIVATE CMAKE_CURRENT_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 
 target_link_libraries(${PROJECT_NAME}_main PUBLIC ${DEPENDS_LIB} )
