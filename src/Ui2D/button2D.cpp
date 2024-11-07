@@ -44,7 +44,6 @@ void button2D::runDrawProcess() {
     glm::mat4 projection = glm::ortho(0.0f, (float)windowsWidth, (float)windowsHeight, 0.0f);
     GLuint projLoc = glGetUniformLocation(shaderSkyBox_->attachId, "projection");
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
     // 绘制按钮
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
