@@ -3,9 +3,6 @@
 #include <stdio.h>
 #include <iostream>
 #include <random>
-
-
-
 #include"globaDefine.h"
 #include"mainLoop.h"
 
