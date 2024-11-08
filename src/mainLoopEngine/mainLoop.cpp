@@ -8,9 +8,6 @@
 #include"shaderLanguage.h"
 #include"modelBindAnimation.h"
 
-
-
-
 mainLoop::mainLoop(/* args */) {
 
 }

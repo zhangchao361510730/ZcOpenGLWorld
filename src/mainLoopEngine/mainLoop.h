@@ -26,6 +26,8 @@ private:
     loadAnimation* loadAnimation_;
     animationTool* animationTool_;
     reflectionBox* reflectionBox_;
+    SceneManager *sceneManager;
+
     bool enableMouse = true;
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;

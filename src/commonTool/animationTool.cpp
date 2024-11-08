@@ -10,6 +10,11 @@ animationTool::animationTool(loadAnimation* animation,mainLoop* parten):parten_(
 	}
 }
 
+animationTool::animationTool(loadAnimation* animation,animationScene* parten) {
+
+}
+
+
 void animationTool::UpdateAnimation(float dt) {
 	 if (parten_->isAnimating) {
 		if (m_CurrentAnimation) {

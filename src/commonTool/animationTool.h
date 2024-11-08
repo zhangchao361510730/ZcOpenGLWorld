@@ -10,11 +10,13 @@
 #include"loadAnimation.h"
 
 class mainLoop;
+class animationScene;
 
 class animationTool
 {
 public:
 	animationTool(loadAnimation* animation,mainLoop* parten);
+	animationTool(loadAnimation* animation,animationScene* parten);
 
 	void UpdateAnimation(float dt);
 
