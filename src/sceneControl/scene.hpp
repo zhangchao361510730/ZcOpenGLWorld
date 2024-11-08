@@ -1,3 +1,6 @@
+#ifndef SCENE_H_
+#define SCENE_H_
+
 class Scene {
 public:
     virtual ~Scene() = default;
@@ -7,3 +10,5 @@ public:
     virtual void Render() = 0;       // 渲染场景
     virtual void Cleanup() = 0;      // 清理场景资源
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef ANIMATION_SCENE_H_
+#define ANIMATION_SCENE_H_
+
 #include"scene.hpp"
 
 class animationScene : public Scene
@@ -13,3 +16,4 @@ public:
     void Cleanup() override;      // 清理场景资源
 };
 
+#endif

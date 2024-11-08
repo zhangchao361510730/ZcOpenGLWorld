@@ -1,6 +1,10 @@
 #ifndef skeletalAnimation_H_
 #define skeletalAnimation_H_
 #include"baseInit.h"
+#include"sceneManager.hpp"
+#include"setScene.h"
+#include"animationScene.h"
+
 
 class skyBox;
 class button2D;

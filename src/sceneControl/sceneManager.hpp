@@ -1,3 +1,6 @@
+#ifndef SceneManager_H_
+#define SceneManager_H_
+
 #include"scene.hpp"
 
 class SceneManager {
@@ -28,3 +31,5 @@ public:
         }
     }
 };
+
+#endif

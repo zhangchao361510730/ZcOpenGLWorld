@@ -39,7 +39,7 @@ void button2D::runDrawProcess() {
     ImGui::NewFrame();
     // 绘制 ImGui 窗口
     
-    ImGui::Begin("Auto-resize Window", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("MyWindow", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
     ImGui::Text("Dancing !!!!!!!!!!");
     ImGui::Checkbox("do It", &flag);
     ImGui::End();

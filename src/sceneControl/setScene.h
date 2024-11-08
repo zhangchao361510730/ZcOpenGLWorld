@@ -1,5 +1,7 @@
-#include"scene.hpp"
+#ifndef SETSCENE_H_
+#define SETSCENE_H_
 
+#include"scene.hpp"
 class setScene : public Scene
 {
 private:
@@ -13,3 +15,4 @@ public:
     void Cleanup() override;      // 清理场景资源
 };
 
+#endif
