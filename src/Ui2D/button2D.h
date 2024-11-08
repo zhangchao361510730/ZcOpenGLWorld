@@ -15,9 +15,14 @@ private:
     ShaderGLSLTool * shaderSkyBox_;
     uint32_t VAO,VBO,EBO;
     void loadVertices();
+    GLFWwindow* window = nullptr;
+    float animationSpeed = 1.0;
+    ImGuiIO io;
 public:
+    void setGLFWwindow(GLFWwindow*windows_);
     bool InitButton2D();
     void runDrawProcess();
+    void runRender();
     button2D(/* args */);
     ~button2D();
 };

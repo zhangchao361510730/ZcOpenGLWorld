@@ -12,27 +12,42 @@ button2D::~button2D() {
 
 }
 
+void button2D::setGLFWwindow(GLFWwindow*windows_) {
+    window = windows_;
+}
+
 bool button2D::InitButton2D() {
     glfwSwapInterval(1); // 开启垂直同步
 
     // 初始化 ImGui 上下文
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
+    io = ImGui::GetIO();
+
+    // 设置 ImGui 样式
+    ImGui::StyleColorsDark();
+
+    // 初始化 ImGui 后端
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
     return true;
 }
 
 void button2D::runDrawProcess() {
-    // 绘制按钮
-    shaderSkyBox_->use();
-    // 设置正交投影
-    glm::mat4 projection = glm::ortho(0.0f, (float)windowsWidth, (float)windowsHeight, 0.0f);
-    GLuint projLoc = glGetUniformLocation(shaderSkyBox_->attachId, "projection");
-    glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-    // 绘制按钮
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+    // 绘制 ImGui 窗口
+    ImGui::Begin("Hello, ImGui!");
+    ImGui::Text("This is a simple example of ImGui with OpenGL3 and GLFW.");
+    ImGui::SliderFloat("float", &io.MouseWheel, 0.0f, 1.0f);
+    ImGui::End();
+}
+
+void button2D::runRender(){
+        // 渲染 ImGui 绘制数据
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void button2D::loadVertices() {

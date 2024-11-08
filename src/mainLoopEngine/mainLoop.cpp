@@ -19,8 +19,13 @@ mainLoop::~mainLoop() {
 
 }
 
+void mainLoop::glfw_error_callback(int error, const char* description) {
+    std::cerr << "GLFW Error (" << error << "): " << description << std::endl;
+}
+
 bool mainLoop::InitGlSource() {
 	setCallbackFun_ = mainLoop::setCallBackControl;
+    glfwSetErrorCallback(mainLoop::glfw_error_callback);
 	baseInit::InitGlSource();
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
     //
@@ -29,14 +34,11 @@ bool mainLoop::InitGlSource() {
     std::string ModelPath_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");
     std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
 
-    //glm::mat4 projection = glm::ortho(0.0f, (float)windowsWidth, (float)windowsHeight, 0.0f);
-
-    
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     button2D_ = new button2D();
+    button2D_->setGLFWwindow(window);
     button2D_->InitButton2D();
-
-    
+    //glm::mat4 projection = glm::ortho(0.0f, (float)windowsWidth, (float)windowsHeight, 0.0f);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     camera_ = new cameraTool(glm::vec3(0.0f, 5.0f, 10.0f));
     skyB_ = new skyBox();
     skyB_->setCameraPtr(camera_);
@@ -66,6 +68,9 @@ void mainLoop::runDrawProcess() {
 
         processInput(window);
         animationTool_->UpdateAnimation(m_DeltaTime);
+        glfwPollEvents();
+        button2D_->runDrawProcess();
+
         // render
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -95,11 +100,10 @@ void mainLoop::runDrawProcess() {
         reflectionBox_->runDrawProcess(model2,view,projection);
 
         skyB_->runDrawProcess(view,projection); 
-
-        button2D_->runDrawProcess();
+        button2D_->runRender();
 
         glfwSwapBuffers(window);
-        glfwPollEvents();
+
     }
     unInitResource();
 }
@@ -110,6 +114,7 @@ void mainLoop::framebuffer_size_callback(GLFWwindow* window, int width, int heig
 
 void mainLoop::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
     mainLoop* thiz = (mainLoop*)glfwGetWindowUserPointer(window);
+    if (!thiz->enableMouse) {
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
     if (thiz->firstMouse) {
@@ -122,6 +127,7 @@ void mainLoop::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) 
     thiz->lastX = xpos;
     thiz->lastY = ypos;
     thiz->camera_->ProcessMouseMovement(xoffset, yoffset);
+    }
 }
 
 void mainLoop::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
@@ -142,6 +148,19 @@ void mainLoop::keyCallback(GLFWwindow* window, int key, int scancode, int action
     }
 }
 
+void mainLoop::mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+    mainLoop* thiz = (mainLoop*)glfwGetWindowUserPointer(window);
+    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+        //std::cout << "右键点击事件捕获！" << std::endl;
+        thiz->enableMouse = !(thiz->enableMouse); 
+        if (thiz->enableMouse) {
+            glfwSetInputMode(thiz->window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        } else {
+            glfwSetInputMode(thiz->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+    }
+}
+
 void mainLoop::setCallBackControl(void*thiz) {
 	mainLoop* thiz_ = (mainLoop*)thiz;
     if (thiz_ == nullptr) {
@@ -152,7 +171,8 @@ void mainLoop::setCallBackControl(void*thiz) {
     glfwSetCursorPosCallback(thiz_->window, mainLoop::mouse_callback);
     glfwSetScrollCallback(thiz_->window, mainLoop::scroll_callback);
     glfwSetKeyCallback(thiz_->window,mainLoop::keyCallback);
-    glfwSetInputMode(thiz_->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetMouseButtonCallback(thiz_->window,mainLoop::mouse_button_callback);
+    //glfwSetInputMode(thiz_->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void mainLoop::processInput(GLFWwindow *window) {

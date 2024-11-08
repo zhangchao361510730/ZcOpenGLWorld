@@ -22,6 +22,7 @@ private:
     loadAnimation* loadAnimation_;
     animationTool* animationTool_;
     reflectionBox* reflectionBox_;
+    bool enableMouse = true;
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;
     bool firstMouse = true;
@@ -33,11 +34,13 @@ private:
 public:
     mainLoop(/* args */);
     ~mainLoop();
+    static void glfw_error_callback(int error, const char* description);
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void setCallBackControl(void*thiz);
+    static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
     void processInput(GLFWwindow* window)override;
     bool InitGlSource()override;
     void runDrawProcess()override;
