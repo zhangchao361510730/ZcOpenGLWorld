@@ -12,7 +12,7 @@
 #include"mainLoop.h"
 
 int main() {
-    baseInit* bI = new mainLoop(); 
+    mainLoop* bI = new mainLoop(); 
     bI->InitGlSource();
     bI->runDrawProcess();
     delete bI;

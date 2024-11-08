@@ -12,10 +12,8 @@
 class animationScene;
 
 
-class animationTool
-{
+class animationTool {
 public:
-	//animationTool(loadAnimation* animation,mainLoop* parten);
 	animationTool(loadAnimation* animation,animationScene* parten);
 
 	void UpdateAnimation(float dt);
@@ -30,8 +28,6 @@ private:
 	animationScene* parten_;
 	std::vector<glm::mat4> m_FinalBoneMatrices;
 	loadAnimation* m_CurrentAnimation;
-	//float m_CurrentTime;
-	//float m_DeltaTime;
 
 };
 #endif

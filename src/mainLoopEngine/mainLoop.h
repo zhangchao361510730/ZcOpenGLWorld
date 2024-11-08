@@ -13,10 +13,12 @@ class loadModelTool;
 class loadAnimation;
 class animationTool;
 class reflectionBox;
-
 class modelBindAnimation;
 
-class mainLoop:public baseInit {
+
+typedef void(*_setCallBackFun_)(void*);
+
+class mainLoop {
 private:
     SceneManager *sceneManager;
 
@@ -30,6 +32,8 @@ private:
     bool isAnimating = false;
     float m_CurrentTime = 0.0f;
     friend class animationTool;
+    _setCallBackFun_ setCallbackFun_ = nullptr;
+    GLFWwindow* window = nullptr;
 public:
     mainLoop(/* args */);
     ~mainLoop();
@@ -40,9 +44,8 @@ public:
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void setCallBackControl(void*thiz);
     static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-    void processInput(GLFWwindow* window)override;
-    bool InitGlSource()override;
-    void runDrawProcess()override;
+    bool InitGlSource();
+    void runDrawProcess();
     bool unInitResource();
 };
 
