@@ -38,9 +38,10 @@ void button2D::runDrawProcess() {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
     // 绘制 ImGui 窗口
-    ImGui::Begin("Hello, ImGui!");
-    ImGui::Text("This is a simple example of ImGui with OpenGL3 and GLFW.");
-    ImGui::SliderFloat("float", &io.MouseWheel, 0.0f, 1.0f);
+    
+    ImGui::Begin("Auto-resize Window", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Text("Dancing !!!!!!!!!!");
+    ImGui::Checkbox("do It", &flag);
     ImGui::End();
 }
 

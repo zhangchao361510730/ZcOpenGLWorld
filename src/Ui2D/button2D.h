@@ -25,6 +25,7 @@ public:
     void runRender();
     button2D(/* args */);
     ~button2D();
+    bool flag = false;
 };
 
 

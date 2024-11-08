@@ -62,6 +62,8 @@ void mainLoop::runDrawProcess() {
     while (!glfwWindowShouldClose(window)) {
        
         // per-frame time logic
+        isAnimating = button2D_->flag;
+        
         float currentFrame = glfwGetTime();
         m_DeltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
@@ -136,16 +138,16 @@ void mainLoop::scroll_callback(GLFWwindow* window, double xoffset, double yoffse
 }
 
 void mainLoop::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    mainLoop* thiz = (mainLoop*)glfwGetWindowUserPointer(window);
-    if (key == GLFW_KEY_X) {
-        if (action == GLFW_PRESS) {
-            thiz->isAnimating = true;
-        }
-        else if (action == GLFW_RELEASE) {
-            thiz->isAnimating = false;
-            //thiz->m_CurrentTime = 0.0f; // 重置动画时间
-        }
-    }
+    // mainLoop* thiz = (mainLoop*)glfwGetWindowUserPointer(window);
+    // if (key == GLFW_KEY_X) {
+    //     if (action == GLFW_PRESS) {
+    //         thiz->isAnimating = true;
+    //     }
+    //     else if (action == GLFW_RELEASE) {
+    //         thiz->isAnimating = false;
+    //         //thiz->m_CurrentTime = 0.0f; // 重置动画时间
+    //     }
+    // }
 }
 
 void mainLoop::mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
@@ -190,13 +192,13 @@ void mainLoop::processInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera_->ProcessKeyboard(RIGHT, m_DeltaTime);
 
-    if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
-        isAnimating = true;
-    }
-    if (glfwGetKey(window, GLFW_KEY_X) == GLFW_RELEASE) {
-        isAnimating = false;
-        //m_CurrentTime = 0.0f; // 重置动画时间
-    }
+    // if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
+    //     isAnimating = true;
+    // }
+    // if (glfwGetKey(window, GLFW_KEY_X) == GLFW_RELEASE) {
+    //     isAnimating = false;
+    //     //m_CurrentTime = 0.0f; // 重置动画时间
+    // }
 }
 
 

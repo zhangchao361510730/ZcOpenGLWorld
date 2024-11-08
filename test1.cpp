@@ -31,7 +31,7 @@ int main() {
         glfwTerminate();
         return -1;
     }
-    glfwMakeContextCurrent(window);
+    //glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // 开启垂直同步
 
     // 初始化 ImGui 上下文
