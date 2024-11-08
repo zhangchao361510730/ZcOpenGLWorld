@@ -1,6 +1,9 @@
 #ifndef SCENE_H_
 #define SCENE_H_
-
+#ifdef PLATFORM_UNIX
+#include <unistd.h>
+#include<cstdint>
+#endif
 struct GLFWwindow;
 
 class Scene {

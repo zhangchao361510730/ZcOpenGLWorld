@@ -2,7 +2,8 @@
 #define ANIMATION_SCENE_H_
 
 #include"scene.hpp"
-#include"baseInit.h"
+#include"mainLoop.h"
+#include"globaDefine.h"
 
 class skyBox;
 class button2D;
@@ -11,7 +12,7 @@ class loadModelTool;
 class loadAnimation;
 class animationTool;
 class reflectionBox;
-
+class ShaderGLSLTool;
 class modelBindAnimation;
 
 class animationScene : public Scene 

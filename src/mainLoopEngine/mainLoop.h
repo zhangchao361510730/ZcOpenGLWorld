@@ -1,9 +1,15 @@
 #ifndef skeletalAnimation_H_
 #define skeletalAnimation_H_
-#include"baseInit.h"
+
 #include"sceneManager.hpp"
 #include"setScene.h"
 #include"animationScene.h"
+#include"globaDefine.h"
+
+#include<cstdint>
+#ifdef PLATFORM_UNIX
+#include<unistd.h>
+#endif
 
 
 class skyBox;

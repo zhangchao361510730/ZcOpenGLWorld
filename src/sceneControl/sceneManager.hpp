@@ -2,6 +2,9 @@
 #define SceneManager_H_
 
 #include"scene.hpp"
+#ifdef PLATFORM_UNIX
+#include <unistd.h>
+#endif
 
 class SceneManager {
 private:

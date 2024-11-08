@@ -4,9 +4,7 @@
 #include <iostream>
 #include <random>
 
-#ifdef PLATFORM_UNIX
-#include <unistd.h>
-#endif
+
 
 #include"globaDefine.h"
 #include"mainLoop.h"
