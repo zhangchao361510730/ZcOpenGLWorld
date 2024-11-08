@@ -13,6 +13,7 @@ class loadModelTool;
 class loadAnimation;
 class animationTool;
 class reflectionBox;
+
 class modelBindAnimation;
 
 class mainLoop:public baseInit {
@@ -28,6 +29,12 @@ private:
     reflectionBox* reflectionBox_;
     SceneManager *sceneManager;
 
+    uint32_t VBO = 0;
+    uint32_t VAO = 0;
+    ShaderGLSLTool* shaderModel_;
+    ShaderGLSLTool* shaderSkyBox_;
+
+    uint16_t sceneNumber = 1;
     bool enableMouse = true;
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;

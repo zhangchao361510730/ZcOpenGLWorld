@@ -11,9 +11,10 @@ class loadModelTool;
 class loadAnimation;
 class animationTool;
 class reflectionBox;
+
 class modelBindAnimation;
 
-class animationScene : public Scene , public baseInit
+class animationScene : public Scene 
 {
 private:
     uint32_t EBO;
@@ -25,6 +26,10 @@ private:
     loadAnimation* loadAnimation_;
     animationTool* animationTool_;
     reflectionBox* reflectionBox_;
+    uint32_t VBO = 0;
+    uint32_t VAO = 0;
+    ShaderGLSLTool* shaderModel_;
+    ShaderGLSLTool* shaderSkyBox_;
 
     bool enableMouse = true;
     float lastX = windowsWidth / 2.0f;
@@ -50,10 +55,10 @@ public:
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void setCallBackControl(void*thiz);
     static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-    void processInput(GLFWwindow* window)override;
+    void processInput(GLFWwindow* window);
     // bool InitGlSource()override;
     // void runDrawProcess()override;
-    bool unInitResource();
+
 };
 
 #endif

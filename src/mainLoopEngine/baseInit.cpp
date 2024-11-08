@@ -4,7 +4,7 @@
 #include"shaderLanguage.h"
 #include<string>
 
-baseInit::baseInit():gen(std::random_device{}()) {
+baseInit::baseInit() {
 
 }
 
@@ -23,7 +23,6 @@ bool baseInit::InitGlSource() {
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-
     // glfw window creation
     // --------------------
     window = glfwCreateWindow(windowsWidth, windowsHeight, "LearnOpenGL", NULL, NULL);

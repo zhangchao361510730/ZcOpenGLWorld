@@ -23,9 +23,6 @@ void animationScene::glfw_error_callback(int error, const char* description) {
 
 
 void animationScene::Init() {
-	setCallbackFun_ = animationScene::setCallBackControl;
-    glfwSetErrorCallback(animationScene::glfw_error_callback);
-	baseInit::InitGlSource();
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
     //
     glEnable(GL_DEPTH_TEST);
@@ -56,15 +53,57 @@ void animationScene::Init() {
 }
 
 void animationScene::Update(float dt) {
+        isAnimating = button2D_->flag;
+        float currentFrame = glfwGetTime();
+        m_DeltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
 
+        processInput(window);
+        animationTool_->UpdateAnimation(m_DeltaTime);
 }
 
 void animationScene::Render() {
+        button2D_->runDrawProcess();
+        // render
+        glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        shaderModel_->use();
+        glm::mat4 projection = glm::perspective(glm::radians(camera_->Zoom), (float)windowsWidth / (float)windowsHeight, 0.1f, 100.0f);
+        //glm::mat4 projection = glm::ortho(0.0f, (float)windowsWidth, (float)windowsHeight, 0.0f);
 
+        glm::mat4 view = camera_->GetViewMatrix();
+        shaderModel_->setMat4("projection", projection);
+        shaderModel_->setMat4("view", view);
+        auto transforms = animationTool_->GetFinalBoneMatrices();
+        for (int i = 0; i < transforms.size(); ++i) {
+            shaderModel_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+        }
+        // render the loaded model
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, -0.4f, -15.0f)); // translate it down so it's at the center of the scene
+        //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
+        model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
+        shaderModel_->setMat4("model", model);
+        modelBindA_->Draw(*shaderModel_);
+
+        glm::mat4 model2 = glm::mat4(1.0f);
+        model2 = glm::translate(model2, glm::vec3(0.0f, -4.0f, -16.0f));  // 平移 y + 向上   z - 向前
+#define scValue 6.0f
+        model2 = glm::scale(model2, glm::vec3(scValue, scValue, scValue));      // 缩放
+        reflectionBox_->runDrawProcess(model2,view,projection);
+
+        skyB_->runDrawProcess(view,projection); 
+        button2D_->runRender();
 }
 
 void animationScene::Cleanup() {
-    
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+    glDeleteProgram(shaderModel_->attachId);
+
+    //glfwTerminate();
+    delete shaderModel_;
 }
 
 void animationScene::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
@@ -156,16 +195,4 @@ void animationScene::processInput(GLFWwindow *window) {
     //     isAnimating = false;
     //     //m_CurrentTime = 0.0f; // 重置动画时间
     // }
-}
-
-
-bool animationScene::unInitResource() {
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
-    glDeleteProgram(shaderModel_->attachId);
-
-    glfwTerminate();
-    delete shaderModel_;
-    return true;
 }

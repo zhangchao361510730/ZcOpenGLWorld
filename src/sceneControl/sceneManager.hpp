@@ -9,7 +9,7 @@ private:
 
 public:
     SceneManager() : currentScene(nullptr) {}
-
+    uint16_t currentNumber = 1;
     void ChangeScene(Scene* newScene) {
         if (currentScene) {
             currentScene->Cleanup();  // 清理当前场景

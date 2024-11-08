@@ -51,6 +51,7 @@ bool mainLoop::InitGlSource() {
     loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
     animationTool_ = new animationTool(loadAnimation_,this);
     shaderModel_ = new ShaderGLSLTool(ModelPath_vs.c_str(),ModelPath_fs.c_str());
+
     return true;
 }
 
@@ -58,48 +59,29 @@ void mainLoop::runDrawProcess() {
     // render loop
     while (!glfwWindowShouldClose(window)) {
        
-        // per-frame time logic
-        isAnimating = button2D_->flag;
-        
-        float currentFrame = glfwGetTime();
-        m_DeltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
-
-        processInput(window);
-        animationTool_->UpdateAnimation(m_DeltaTime);
-        glfwPollEvents();
-        button2D_->runDrawProcess();
-
-        // render
-        glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        shaderModel_->use();
-        glm::mat4 projection = glm::perspective(glm::radians(camera_->Zoom), (float)windowsWidth / (float)windowsHeight, 0.1f, 100.0f);
-        //glm::mat4 projection = glm::ortho(0.0f, (float)windowsWidth, (float)windowsHeight, 0.0f);
-
-        glm::mat4 view = camera_->GetViewMatrix();
-        shaderModel_->setMat4("projection", projection);
-        shaderModel_->setMat4("view", view);
-        auto transforms = animationTool_->GetFinalBoneMatrices();
-        for (int i = 0; i < transforms.size(); ++i) {
-            shaderModel_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+        switch (sceneNumber) {
+            case 1:{
+                if (sceneManager->currentNumber != 1) {
+                    sceneManager->ChangeScene(new animationScene());
+                    sceneManager->currentNumber = 1;
+                }
+                break;
+            }
+            case 2:{
+                if (sceneManager->currentNumber != 2) {
+                    sceneManager->ChangeScene(new setScene());
+                    sceneManager->currentNumber = 2;
+                }
+                break;
+            }
+            default:{
+                break;
+            }
         }
-        // render the loaded model
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -0.4f, -15.0f)); // translate it down so it's at the center of the scene
-        //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
-        model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
-        shaderModel_->setMat4("model", model);
-        modelBindA_->Draw(*shaderModel_);
-
-        glm::mat4 model2 = glm::mat4(1.0f);
-        model2 = glm::translate(model2, glm::vec3(0.0f, -4.0f, -16.0f));  // 平移 y + 向上   z - 向前
-#define scValue 6.0f
-        model2 = glm::scale(model2, glm::vec3(scValue, scValue, scValue));      // 缩放
-        reflectionBox_->runDrawProcess(model2,view,projection);
-
-        skyB_->runDrawProcess(view,projection); 
-        button2D_->runRender();
+        // per-frame time logic
+        sceneManager->Update(1);
+        glfwPollEvents();
+        sceneManager->Render();
 
         glfwSwapBuffers(window);
 

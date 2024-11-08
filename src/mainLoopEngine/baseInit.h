@@ -14,17 +14,10 @@ typedef void(*_setCallBackFun_)(void*);
 
 class baseInit {
 public:
-    GLFWwindow* window = nullptr;
-    std::mt19937 gen; 
-    uint32_t VBO = 0;
-    uint32_t VAO = 0;
-    ShaderGLSLTool* shaderModel_;
-    ShaderGLSLTool* shaderSkyBox_;
-
 	baseInit();
 	~baseInit();
     _setCallBackFun_ setCallbackFun_ = nullptr;
-
+    GLFWwindow* window = nullptr;
 	virtual bool InitGlSource();
     virtual void runDrawProcess() = 0; 
     //void static framebuffer_size_callback(GLFWwindow* window, int width, int height);
