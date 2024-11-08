@@ -1,6 +1,6 @@
 #include"setScene.h"
 
-setScene::setScene(/* args */)
+setScene::setScene(GLFWwindow* windows_):Scene(windows_)
 {
 }
 

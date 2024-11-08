@@ -41,7 +41,7 @@ private:
     float m_CurrentTime = 0.0f;
     friend class animationTool;
 public:
-    animationScene(/* args */);
+    animationScene(GLFWwindow* windows_);
     ~animationScene();
     void Init() override;         // 初始化场景
     void Update(float dt) override;  // 更新场景逻辑

@@ -5,18 +5,22 @@
 
 class SceneManager {
 private:
-    Scene* currentScene;
+    Scene* currentScene = nullptr;
 
 public:
     SceneManager() : currentScene(nullptr) {}
-    uint16_t currentNumber = 1;
+    uint16_t currentNumber = -1;
     void ChangeScene(Scene* newScene) {
         if (currentScene) {
             currentScene->Cleanup();  // 清理当前场景
             delete currentScene;
         }
         currentScene = newScene;
+        
+    }
+    bool newSceneInit() {
         currentScene->Init();  // 初始化新场景
+        return true;
     }
 
     void Update(float dt) {

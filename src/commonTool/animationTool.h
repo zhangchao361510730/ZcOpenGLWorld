@@ -9,13 +9,13 @@
 #include"boneTool.h"
 #include"loadAnimation.h"
 
-class mainLoop;
 class animationScene;
+
 
 class animationTool
 {
 public:
-	animationTool(loadAnimation* animation,mainLoop* parten);
+	//animationTool(loadAnimation* animation,mainLoop* parten);
 	animationTool(loadAnimation* animation,animationScene* parten);
 
 	void UpdateAnimation(float dt);
@@ -27,7 +27,7 @@ public:
 	std::vector<glm::mat4> GetFinalBoneMatrices();
 
 private:
-	mainLoop* parten_;
+	animationScene* parten_;
 	std::vector<glm::mat4> m_FinalBoneMatrices;
 	loadAnimation* m_CurrentAnimation;
 	//float m_CurrentTime;

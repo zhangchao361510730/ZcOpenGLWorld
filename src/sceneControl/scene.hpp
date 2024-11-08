@@ -6,7 +6,11 @@ struct GLFWwindow;
 class Scene {
     
 public:
+    Scene(GLFWwindow*window_) {
+        window = window_;
+    }
     virtual ~Scene() = default;
+    bool hasInit = false;
     GLFWwindow* window = nullptr;
     virtual void Init() = 0;         // 初始化场景
     virtual void Update(float dt) = 0;  // 更新场景逻辑

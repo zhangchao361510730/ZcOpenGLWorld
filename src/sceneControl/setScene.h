@@ -7,7 +7,7 @@ class setScene : public Scene
 private:
     /* data */
 public:
-    setScene(/* args */);
+    setScene(GLFWwindow* windows_);
     ~setScene();
     void Init() override;         // 初始化场景
     void Update(float dt) override;  // 更新场景逻辑

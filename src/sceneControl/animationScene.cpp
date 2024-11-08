@@ -9,7 +9,7 @@
 #include"shaderLanguage.h"
 #include"modelBindAnimation.h"
 
-animationScene::animationScene(/* args */)
+animationScene::animationScene(GLFWwindow* windows_):Scene(windows_)
 {
 }
 
@@ -50,13 +50,13 @@ void animationScene::Init() {
     loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
     animationTool_ = new animationTool(loadAnimation_,this);
     shaderModel_ = new ShaderGLSLTool(ModelPath_vs.c_str(),ModelPath_fs.c_str());
+    hasInit = true;
 }
 
 void animationScene::Update(float dt) {
         isAnimating = button2D_->flag;
-        float currentFrame = glfwGetTime();
-        m_DeltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+        m_DeltaTime = dt - lastFrame;
+        lastFrame = dt;
 
         processInput(window);
         animationTool_->UpdateAnimation(m_DeltaTime);
@@ -97,6 +97,10 @@ void animationScene::Render() {
 }
 
 void animationScene::Cleanup() {
+    if (!hasInit) {
+        // 如果未初始化直接
+        return;
+    }
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);

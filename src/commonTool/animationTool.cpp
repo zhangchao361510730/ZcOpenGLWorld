@@ -1,17 +1,13 @@
 #include"animationTool.h"
 #include"mainLoop.h"
 
-animationTool::animationTool(loadAnimation* animation,mainLoop* parten):parten_(parten) {
-	//m_CurrentTime = 0.0;
+
+animationTool::animationTool(loadAnimation* animation,animationScene* parten):parten_(parten) {
 	m_CurrentAnimation = animation;
 	m_FinalBoneMatrices.reserve(100);
 	for (int i = 0; i < 100; i++) {
 		m_FinalBoneMatrices.push_back(glm::mat4(1.0f));
 	}
-}
-
-animationTool::animationTool(loadAnimation* animation,animationScene* parten) {
-
 }
 
 
