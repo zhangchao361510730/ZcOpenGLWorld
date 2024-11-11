@@ -79,13 +79,31 @@ void animationScene::Render() {
         for (int i = 0; i < transforms.size(); ++i) {
             shaderModel_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
         }
-        // render the loaded model
+
+
+    // 位置数组，定义每个模型的位置
+    std::vector<glm::vec3> modelPositions = {
+        glm::vec3(0.0f, -0.4f, -15.0f),
+        glm::vec3(2.0f, -0.4f, -15.0f),
+        glm::vec3(-2.0f, -0.4f, -15.0f)
+    };
+
+    // 渲染每个位置的模型
+    for (const auto& pos : modelPositions) {
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -0.4f, -15.0f)); // translate it down so it's at the center of the scene
-        //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
-        model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
+        model = glm::translate(model, pos); // 设置位置
+        model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f)); // 缩放
         shaderModel_->setMat4("model", model);
         modelBindA_->Draw(*shaderModel_);
+    }
+
+        // // render the loaded model
+        // glm::mat4 model = glm::mat4(1.0f);
+        // model = glm::translate(model, glm::vec3(0.0f, -0.4f, -15.0f)); // translate it down so it's at the center of the scene
+        // //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
+        // model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
+        // shaderModel_->setMat4("model", model);
+        // modelBindA_->Draw(*shaderModel_);
 
         glm::mat4 model2 = glm::mat4(1.0f);
         model2 = glm::translate(model2, glm::vec3(0.0f, -4.0f, -16.0f));  // 平移 y + 向上   z - 向前
