@@ -4,7 +4,7 @@
 #include "imgui_impl_opengl3.h"
 #include <GLFW/glfw3.h>
 #include <string>
-
+#include<iostream>
 
 
 setScene::setScene(GLFWwindow* windows_):Scene(windows_) {
@@ -49,6 +49,11 @@ void setScene::renderUI() {
     // 单击模式按钮
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(20, 20));
     if (ImGui::Button("Single Click Mode", ImVec2(200, 60))) {
+        if (SceneManager_ != nullptr) {
+            SceneManager_->currentNumber = 2;
+        } else {
+            std::cerr<<__FILE__<<" "<<__LINE__<<" nullptr"<<std::endl;
+        }
         isSingleClickMode = !isSingleClickMode;
     }
     ImGui::PopStyleVar();
