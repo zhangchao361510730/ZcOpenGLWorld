@@ -1,7 +1,12 @@
 #include "serverCon.h"
+#include <iostream>
+#include <cstring>
+#include <unistd.h>
+#include <arpa/inet.h>
+
 
 serverCon::serverCon(int port) : port(port) {
-    // 创建服务器端套接字
+    // 创建 socket
     serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket < 0) {
         std::cerr << "Socket creation failed!" << std::endl;
@@ -20,13 +25,11 @@ serverCon::~serverCon() {
 }
 
 void serverCon::startServer() {
-    // 绑定套接字到地址
     if (bind(serverSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
         std::cerr << "Bind failed!" << std::endl;
         return;
     }
 
-    // 监听客户端连接
     if (listen(serverSocket, 3) < 0) {
         std::cerr << "Listen failed!" << std::endl;
         return;
@@ -42,17 +45,37 @@ void serverCon::startServer() {
     }
 
     std::cout << "Client connected!" << std::endl;
-    char buffer[512];
-    int bytesReceived;
-    while ((bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0)) > 0) {
-        buffer[bytesReceived] = '\0'; // 终止字符串
-        std::cout << "Received message: " << buffer << std::endl;
-        send(clientSocket, "Message received", 17, 0);  // 发送响应
-    }
+    handleClient();
+}
 
-    if (bytesReceived == 0) {
-        std::cout << "Client disconnected" << std::endl;
-    } else if (bytesReceived < 0) {
-        std::cerr << "Recv failed!" << std::endl;
+void serverCon::handleClient() {
+    while (true) {
+        // 读取 Type 和 Length
+        int type;
+        int length;
+        int bytesReceived = recv(clientSocket, (char*)&type, sizeof(type), 0);
+        if (bytesReceived <= 0) break;
+
+        bytesReceived = recv(clientSocket, (char*)&length, sizeof(length), 0);
+        if (bytesReceived <= 0) break;
+
+        // 使用智能指针管理内存
+        //std::unique_ptr<char[]> buffer = std::unique_ptr<char[]>(length);
+        std::unique_ptr<char[]> buffer(new char[length]);    
+        bytesReceived = recv(clientSocket, buffer.get(), length, 0);
+        if (bytesReceived <= 0) break;
+
+        // 处理接收到的消息
+        processMessage(buffer.get(), length);
     }
+}
+
+void serverCon::processMessage(const char* message, int length) {
+    std::cout << "Received message: " << std::string(message, length) << std::endl;
+
+    // 发送响应
+    const char* response = "Message received!";
+    int responseLength = strlen(response);
+    send(clientSocket, (char*)&responseLength, sizeof(responseLength), 0);  // 发送响应长度
+    send(clientSocket, response, responseLength, 0);  // 发送响应内容
 }

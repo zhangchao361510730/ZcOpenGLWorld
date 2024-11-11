@@ -1,13 +1,9 @@
-
-
 #ifndef CLIENTCON_H
 #define CLIENTCON_H
 
 #include <string>
-#include <iostream>
-#include <unistd.h>
+#include <memory>
 #include <arpa/inet.h>
-#include <cstring>
 
 class clientCon {
 public:
@@ -21,6 +17,8 @@ private:
     struct sockaddr_in serverAddr;
     std::string serverAddress;
     int port;
+
+    void sendTLVMessage(int type, const std::string& message);
 };
 
 #endif // CLIENTCON_H

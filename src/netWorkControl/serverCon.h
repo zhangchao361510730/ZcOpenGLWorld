@@ -1,13 +1,9 @@
-
 #ifndef SERVERCON_H
 #define SERVERCON_H
 
-#include <iostream>
-#include <unistd.h>
+#include <string>
+#include <memory>
 #include <arpa/inet.h>
-#include <cstring>
-
-
 class serverCon {
 public:
     serverCon(int port);
@@ -18,6 +14,9 @@ private:
     int serverSocket, clientSocket;
     struct sockaddr_in serverAddr, clientAddr;
     int port;
+
+    void handleClient();
+    void processMessage(const char* message, int length);
 };
 
 #endif // SERVERCON_H

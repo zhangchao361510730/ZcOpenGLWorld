@@ -1,8 +1,11 @@
 #include "clientCon.h"
+#include <iostream>
+#include <cstring>
+#include <unistd.h>
+
 
 clientCon::clientCon(const std::string& serverAddress, int port)
     : serverAddress(serverAddress), port(port) {
-    // 创建客户端套接字
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket < 0) {
         std::cerr << "Socket creation failed!" << std::endl;
@@ -28,11 +31,26 @@ void clientCon::connectToServer() {
 }
 
 void clientCon::sendMessage(const std::string& message) {
-    send(clientSocket, message.c_str(), message.length(), 0);
+    sendTLVMessage(1, message);  // 类型 1 代表文本消息
+
+    // 接收服务器响应
+    int responseLength;
+    recv(clientSocket, (char*)&responseLength, sizeof(responseLength), 0);  // 接收响应长度
     char buffer[512];
-    int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
+    int bytesReceived = recv(clientSocket, buffer, responseLength, 0);  // 接收响应内容
     if (bytesReceived > 0) {
-        buffer[bytesReceived] = '\0'; // 终止字符串
+        buffer[bytesReceived] = '\0';  // 终止字符串
         std::cout << "Server response: " << buffer << std::endl;
     }
+}
+
+void clientCon::sendTLVMessage(int type, const std::string& message) {
+    int messageLength = message.length();
+
+    // 发送消息类型
+    send(clientSocket, (char*)&type, sizeof(type), 0);
+    // 发送消息长度
+    send(clientSocket, (char*)&messageLength, sizeof(messageLength), 0);
+    // 发送消息内容
+    send(clientSocket, message.c_str(), messageLength, 0);
 }
