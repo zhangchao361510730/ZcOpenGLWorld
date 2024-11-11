@@ -19,11 +19,7 @@ setScene::~setScene()
 }
 
 void setScene::renderUI() {
-    static char ip[16] = "127.0.0.1";      // 默认 IP 地址
-    static char portStr[6] = "8080";       // 默认端口字符串（方便软键盘输入）
-    static bool isSingleClickMode = false;
-    static bool isServerCreated = false;
-    static bool isConnected = false;
+
     ImGui::SetNextWindowPos(ImVec2(50, subWindHeight));
     ImGui::Begin("MyWindow", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -77,15 +73,50 @@ void setScene::renderUI() {
     ImGui::Text(isServerCreated ? "Created" : "Not Created");
 
     // 连接到服务器按钮
+    // ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(20, 20));
+    // if (ImGui::Button("Connect to Server", ImVec2(200, 60))) {
+    //     isConnected = true;
+    // }
+
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(20, 20));
     if (ImGui::Button("Connect to Server", ImVec2(200, 60))) {
-        isConnected = true;
+        if (!isConnected) {
+            connectToServer();
+        }
     }
+
     ImGui::PopStyleVar();
     ImGui::SameLine();
     ImGui::Text(isConnected ? "Connected" : "Not Connected");
 
     ImGui::End();
+}
+
+void setScene::connectToServer() {
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0) {
+        std::cerr << "Error creating socket." << std::endl;
+        return;
+    }
+
+    struct sockaddr_in server_addr;
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(std::stoi(portStr));
+
+    if (inet_pton(AF_INET, ip, &server_addr.sin_addr) <= 0) {
+        std::cerr << "Invalid IP address." << std::endl;
+        close(sockfd);
+        return;
+    }
+
+    if (connect(sockfd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
+        std::cerr << "Connection failed." << std::endl;
+        close(sockfd);
+    } else {
+        std::cout << "Connected to server!" << std::endl;
+        isConnected = true;
+        close(sockfd);
+    }
 }
 
 // 显示虚拟键盘
@@ -118,6 +149,8 @@ void setScene::ShowVirtualKeyboard(char* inputBuffer, size_t bufferSize) {
 
 
 void setScene::Init() {
+    strcpy(ip, "127.0.0.1");      // 设置默认 IP 地址
+    strcpy(portStr, "8080");      // 设置默认端口字符串
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -156,6 +189,6 @@ void setScene::Cleanup() {
 
 void setScene::startServer() {
     // 假设 serverCon 是你创建的服务器类
-    serverCon server(9527);
-    server.startServer();  // 假设 start() 是服务器启动的函数，负责监听客户端连接
+    serverConPtr = std::make_shared<serverCon>(std::stoi(portStr));
+    serverConPtr->startServer();  // 假设 start() 是服务器启动的函数，负责监听客户端连接
 }
