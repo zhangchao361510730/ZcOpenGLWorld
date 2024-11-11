@@ -12,8 +12,9 @@ private:
     // 当前选中的输入框（0 表示 IP，1 表示端口）
     int activeInput = 0;  // 0 表示 IP，1 表示端口
     SceneManager *SceneManager_ = nullptr;
+    uint16_t* sceneId_ = nullptr;
 public:
-    setScene(GLFWwindow* windows_);
+    setScene(GLFWwindow* windows_,uint16_t * sceneId);
     ~setScene();
     void Init() override;         // 初始化场景
     void Update(float dt) override;  // 更新场景逻辑

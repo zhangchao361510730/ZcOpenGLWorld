@@ -69,7 +69,7 @@ void mainLoop::runDrawProcess() {
             }
             case 2:{
                 if (sceneManager->currentNumber != 2) {
-                    sceneManager->ChangeScene(new setScene(window));
+                    sceneManager->ChangeScene(new setScene(window,&sceneNumber));
                     sceneManager->newSceneInit();
                     sceneManager->currentNumber = 2;
                 }

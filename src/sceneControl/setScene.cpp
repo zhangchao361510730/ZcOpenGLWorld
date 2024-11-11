@@ -7,7 +7,7 @@
 #include<iostream>
 
 
-setScene::setScene(GLFWwindow* windows_):Scene(windows_) {
+setScene::setScene(GLFWwindow* windows_,uint16_t *sceneId):Scene(windows_),sceneId_(sceneId){
 
 }
 
@@ -49,8 +49,8 @@ void setScene::renderUI() {
     // 单击模式按钮
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(20, 20));
     if (ImGui::Button("Single Click Mode", ImVec2(200, 60))) {
-        if (SceneManager_ != nullptr) {
-            SceneManager_->currentNumber = 2;
+        if (sceneId_ != nullptr) {
+            *sceneId_ = 1;
         } else {
             std::cerr<<__FILE__<<" "<<__LINE__<<" nullptr"<<std::endl;
         }
@@ -143,7 +143,6 @@ void setScene::Cleanup() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
-
     // glfwDestroyWindow(window);
     // glfwTerminate();
 }
