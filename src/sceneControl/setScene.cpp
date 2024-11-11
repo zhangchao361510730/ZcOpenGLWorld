@@ -6,6 +6,7 @@
 #include <thread>
 #include <string>
 #include <iostream>
+#include"clientCon.h"
 #include"serverCon.h"
 
 
@@ -78,10 +79,12 @@ void setScene::renderUI() {
     //     isConnected = true;
     // }
 
+    // 连接到服务器按钮
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(20, 20));
     if (ImGui::Button("Connect to Server", ImVec2(200, 60))) {
         if (!isConnected) {
-            connectToServer();
+            clientPtr_ = std::make_shared<clientCon>(ip, std::stoi(portStr));
+            isConnected = clientPtr_->connectToServer();
         }
     }
 

@@ -10,6 +10,7 @@
 #include<string>
 
 class serverCon;
+class clientCon;
 
 class setScene : public Scene
 {
@@ -20,6 +21,7 @@ private:
     SceneManager *SceneManager_ = nullptr;
     uint16_t* sceneId_ = nullptr;
     std::shared_ptr<serverCon> serverConPtr;
+    std::shared_ptr<clientCon> clientPtr_;
     // 成员变量
     char ip[16];      // 默认 IP 地址
     char portStr[6];       // 默认端口字符串（方便软键盘输入）
