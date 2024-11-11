@@ -14,8 +14,6 @@ private:
     uint32_t cubeVAO, cubeVBO;
     ShaderGLSLTool*shaderReflectionBox_; 
     cameraTool* camera;
-    
-    std::vector<glm::vec3> MultiDrawPositions;
 public:
     uint32_t cubemapTexture;
     bool InitReflectionBox();
