@@ -28,7 +28,7 @@ class mainLoop {
 private:
     SceneManager *sceneManager;
 
-    uint16_t sceneNumber = 1;
+    uint16_t sceneNumber = 2;
     bool enableMouse = true;
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;

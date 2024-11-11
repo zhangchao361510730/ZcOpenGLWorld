@@ -1,11 +1,14 @@
 #ifndef SETSCENE_H_
 #define SETSCENE_H_
 
+#define subWindHeight 100
+
 #include"scene.hpp"
 class setScene : public Scene
 {
 private:
-    /* data */
+    // 当前选中的输入框（0 表示 IP，1 表示端口）
+    int activeInput = 0;  // 0 表示 IP，1 表示端口
 public:
     setScene(GLFWwindow* windows_);
     ~setScene();
@@ -13,6 +16,8 @@ public:
     void Update(float dt) override;  // 更新场景逻辑
     void Render() override;       // 渲染场景
     void Cleanup() override;      // 清理场景资源
+    void renderUI();
+    void ShowVirtualKeyboard(char* inputBuffer, size_t bufferSize);
 };
 
 #endif

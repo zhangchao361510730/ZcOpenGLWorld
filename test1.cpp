@@ -3,37 +3,11 @@
 #include "imgui_impl_opengl3.h"
 #include <GLFW/glfw3.h>
 #include <string>
-
+#define subWindHeight 100
 // 当前选中的输入框（0 表示 IP，1 表示端口）
 static int activeInput = 0;  // 0 表示 IP，1 表示端口
 
-// 显示虚拟键盘
-void ShowVirtualKeyboard(char* inputBuffer, size_t bufferSize) {
-    ImGui::Begin("Virtual Keyboard");
 
-    const char* keys = "123456789.0";  // 包含 1-9、0 和小数点
-    for (int i = 0; keys[i] != '\0'; i++) {
-        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(20, 20)); // 放大按钮
-        if (ImGui::Button(std::string(1, keys[i]).c_str(), ImVec2(60, 60))) {
-            size_t len = strlen(inputBuffer);
-            if (len < bufferSize - 1) {
-                inputBuffer[len] = keys[i];
-                inputBuffer[len + 1] = '\0';
-            }
-        }
-        ImGui::PopStyleVar();
-        if ((i + 1) % 3 == 0) ImGui::NewLine();
-        else ImGui::SameLine();
-    }
-
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(20, 20));
-    if (ImGui::Button("Backspace", ImVec2(180, 60)) && strlen(inputBuffer) > 0) {
-        inputBuffer[strlen(inputBuffer) - 1] = '\0';
-    }
-    ImGui::PopStyleVar();
-
-    ImGui::End();
-}
 
 void renderUI() {
     static char ip[16] = "127.0.0.1";      // 默认 IP 地址
@@ -41,8 +15,8 @@ void renderUI() {
     static bool isSingleClickMode = false;
     static bool isServerCreated = false;
     static bool isConnected = false;
-
-    ImGui::Begin("Server Configuration");  // 窗口标题
+    ImGui::SetNextWindowPos(ImVec2(50, subWindHeight));
+    ImGui::Begin("MyWindow", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
     ImGui::InputText("IP Address", ip, sizeof(ip));
     ImGui::InputText("Port", portStr, sizeof(portStr));

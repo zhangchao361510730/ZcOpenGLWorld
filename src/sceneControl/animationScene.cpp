@@ -24,7 +24,8 @@ void animationScene::glfw_error_callback(int error, const char* description) {
 
 void animationScene::Init() {
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-    //
+    glfwSetWindowUserPointer(window, (void*)this);
+    setCallBackControl(this);
     glEnable(GL_DEPTH_TEST);
     std::string ModelPath_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.fs");
     std::string ModelPath_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");

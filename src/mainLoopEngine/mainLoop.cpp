@@ -49,7 +49,7 @@ bool mainLoop::InitGlSource() {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return false;
     }
-    glfwSetWindowUserPointer(window, (void*)this);
+
     sceneManager = new SceneManager();
     return true;
 }
@@ -70,6 +70,7 @@ void mainLoop::runDrawProcess() {
             case 2:{
                 if (sceneManager->currentNumber != 2) {
                     sceneManager->ChangeScene(new setScene(window));
+                    sceneManager->newSceneInit();
                     sceneManager->currentNumber = 2;
                 }
                 break;
