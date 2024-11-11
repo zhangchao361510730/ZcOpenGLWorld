@@ -1,5 +1,6 @@
-#include"reflectionBox.h"
 #include<string>
+#include"reflectionBox.h"
+#include"printTool.hpp"
 #include"globaDefine.h"
 reflectionBox::reflectionBox(/* args */) {
 
@@ -34,8 +35,6 @@ bool reflectionBox::InitReflectionBox() {
 void reflectionBox::setCameraPtr(cameraTool* camera_) {
     this->camera = camera_;
 }
-
-#include"printTool.hpp"
 
 void reflectionBox::runDrawProcess(glm::mat4 &model,glm::mat4 &view,glm::mat4 &projection) {
         shaderReflectionBox_->use();

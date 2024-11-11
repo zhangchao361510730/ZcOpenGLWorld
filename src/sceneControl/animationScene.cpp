@@ -82,34 +82,46 @@ void animationScene::Render() {
 
 
     // 位置数组，定义每个模型的位置
-    std::vector<glm::vec3> modelPositions = {
-        glm::vec3(0.0f, -0.4f, -15.0f),
-        glm::vec3(2.0f, -0.4f, -15.0f),
-        glm::vec3(-2.0f, -0.4f, -15.0f)
-    };
+    // std::vector<glm::vec3> modelPositions = {
+    //     glm::vec3(0.0f, -0.4f, -15.0f),
+    //     glm::vec3(2.0f, -0.4f, -15.0f),
+    //     glm::vec3(-2.0f, -0.4f, -15.0f)
+    // };
 
-    // 渲染每个位置的模型
-    for (const auto& pos : modelPositions) {
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, pos); // 设置位置
-        model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f)); // 缩放
-        shaderModel_->setMat4("model", model);
-        modelBindA_->Draw(*shaderModel_);
-    }
+    // // 渲染每个位置的模型
+    // for (const auto& pos : modelPositions) {
+    //     glm::mat4 model = glm::mat4(1.0f);
+    //     model = glm::translate(model, pos); // 设置位置
+    //     model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f)); // 缩放
+    //     shaderModel_->setMat4("model", model);
+    //     modelBindA_->Draw(*shaderModel_);
+    // }
 
         // // render the loaded model
-        // glm::mat4 model = glm::mat4(1.0f);
-        // model = glm::translate(model, glm::vec3(0.0f, -0.4f, -15.0f)); // translate it down so it's at the center of the scene
-        // //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
-        // model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
-        // shaderModel_->setMat4("model", model);
-        // modelBindA_->Draw(*shaderModel_);
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, -0.4f, -15.0f)); // translate it down so it's at the center of the scene
+        //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
+        model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
+        shaderModel_->setMat4("model", model);
+        modelBindA_->Draw(*shaderModel_);
 
-        glm::mat4 model2 = glm::mat4(1.0f);
-        model2 = glm::translate(model2, glm::vec3(0.0f, -4.0f, -16.0f));  // 平移 y + 向上   z - 向前
-#define scValue 6.0f
-        model2 = glm::scale(model2, glm::vec3(scValue, scValue, scValue));      // 缩放
-        reflectionBox_->runDrawProcess(model2,view,projection);
+//         glm::mat4 model2 = glm::mat4(1.0f);
+//         model2 = glm::translate(model2, glm::vec3(0.0f, -4.0f, -16.0f));  // 平移 y + 向上   z - 向前
+ #define scValue 6.0f
+//         model2 = glm::scale(model2, glm::vec3(scValue, scValue, scValue));      // 缩放
+//         reflectionBox_->runDrawProcess(model2,view,projection);
+
+    std::vector<glm::mat4> models = {
+        glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)),  // 第一个盒子的位置
+        glm::translate(glm::mat4(1.0f), glm::vec3(2.0f, 0.0f, 0.0f)),  // 第二个盒子的位置
+        glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, 0.0f, 0.0f)), // 第三个盒子的位置
+        // 添加更多位置矩阵
+    };
+
+    for (auto& model2 : models) {
+        model2 = glm::scale(model2, glm::vec3(scValue, scValue, scValue));
+        reflectionBox_->runDrawProcess(model2, view, projection);
+    }
 
         skyB_->runDrawProcess(view,projection); 
         button2D_->runRender();
