@@ -3,8 +3,10 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <GLFW/glfw3.h>
+#include <thread>
 #include <string>
-#include<iostream>
+#include <iostream>
+#include"serverCon.h"
 
 
 setScene::setScene(GLFWwindow* windows_,uint16_t *sceneId):Scene(windows_),sceneId_(sceneId){
@@ -52,7 +54,7 @@ void setScene::renderUI() {
         if (sceneId_ != nullptr) {
             *sceneId_ = 1;
         } else {
-            std::cerr<<__FILE__<<" "<<__LINE__<<" nullptr"<<std::endl;
+            std::cerr << __FILE__ << " " << __LINE__ << " nullptr" << std::endl;
         }
         isSingleClickMode = !isSingleClickMode;
     }
@@ -63,7 +65,12 @@ void setScene::renderUI() {
     // 创建服务器按钮
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(20, 20));
     if (ImGui::Button("Create Server", ImVec2(200, 60))) {
-        isServerCreated = true;
+        if (!isServerCreated) {
+            isServerCreated = true;
+            // 在新线程中启动服务器
+            std::thread serverThread(&setScene::startServer, this);
+            serverThread.detach();  // 使线程在后台运行
+        }
     }
     ImGui::PopStyleVar();
     ImGui::SameLine();
@@ -145,4 +152,10 @@ void setScene::Cleanup() {
     ImGui::DestroyContext();
     // glfwDestroyWindow(window);
     // glfwTerminate();
+}
+
+void setScene::startServer() {
+    // 假设 serverCon 是你创建的服务器类
+    serverCon server(9527);
+    server.startServer();  // 假设 start() 是服务器启动的函数，负责监听客户端连接
 }

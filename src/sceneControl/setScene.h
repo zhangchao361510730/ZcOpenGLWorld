@@ -6,6 +6,7 @@
 #include"sceneManager.hpp"
 
 #include"scene.hpp"
+
 class setScene : public Scene
 {
 private:
@@ -21,6 +22,7 @@ public:
     void Render() override;       // 渲染场景
     void Cleanup() override;      // 清理场景资源
     void renderUI();
+    void startServer();
     inline void setSceneManager(SceneManager * _SceneManager_) {
         SceneManager_ = _SceneManager_;
     }
