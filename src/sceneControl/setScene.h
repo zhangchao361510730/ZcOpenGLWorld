@@ -4,7 +4,6 @@
 #define subWindHeight 100
 
 #include"sceneManager.hpp"
-
 #include"scene.hpp"
 #include<memory>
 #include<string>
@@ -18,10 +17,9 @@ private:
     friend class mainLoop;
     // 当前选中的输入框（0 表示 IP，1 表示端口）
     int activeInput = 0;  // 0 表示 IP，1 表示端口
-    SceneManager *SceneManager_ = nullptr;
+    
     uint16_t* sceneId_ = nullptr;
-    std::shared_ptr<serverCon> serverConPtr;
-    std::shared_ptr<clientCon> clientPtr_;
+
     // 成员变量
     char ip[16];      // 默认 IP 地址
     char portStr[6];       // 默认端口字符串（方便软键盘输入）
@@ -38,9 +36,8 @@ public:
     void renderUI();
     void startServer();
     void connectToServer();
-    inline void setSceneManager(SceneManager * _SceneManager_) {
-        SceneManager_ = _SceneManager_;
-    }
+    SceneManager *SceneManager_ = nullptr;
+    void setSceneManager(SceneManager * _SceneManager_)override;
     void ShowVirtualKeyboard(char* inputBuffer, size_t bufferSize);
 };
 

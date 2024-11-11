@@ -4,8 +4,8 @@
 #include <unistd.h>
 
 
-clientCon::clientCon(const std::string& serverAddress, int port)
-    : serverAddress(serverAddress), port(port) {
+clientCon::clientCon(const std::string& serverAddress, int port) : serverAddress(serverAddress), port(port) {
+    std::cout<<"IP is "<<serverAddress<<" port is "<<port<<std::endl;
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket < 0) {
         std::cerr << "Socket creation failed!" << std::endl;
@@ -22,12 +22,13 @@ clientCon::~clientCon() {
     close(clientSocket);
 }
 
-void clientCon::connectToServer() {
+bool clientCon::connectToServer() {
     if (connect(clientSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
         std::cerr << "Connection failed!" << std::endl;
         exit(1);
     }
     std::cout << "Connected to server!" << std::endl;
+    return true;
 }
 
 void clientCon::sendMessage(const std::string& message) {

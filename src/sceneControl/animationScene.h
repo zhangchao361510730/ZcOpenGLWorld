@@ -57,6 +57,8 @@ public:
 	static void setCallBackControl(void*thiz);
     static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
     void processInput(GLFWwindow* window);
+    SceneManager *SceneManager_ = nullptr;
+    void setSceneManager(SceneManager * _SceneManager_)override;
     // bool InitGlSource()override;
     // void runDrawProcess()override;
 

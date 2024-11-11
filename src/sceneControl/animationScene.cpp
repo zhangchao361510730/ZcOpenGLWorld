@@ -63,6 +63,11 @@ void animationScene::Update(float dt) {
         animationTool_->UpdateAnimation(m_DeltaTime);
 }
 
+void animationScene::setSceneManager(SceneManager * _SceneManager_) {
+        SceneManager_ = _SceneManager_;
+}
+
+
 void animationScene::Render() {
         button2D_->runDrawProcess();
         // render

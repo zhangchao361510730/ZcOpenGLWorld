@@ -5,7 +5,7 @@
 #include<cstdint>
 #endif
 struct GLFWwindow;
-
+class SceneManager;
 class Scene {
     
 public:
@@ -14,6 +14,7 @@ public:
     }
     virtual ~Scene() = default;
     bool hasInit = false;
+    virtual void setSceneManager(SceneManager * _SceneManager_) = 0;
     GLFWwindow* window = nullptr;
     virtual void Init() = 0;         // 初始化场景
     virtual void Update(float dt) = 0;  // 更新场景逻辑

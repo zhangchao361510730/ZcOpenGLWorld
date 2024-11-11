@@ -79,12 +79,12 @@ void setScene::renderUI() {
     //     isConnected = true;
     // }
 
-    // 连接到服务器按钮
+    // 连接到服务器按钮  std::make_shared<clientCon> clientPtr_;
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(20, 20));
     if (ImGui::Button("Connect to Server", ImVec2(200, 60))) {
         if (!isConnected) {
-            clientPtr_ = std::make_shared<clientCon>(ip, std::stoi(portStr));
-            isConnected = clientPtr_->connectToServer();
+            SceneManager_->clientPtr_ = std::make_shared<clientCon>(ip, std::stoi(portStr));
+            isConnected = SceneManager_->clientPtr_->connectToServer();
         }
     }
 
@@ -120,6 +120,10 @@ void setScene::connectToServer() {
         isConnected = true;
         close(sockfd);
     }
+}
+
+void setScene::setSceneManager(SceneManager * _SceneManager_) {
+        SceneManager_ = _SceneManager_;
 }
 
 // 显示虚拟键盘
@@ -192,6 +196,6 @@ void setScene::Cleanup() {
 
 void setScene::startServer() {
     // 假设 serverCon 是你创建的服务器类
-    serverConPtr = std::make_shared<serverCon>(std::stoi(portStr));
-    serverConPtr->startServer();  // 假设 start() 是服务器启动的函数，负责监听客户端连接
+    SceneManager_->serverConPtr = std::make_shared<serverCon>(std::stoi(portStr));
+    SceneManager_->serverConPtr->startServer();  // 假设 start() 是服务器启动的函数，负责监听客户端连接
 }

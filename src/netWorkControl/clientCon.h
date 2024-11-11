@@ -9,7 +9,7 @@ class clientCon {
 public:
     clientCon(const std::string& serverAddress, int port);
     ~clientCon();
-    void connectToServer();
+    bool connectToServer();
     void sendMessage(const std::string& message);
 
 private:
