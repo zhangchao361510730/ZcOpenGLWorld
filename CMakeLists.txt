@@ -37,6 +37,9 @@ list(APPEND SRCFILE ${GLLSTool_})
 file(GLOB GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/src/sceneControl/*.cpp)
 list(APPEND SRCFILE ${GLLSTool_})
 
+file(GLOB GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/src/netWorkControl/*.cpp)
+list(APPEND SRCFILE ${GLLSTool_})
+
 set(GLLSTool_ ${CMAKE_CURRENT_SOURCE_DIR}/thirdPart/imguiLib/imgui.cpp 
 			  ${CMAKE_CURRENT_SOURCE_DIR}/thirdPart/imguiLib/imgui_draw.cpp
 			  ${CMAKE_CURRENT_SOURCE_DIR}/thirdPart/imguiLib/imgui_tables.cpp
@@ -64,6 +67,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src/mainLoopEngine)
 include_directories(${CMAKE_SOURCE_DIR}/src/cubeFunc)
 include_directories(${CMAKE_SOURCE_DIR}/src/commonTool)
 include_directories(${CMAKE_SOURCE_DIR}/src/Ui2D)
+include_directories(${CMAKE_SOURCE_DIR}/src/netWorkControl)
 include_directories(${CMAKE_SOURCE_DIR}/src/sceneControl)
 include_directories(${CMAKE_SOURCE_DIR}/thirdPart/imguiLib)
 include_directories(${CMAKE_SOURCE_DIR}/thirdPart/imguiLib/backends)
