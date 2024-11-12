@@ -20,7 +20,7 @@ void netControl::RecvMessageLoop(void* thiz) {
 
             // 处理接收到的消息
             if (thiz_->messageProcessCallback != nullptr) {
-                thiz_->messageProcessCallback(buffer.get(), length,(void*)(thiz_->SceneManager_->currentScene));
+                thiz_->messageProcessCallback(type,buffer.get(), length,(void*)(thiz_->SceneManager_->currentScene));
             }
         }   
     }

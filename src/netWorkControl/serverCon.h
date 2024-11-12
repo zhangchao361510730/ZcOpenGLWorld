@@ -12,8 +12,6 @@ private:
     int serverSocket, clientSocket;
     struct sockaddr_in serverAddr, clientAddr;
     int port;
-    void handleClient();
-    void processMessage(const char* message, int length);
 };
 
 #endif // SERVERCON_H

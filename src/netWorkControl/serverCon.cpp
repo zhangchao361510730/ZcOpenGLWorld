@@ -47,37 +47,6 @@ void serverCon::startServer() {
     }
 
     std::cout << "Client connected!" << std::endl;
-    handleClient();
 }
 
-void serverCon::handleClient() {
-    while (true) {
-        // 读取 Type 和 Length
-        int type;
-        int length;
-        int bytesReceived = recv(clientSocket, (char*)&type, sizeof(type), 0);
-        if (bytesReceived <= 0) break;
 
-        bytesReceived = recv(clientSocket, (char*)&length, sizeof(length), 0);
-        if (bytesReceived <= 0) break;
-
-        // 使用智能指针管理内存
-        //std::unique_ptr<char[]> buffer = std::unique_ptr<char[]>(length);
-        std::unique_ptr<char[]> buffer(new char[length]);    
-        bytesReceived = recv(clientSocket, buffer.get(), length, 0);
-        if (bytesReceived <= 0) break;
-
-        // 处理接收到的消息
-        processMessage(buffer.get(), length);
-    }
-}
-
-void serverCon::processMessage(const char* message, int length) {
-    std::cout << "Received message: " << std::string(message, length) << std::endl;
-
-    // 发送响应
-    const char* response = "Message received!";
-    int responseLength = strlen(response);
-    send(clientSocket, (char*)&responseLength, sizeof(responseLength), 0);  // 发送响应长度
-    send(clientSocket, response, responseLength, 0);  // 发送响应内容
-}

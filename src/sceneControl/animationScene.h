@@ -61,7 +61,7 @@ public:
 	static void setCallBackControl(void*thiz);
     static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
-    static bool recvNetMessage(char* buf,int length,void* scene);
+    static bool recvNetMessage(int type,char* buf,int length,void* scene);
     void processInput(GLFWwindow* window);
     SceneManager *SceneManager_ = nullptr;
     void setSceneManager(SceneManager * _SceneManager_)override;
