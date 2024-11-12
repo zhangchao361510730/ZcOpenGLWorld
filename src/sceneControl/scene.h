@@ -4,12 +4,13 @@
 #include <unistd.h>
 #include<cstdint>
 #endif
+#include<sceneManager.hpp>
 struct GLFWwindow;
-class SceneManager;
 class mainLoop;
+class SceneManager;
 
-class Scene {
-    
+
+class Scene {    
 public:
     Scene(GLFWwindow*window_) {
         window = window_;

@@ -5,25 +5,20 @@
 #include <memory>
 #include <arpa/inet.h>
 #include"globaDefine.h"
+#include"netControl.h"
 
-class SceneManager;
-class mainLoop;
-
-class clientCon {
+class clientCon:public netControl {
 public:
     clientCon(const std::string& serverAddress, int port);
     ~clientCon();
     bool connectToServer();
     void sendMessage(const std::string& message);
-    mainLoop* mainLoop_ = nullptr;
-    SceneManager* SceneManager_ = nullptr;
-    _processMessage_ messageProcessCallback = nullptr;
 private:
-    int clientSocket;
+
     struct sockaddr_in serverAddr;
     std::string serverAddress;
     int port;
-    static void RecvMessageLoop(void* thiz);
+
     void sendTLVMessage(int type, const std::string& message);
 };
 

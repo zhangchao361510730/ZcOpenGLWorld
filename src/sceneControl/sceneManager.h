@@ -5,7 +5,7 @@
 #include <unistd.h>
 #endif
 #include <memory>
-#include"scene.hpp"
+#include"scene.h"
 #include"serverCon.h"
 #include"clientCon.h"
 
@@ -15,10 +15,8 @@ class clientCon;
 class mainLoop;
 
 class SceneManager {
-private:
-    Scene* currentScene = nullptr;
-
 public:
+    Scene* currentScene = nullptr;
     uint16_t runType = 3;// 1 is server . 2 is clieny . 3 unknow (single mode)
     std::shared_ptr<serverCon> serverPtr_;
     std::shared_ptr<clientCon> clientPtr_;

@@ -17,6 +17,11 @@ animationScene::~animationScene()
 {
 }
 
+bool animationScene::recvNetMessage(char* buf,int length,void* scene_) {
+
+    return true;
+}
+
 void animationScene::glfw_error_callback(int error, const char* description) {
     std::cerr << "GLFW Error (" << error << "): " << description << std::endl;
 }

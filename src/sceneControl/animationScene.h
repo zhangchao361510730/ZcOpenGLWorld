@@ -1,7 +1,7 @@
 #ifndef ANIMATION_SCENE_H_
 #define ANIMATION_SCENE_H_
 
-#include"scene.hpp"
+#include"scene.h"
 #include"mainLoop.h"
 #include"globaDefine.h"
 
@@ -60,6 +60,8 @@ public:
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void setCallBackControl(void*thiz);
     static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+
+    static bool recvNetMessage(char* buf,int length,void* scene);
     void processInput(GLFWwindow* window);
     SceneManager *SceneManager_ = nullptr;
     void setSceneManager(SceneManager * _SceneManager_)override;

@@ -69,7 +69,7 @@ void serverCon::RecvMessageLoop(void* thiz) {
 
         // 处理接收到的消息
         if (thiz_->messageProcessCallback != nullptr) {
-            thiz_->messageProcessCallback(buffer.get(), length);
+            thiz_->messageProcessCallback(buffer.get(), length,(void*)thiz_->SceneManager_->currentScene);
         }
     }
 }
