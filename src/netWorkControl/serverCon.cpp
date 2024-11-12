@@ -46,6 +46,7 @@ void serverCon::startServer() {
         std::cerr << "Client connection failed!" << std::endl;
         return;
     }
+    SceneManager_->hasConnected = true;
 
     std::cout << "Client connected!" << std::endl;
 }

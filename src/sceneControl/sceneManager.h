@@ -22,7 +22,7 @@ public:
     std::shared_ptr<clientCon> clientPtr_;
     mainLoop* mainLoop_ = nullptr;
     uint16_t currentNumber = -1;
-
+    bool hasConnected = false;
     SceneManager();
 
     bool sendNetMessage();

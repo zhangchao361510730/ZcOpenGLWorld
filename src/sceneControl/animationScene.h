@@ -41,6 +41,7 @@ private:
     float m_DeltaTime = 0.0f;
     float lastFrame = 0.0f;
     bool isAnimating = false;
+    bool PreisAnimating = false;
     bool isAnimatingOpposite = false;
     float m_CurrentTime = 0.0f;
     float m_CurrentTimeOpposite = 0.0f;

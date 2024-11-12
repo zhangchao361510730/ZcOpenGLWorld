@@ -79,6 +79,14 @@ void animationScene::Init() {
 
 void animationScene::Update(float dt) {
         isAnimating = button2D_->flag;
+        if (isAnimating != PreisAnimating) {
+            if (isAnimating) {
+                sendNetMessage(1,"start");
+            } else {
+                sendNetMessage(1,"stop");
+            }
+            PreisAnimating = isAnimating;
+        }
         m_DeltaTime = dt - lastFrame;
         lastFrame = dt;
         processInput(window);
@@ -156,8 +164,8 @@ void animationScene::Render() {
 
     std::vector<glm::mat4> models = {
         glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)),  // 第一个盒子的位置
-        glm::translate(glm::mat4(1.0f), glm::vec3(2.0f, 0.0f, 0.0f)),  // 第二个盒子的位置
-        glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, 0.0f, 0.0f)), // 第三个盒子的位置
+        // glm::translate(glm::mat4(1.0f), glm::vec3(2.0f, 0.0f, 0.0f)),  // 第二个盒子的位置
+        // glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, 0.0f, 0.0f)), // 第三个盒子的位置
         // 添加更多位置矩阵
     };
 

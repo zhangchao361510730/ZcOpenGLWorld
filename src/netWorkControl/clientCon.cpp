@@ -30,6 +30,7 @@ bool clientCon::connectToServer() {
     } else {
         std::cout << "Connected to server!" << std::endl;
         SceneManager_->runType = 2;
+        SceneManager_->hasConnected = true;
         mainLoop_->changeScene(1);
         return true;
     }
