@@ -1,5 +1,5 @@
 #include"netControl.h"
-#include"sceneManager.hpp"
+#include"sceneManager.h"
 
 void netControl::RecvMessageLoop(void* thiz) {
         netControl* thiz_ = (netControl* )thiz;

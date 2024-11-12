@@ -1,7 +1,7 @@
 #ifndef skeletalAnimation_H_
 #define skeletalAnimation_H_
 
-#include"sceneManager.hpp"
+#include"sceneManager.h"
 #include"setScene.h"
 #include"animationScene.h"
 #include"globaDefine.h"

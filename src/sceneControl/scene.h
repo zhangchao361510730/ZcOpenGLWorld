@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include<cstdint>
 #endif
-#include<sceneManager.hpp>
+#include<sceneManager.h>
 struct GLFWwindow;
 class mainLoop;
 class SceneManager;
