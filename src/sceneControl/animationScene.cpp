@@ -74,12 +74,7 @@ void animationScene::Init() {
     }
     }
     
-
-
     hasInit = true;
-
-
-
 }
 
 void animationScene::Update(float dt) {
@@ -92,6 +87,24 @@ void animationScene::Update(float dt) {
 
 void animationScene::setSceneManager(SceneManager * _SceneManager_) {
         SceneManager_ = _SceneManager_;
+}
+
+bool animationScene::sendNetMessage(int type,std::string info) {
+    switch(SceneManager_->runType) {
+        case 1:{
+            SceneManager_->serverPtr_->sendTLVMessage(type,info);
+            break;
+        }
+        case 2:{
+            SceneManager_->clientPtr_->sendTLVMessage(type,info);
+            break;
+        }
+        default:{
+
+            break;
+        }
+    }
+    return true;
 }
 
 void animationScene::Render() {

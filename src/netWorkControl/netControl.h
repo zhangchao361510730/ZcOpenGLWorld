@@ -20,6 +20,7 @@ public:
     mainLoop* mainLoop_ = nullptr;
     SceneManager* SceneManager_ = nullptr;
     _processMessage_ messageProcessCallback = nullptr;
+    virtual void sendTLVMessage(int type, const std::string& message);
     static void RecvMessageLoop(void* thiz);
 };
 

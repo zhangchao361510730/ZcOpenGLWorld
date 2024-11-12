@@ -1,6 +1,27 @@
 #include"netControl.h"
 #include"sceneManager.h"
 #include<iostream>
+#include<vector>
+#include<memory.h>
+
+
+void netControl::sendTLVMessage(int type, const std::string& message) {
+    int messageLength = message.length();
+    int totalLength = sizeof(type) + sizeof(messageLength) + messageLength;
+
+    // 创建一个缓冲区以容纳类型、长度和内容
+    std::vector<char> buffer(totalLength);
+
+    // 将类型、长度和消息内容复制到缓冲区
+    memcpy(buffer.data(), &type, sizeof(type));
+    memcpy(buffer.data() + sizeof(type), &messageLength, sizeof(messageLength));
+    memcpy(buffer.data() + sizeof(type) + sizeof(messageLength), message.c_str(), messageLength);
+
+    // 一次性发送缓冲区中的所有数据
+    send(clientSocket, buffer.data(), totalLength, 0);
+}
+
+
 
 void netControl::RecvMessageLoop(void* thiz) {
         netControl* thiz_ = (netControl* )thiz;

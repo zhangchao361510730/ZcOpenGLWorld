@@ -50,15 +50,3 @@ void clientCon::sendMessage(const std::string& message) {
     }
 }
 
-
-
-void clientCon::sendTLVMessage(int type, const std::string& message) {
-    int messageLength = message.length();
-
-    // 发送消息类型
-    send(clientSocket, (char*)&type, sizeof(type), 0);
-    // 发送消息长度
-    send(clientSocket, (char*)&messageLength, sizeof(messageLength), 0);
-    // 发送消息内容
-    send(clientSocket, message.c_str(), messageLength, 0);
-}

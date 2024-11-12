@@ -63,6 +63,8 @@ public:
 
     static bool recvNetMessage(int type,char* buf,int length,void* scene);
     void processInput(GLFWwindow* window);
+
+    bool sendNetMessage(int type,std::string info);
     SceneManager *SceneManager_ = nullptr;
     void setSceneManager(SceneManager * _SceneManager_)override;
 
