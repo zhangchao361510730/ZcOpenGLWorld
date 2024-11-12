@@ -7,6 +7,7 @@
 
 serverCon::serverCon(int port) : port(port) {
     // 创建 socket
+    selfType = "server";
     serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket < 0) {
         std::cerr << "Socket creation failed!" << std::endl;

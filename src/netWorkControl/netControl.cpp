@@ -1,8 +1,10 @@
 #include"netControl.h"
 #include"sceneManager.h"
+#include<iostream>
 
 void netControl::RecvMessageLoop(void* thiz) {
         netControl* thiz_ = (netControl* )thiz;
+        std::cout<<thiz_->selfType<<" ruing netControl::RecvMessageLoop"<<std::endl;
         while (true) {
             int type;
             int length;

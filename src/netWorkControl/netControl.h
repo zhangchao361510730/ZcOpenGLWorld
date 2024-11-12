@@ -13,6 +13,7 @@ class netControl
 private:
     /* data */
 public:
+    std::string selfType;
     netControl(/* args */) = default;
     ~netControl() = default;
     int clientSocket;

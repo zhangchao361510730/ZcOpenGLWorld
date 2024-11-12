@@ -6,6 +6,7 @@
 
 clientCon::clientCon(const std::string& serverAddress, int port) : serverAddress(serverAddress), port(port) {
     std::cout<<"IP is "<<serverAddress<<" port is "<<port<<std::endl;
+    selfType = "client";
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket < 0) {
         std::cerr << "Socket creation failed!" << std::endl;

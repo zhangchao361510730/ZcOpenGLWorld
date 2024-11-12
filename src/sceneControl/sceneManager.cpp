@@ -17,8 +17,8 @@ void SceneManager::ChangeScene(Scene* newScene) {
 
 bool SceneManager::newSceneInit() {
     if (currentScene) {
-        currentScene->Init();  // 初始化新场景
         currentScene->setSceneManager(this);
+        currentScene->Init();  // 初始化新场景
         return true;
     }
     return false;
