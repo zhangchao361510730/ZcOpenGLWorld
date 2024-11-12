@@ -57,6 +57,9 @@ public:
     bool InitGlSource();
     void runDrawProcess();
     bool unInitResource();
+    inline void changeScene(int sceneId) {
+        sceneNumber = sceneId;
+    }
     uint16_t sceneNumber = 2;
 };
 

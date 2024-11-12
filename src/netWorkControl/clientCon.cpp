@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
-
+#include<mainLoop.h>
 
 clientCon::clientCon(const std::string& serverAddress, int port) : serverAddress(serverAddress), port(port) {
     std::cout<<"IP is "<<serverAddress<<" port is "<<port<<std::endl;
@@ -25,10 +25,14 @@ clientCon::~clientCon() {
 bool clientCon::connectToServer() {
     if (connect(clientSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
         std::cerr << "Connection failed!" << std::endl;
-        exit(1);
+        return false;
+    } else {
+        std::cout << "Connected to server!" << std::endl;
+        SceneManager_->runType = 2;
+        mainLoop_->changeScene(1);
+        return true;
     }
-    std::cout << "Connected to server!" << std::endl;
-    return true;
+
 }
 
 void clientCon::sendMessage(const std::string& message) {
@@ -42,6 +46,30 @@ void clientCon::sendMessage(const std::string& message) {
     if (bytesReceived > 0) {
         buffer[bytesReceived] = '\0';  // 终止字符串
         std::cout << "Server response: " << buffer << std::endl;
+    }
+}
+
+void clientCon::RecvMessageLoop(void* thiz) {
+    clientCon* thiz_ = (clientCon* )thiz;
+    while (true) {
+        int type;
+        int length;
+        int bytesReceived = recv(thiz_->clientSocket, (char*)&type, sizeof(type), 0);
+        if (bytesReceived <= 0) break;
+
+        bytesReceived = recv(thiz_->clientSocket, (char*)&length, sizeof(length), 0);
+        if (bytesReceived <= 0) break;
+
+        // 使用智能指针管理内存
+        //std::unique_ptr<char[]> buffer = std::unique_ptr<char[]>(length);
+        std::unique_ptr<char[]> buffer(new char[length]);    
+        bytesReceived = recv(thiz_->clientSocket, buffer.get(), length, 0);
+        if (bytesReceived <= 0) break;
+
+        // 处理接收到的消息
+        if (thiz_->messageProcessCallback != nullptr) {
+            thiz_->messageProcessCallback(buffer.get(), length);
+        }
     }
 }
 

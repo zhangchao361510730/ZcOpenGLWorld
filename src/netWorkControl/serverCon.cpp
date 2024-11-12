@@ -39,6 +39,7 @@ void serverCon::startServer() {
 
     socklen_t clientAddrSize = sizeof(clientAddr);
     mainLoop_->sceneNumber = 1;
+    SceneManager_->runType = 1;
     clientSocket = accept(serverSocket, (struct sockaddr*)&clientAddr, &clientAddrSize);
     if (clientSocket < 0) {
         std::cerr << "Client connection failed!" << std::endl;
@@ -47,6 +48,30 @@ void serverCon::startServer() {
 
     std::cout << "Client connected!" << std::endl;
     handleClient();
+}
+
+void serverCon::RecvMessageLoop(void* thiz) {
+    serverCon* thiz_ = (serverCon* )thiz;
+    while (true) {
+        int type;
+        int length;
+        int bytesReceived = recv(thiz_->clientSocket, (char*)&type, sizeof(type), 0);
+        if (bytesReceived <= 0) break;
+
+        bytesReceived = recv(thiz_->clientSocket, (char*)&length, sizeof(length), 0);
+        if (bytesReceived <= 0) break;
+
+        // 使用智能指针管理内存
+        //std::unique_ptr<char[]> buffer = std::unique_ptr<char[]>(length);
+        std::unique_ptr<char[]> buffer(new char[length]);    
+        bytesReceived = recv(thiz_->clientSocket, buffer.get(), length, 0);
+        if (bytesReceived <= 0) break;
+
+        // 处理接收到的消息
+        if (thiz_->messageProcessCallback != nullptr) {
+            thiz_->messageProcessCallback(buffer.get(), length);
+        }
+    }
 }
 
 void serverCon::handleClient() {

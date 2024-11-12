@@ -15,9 +15,10 @@ class reflectionBox;
 class ShaderGLSLTool;
 class modelBindAnimation;
 
-class animationScene : public Scene 
-{
+class animationScene : public Scene {
 private:
+    friend class SceneManager;
+    friend class mainLoop;
     uint32_t EBO;
     skyBox * skyB_;
     button2D * button2D_;
@@ -32,6 +33,7 @@ private:
     ShaderGLSLTool* shaderModel_;
     ShaderGLSLTool* shaderSkyBox_;
 
+
     bool enableMouse = true;
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;
@@ -39,15 +41,17 @@ private:
     float m_DeltaTime = 0.0f;
     float lastFrame = 0.0f;
     bool isAnimating = false;
+    bool isAnimatingOpposite = false;
     float m_CurrentTime = 0.0f;
+    float m_CurrentTimeOpposite = 0.0f;
     friend class animationTool;
 public:
     animationScene(GLFWwindow* windows_);
     ~animationScene();
-    void Init() override;         // 初始化场景
+    void Init() override;            // 初始化场景
     void Update(float dt) override;  // 更新场景逻辑
-    void Render() override;       // 渲染场景
-    void Cleanup() override;      // 清理场景资源
+    void Render() override;          // 渲染场景
+    void Cleanup() override;         // 清理场景资源
 
     static void glfw_error_callback(int error, const char* description);
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -59,8 +63,6 @@ public:
     void processInput(GLFWwindow* window);
     SceneManager *SceneManager_ = nullptr;
     void setSceneManager(SceneManager * _SceneManager_)override;
-    // bool InitGlSource()override;
-    // void runDrawProcess()override;
 
 };
 

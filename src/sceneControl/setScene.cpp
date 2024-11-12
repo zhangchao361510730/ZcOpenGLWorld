@@ -84,6 +84,7 @@ void setScene::renderUI() {
     if (ImGui::Button("Connect to Server", ImVec2(200, 60))) {
         if (!isConnected) {
             SceneManager_->clientPtr_ = std::make_shared<clientCon>(ip, std::stoi(portStr));
+            SceneManager_->setClientPtr();
             isConnected = SceneManager_->clientPtr_->connectToServer();
         }
     }

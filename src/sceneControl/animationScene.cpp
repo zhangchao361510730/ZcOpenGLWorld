@@ -58,7 +58,6 @@ void animationScene::Update(float dt) {
         isAnimating = button2D_->flag;
         m_DeltaTime = dt - lastFrame;
         lastFrame = dt;
-
         processInput(window);
         animationTool_->UpdateAnimation(m_DeltaTime);
 }
@@ -66,7 +65,6 @@ void animationScene::Update(float dt) {
 void animationScene::setSceneManager(SceneManager * _SceneManager_) {
         SceneManager_ = _SceneManager_;
 }
-
 
 void animationScene::Render() {
         button2D_->runDrawProcess();
@@ -76,7 +74,6 @@ void animationScene::Render() {
         shaderModel_->use();
         glm::mat4 projection = glm::perspective(glm::radians(camera_->Zoom), (float)windowsWidth / (float)windowsHeight, 0.1f, 100.0f);
         //glm::mat4 projection = glm::ortho(0.0f, (float)windowsWidth, (float)windowsHeight, 0.0f);
-
         glm::mat4 view = camera_->GetViewMatrix();
         shaderModel_->setMat4("projection", projection);
         shaderModel_->setMat4("view", view);

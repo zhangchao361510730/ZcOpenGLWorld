@@ -19,6 +19,7 @@ private:
     Scene* currentScene = nullptr;
 
 public:
+    uint16_t runType = 3;// 1 is server . 2 is clieny . 3 unknow (single mode)
     std::shared_ptr<serverCon> serverPtr_;
     std::shared_ptr<clientCon> clientPtr_;
     mainLoop* mainLoop_ = nullptr;
