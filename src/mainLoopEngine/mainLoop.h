@@ -32,7 +32,7 @@ class mainLoop {
 private:
     SceneManager *sceneManager;
     netWorkType netType = netWorkType::unKnow;
-    uint16_t sceneNumber = 2;
+  
     bool enableMouse = true;
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;
@@ -57,6 +57,7 @@ public:
     bool InitGlSource();
     void runDrawProcess();
     bool unInitResource();
+    uint16_t sceneNumber = 2;
 };
 
 #endif

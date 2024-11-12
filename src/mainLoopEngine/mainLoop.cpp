@@ -51,6 +51,7 @@ bool mainLoop::InitGlSource() {
     }
 
     sceneManager = new SceneManager();
+    sceneManager->mainLoop_ = this;
     return true;
 }
 

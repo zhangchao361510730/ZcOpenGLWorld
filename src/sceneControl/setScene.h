@@ -35,10 +35,12 @@ public:
     void Cleanup() override;      // 清理场景资源
     void renderUI();
     void startServer();
-    void connectToServer();
     SceneManager *SceneManager_ = nullptr;
     void setSceneManager(SceneManager * _SceneManager_)override;
     void ShowVirtualKeyboard(char* inputBuffer, size_t bufferSize);
+
 };
+
+
 
 #endif

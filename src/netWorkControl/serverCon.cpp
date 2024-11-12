@@ -3,7 +3,7 @@
 #include <cstring>
 #include <unistd.h>
 #include <arpa/inet.h>
-
+#include<mainLoop.h>
 
 serverCon::serverCon(int port) : port(port) {
     // 创建 socket
@@ -38,6 +38,7 @@ void serverCon::startServer() {
     std::cout << "Waiting for client to connect..." << std::endl;
 
     socklen_t clientAddrSize = sizeof(clientAddr);
+    mainLoop_->sceneNumber = 1;
     clientSocket = accept(serverSocket, (struct sockaddr*)&clientAddr, &clientAddrSize);
     if (clientSocket < 0) {
         std::cerr << "Client connection failed!" << std::endl;

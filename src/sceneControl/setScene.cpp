@@ -95,32 +95,7 @@ void setScene::renderUI() {
     ImGui::End();
 }
 
-void setScene::connectToServer() {
-    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0) {
-        std::cerr << "Error creating socket." << std::endl;
-        return;
-    }
 
-    struct sockaddr_in server_addr;
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(std::stoi(portStr));
-
-    if (inet_pton(AF_INET, ip, &server_addr.sin_addr) <= 0) {
-        std::cerr << "Invalid IP address." << std::endl;
-        close(sockfd);
-        return;
-    }
-
-    if (connect(sockfd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
-        std::cerr << "Connection failed." << std::endl;
-        close(sockfd);
-    } else {
-        std::cout << "Connected to server!" << std::endl;
-        isConnected = true;
-        close(sockfd);
-    }
-}
 
 void setScene::setSceneManager(SceneManager * _SceneManager_) {
         SceneManager_ = _SceneManager_;
@@ -196,6 +171,7 @@ void setScene::Cleanup() {
 
 void setScene::startServer() {
     // 假设 serverCon 是你创建的服务器类
-    SceneManager_->serverConPtr = std::make_shared<serverCon>(std::stoi(portStr));
-    SceneManager_->serverConPtr->startServer();  // 假设 start() 是服务器启动的函数，负责监听客户端连接
+    SceneManager_->serverPtr_ = std::make_shared<serverCon>(std::stoi(portStr));
+    SceneManager_->setServerPtr();
+    SceneManager_->serverPtr_->startServer();  // 假设 start() 是服务器启动的函数，负责监听客户端连接
 }

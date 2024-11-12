@@ -6,12 +6,15 @@
 #endif
 struct GLFWwindow;
 class SceneManager;
+class mainLoop;
+
 class Scene {
     
 public:
     Scene(GLFWwindow*window_) {
         window = window_;
     }
+
     virtual ~Scene() = default;
     bool hasInit = false;
     virtual void setSceneManager(SceneManager * _SceneManager_) = 0;
