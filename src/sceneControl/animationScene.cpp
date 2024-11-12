@@ -36,7 +36,7 @@ void animationScene::Init() {
     glEnable(GL_DEPTH_TEST);
     std::string ModelPath_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.fs");
     std::string ModelPath_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");
-    std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
+    std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test8.fbx");
 
     button2D_ = new button2D();
     button2D_->setGLFWwindow(window);
