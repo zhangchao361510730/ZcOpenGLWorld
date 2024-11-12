@@ -13,7 +13,6 @@ private:
     struct sockaddr_in serverAddr, clientAddr;
     int port;
     void handleClient();
-    static void RecvMessageLoop(void* thiz);
     void processMessage(const char* message, int length);
 };
 
