@@ -14,7 +14,6 @@ public:
     bool connectToServer();
     void sendMessage(const std::string& message);
 private:
-
     struct sockaddr_in serverAddr;
     std::string serverAddress;
     int port;

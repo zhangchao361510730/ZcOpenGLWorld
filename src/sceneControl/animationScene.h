@@ -40,6 +40,7 @@ private:
     bool firstMouse = true;
     float m_DeltaTime = 0.0f;
     float lastFrame = 0.0f;
+    bool hasInitNetWorkThread = false;
     bool isAnimating = false;
     bool PreisAnimating = false;
     bool isAnimatingOpposite = false;

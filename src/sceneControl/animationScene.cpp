@@ -59,26 +59,12 @@ void animationScene::Init() {
     animationTool_ = new animationTool(loadAnimation_,this);
     shaderModel_ = new ShaderGLSLTool(ModelPath_vs.c_str(),ModelPath_fs.c_str());
     
-    switch (SceneManager_->runType) {
-    case 1:{
-        SceneManager_->serverPtr_->messageProcessCallback = animationScene::recvNetMessage;
-        std::thread serverThread(&netControl::RecvMessageLoop, SceneManager_->serverPtr_.get());
-        serverThread.detach();  // 使线程在后台运行
-        break;
-    }
-    case 2:{
-        SceneManager_->clientPtr_->messageProcessCallback = animationScene::recvNetMessage;
-        std::thread serverThread(&netControl::RecvMessageLoop, SceneManager_->clientPtr_.get());
-        serverThread.detach();  // 使线程在后台运行
-        break;
-    }
-    }
-    
     hasInit = true;
 }
 
 void animationScene::Update(float dt) {
         isAnimating = button2D_->flag;
+    if (hasInitNetWorkThread) {
         if (isAnimating != PreisAnimating) {
             if (isAnimating) {
                 sendNetMessage(1,"start");
@@ -87,6 +73,25 @@ void animationScene::Update(float dt) {
             }
             PreisAnimating = isAnimating;
         }
+    } else {
+        if (SceneManager_->hasConnected) {
+            switch (SceneManager_->runType) {
+                case 1:{
+                    SceneManager_->serverPtr_->messageProcessCallback = animationScene::recvNetMessage;
+                    std::thread serverThread(&netControl::RecvMessageLoop, SceneManager_->serverPtr_.get());
+                    serverThread.detach();  // 使线程在后台运行
+                    break;
+                }
+                case 2:{
+                    SceneManager_->clientPtr_->messageProcessCallback = animationScene::recvNetMessage;
+                    std::thread serverThread(&netControl::RecvMessageLoop, SceneManager_->clientPtr_.get());
+                    serverThread.detach();  // 使线程在后台运行
+                    break;
+                }
+        }
+            hasInitNetWorkThread = true;
+        }
+    }
         m_DeltaTime = dt - lastFrame;
         lastFrame = dt;
         processInput(window);

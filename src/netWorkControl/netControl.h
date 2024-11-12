@@ -16,7 +16,7 @@ public:
     std::string selfType;
     netControl(/* args */) = default;
     ~netControl() = default;
-    int clientSocket;
+    int netWorkSock = -1;
     mainLoop* mainLoop_ = nullptr;
     SceneManager* SceneManager_ = nullptr;
     _processMessage_ messageProcessCallback = nullptr;

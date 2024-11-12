@@ -18,7 +18,7 @@ void netControl::sendTLVMessage(int type, const std::string& message) {
     memcpy(buffer.data() + sizeof(type) + sizeof(messageLength), message.c_str(), messageLength);
 
     // 一次性发送缓冲区中的所有数据
-    send(clientSocket, buffer.data(), totalLength, 0);
+    send(netWorkSock, buffer.data(), totalLength, 0);
 }
 
 void netControl::RecvMessageLoop(void* thiz) {
@@ -27,24 +27,26 @@ void netControl::RecvMessageLoop(void* thiz) {
         while (true) {
             int type;
             int length;
-            int bytesReceived = recv(thiz_->clientSocket, (char*)&type, sizeof(type), 0);
+            int bytesReceived = recv(thiz_->netWorkSock, (char*)&type, sizeof(type), 0);
             if (bytesReceived <= 0) {
-                std::cerr<<"bytesReceived is "<<bytesReceived<<std::endl;
+                perror("recv");
+                printf("错误原因: %s\n", strerror(errno));
+                std::cerr<<"1 bytesReceived is "<<bytesReceived<<std::endl;
                 break;
             }
 
-            bytesReceived = recv(thiz_->clientSocket, (char*)&length, sizeof(length), 0);
+            bytesReceived = recv(thiz_->netWorkSock, (char*)&length, sizeof(length), 0);
             if (bytesReceived <= 0) {
-                std::cerr<<"bytesReceived is "<<bytesReceived<<std::endl;
+                std::cerr<<"2 bytesReceived is "<<bytesReceived<<std::endl;
                 break;
             }
 
             // 使用智能指针管理内存
             //std::unique_ptr<char[]> buffer = std::unique_ptr<char[]>(length);
             std::unique_ptr<char[]> buffer(new char[length]);    
-            bytesReceived = recv(thiz_->clientSocket, buffer.get(), length, 0);
+            bytesReceived = recv(thiz_->netWorkSock, buffer.get(), length, 0);
             if (bytesReceived <= 0) {
-                std::cerr<<"bytesReceived is "<<bytesReceived<<std::endl;
+                std::cerr<<"3 bytesReceived is "<<bytesReceived<<std::endl;
                 break;
             }
 

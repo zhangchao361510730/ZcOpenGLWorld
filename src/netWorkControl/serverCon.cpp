@@ -8,10 +8,16 @@
 serverCon::serverCon(int port) : port(port) {
     // 创建 socket
     selfType = "server";
-    serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (serverSocket < 0) {
+    netWorkSock = socket(AF_INET, SOCK_STREAM, 0);
+    if (netWorkSock < 0) {
         std::cerr << "Socket creation failed!" << std::endl;
         exit(1);
+    }
+
+    int opt = 1;
+    if (setsockopt(netWorkSock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
+        std::cerr << "setsockopt(SO_REUSEADDR) failed" << std::endl;
+        close(netWorkSock);
     }
 
     memset(&serverAddr, 0, sizeof(serverAddr));
@@ -21,17 +27,17 @@ serverCon::serverCon(int port) : port(port) {
 }
 
 serverCon::~serverCon() {
-    close(clientSocket);
-    close(serverSocket);
+    close(netWorkSock);
+    close(netWorkSock);
 }
 
 void serverCon::startServer() {
-    if (bind(serverSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
+    if (bind(netWorkSock, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
         std::cerr << "Bind failed!" << std::endl;
         return;
     }
 
-    if (listen(serverSocket, 3) < 0) {
+    if (listen(netWorkSock, 3) < 0) {
         std::cerr << "Listen failed!" << std::endl;
         return;
     }
@@ -41,8 +47,8 @@ void serverCon::startServer() {
     socklen_t clientAddrSize = sizeof(clientAddr);
     mainLoop_->sceneNumber = 1;
     SceneManager_->runType = 1;
-    clientSocket = accept(serverSocket, (struct sockaddr*)&clientAddr, &clientAddrSize);
-    if (clientSocket < 0) {
+    netWorkSock = accept(netWorkSock, (struct sockaddr*)&clientAddr, &clientAddrSize);
+    if (netWorkSock < 0) {
         std::cerr << "Client connection failed!" << std::endl;
         return;
     }

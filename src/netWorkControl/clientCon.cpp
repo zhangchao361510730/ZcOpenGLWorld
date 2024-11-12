@@ -7,8 +7,8 @@
 clientCon::clientCon(const std::string& serverAddress, int port) : serverAddress(serverAddress), port(port) {
     std::cout<<"IP is "<<serverAddress<<" port is "<<port<<std::endl;
     selfType = "client";
-    clientSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (clientSocket < 0) {
+    netWorkSock = socket(AF_INET, SOCK_STREAM, 0);
+    if (netWorkSock < 0) {
         std::cerr << "Socket creation failed!" << std::endl;
         exit(1);
     }
@@ -20,11 +20,11 @@ clientCon::clientCon(const std::string& serverAddress, int port) : serverAddress
 }
 
 clientCon::~clientCon() {
-    close(clientSocket);
+    close(netWorkSock);
 }
 
 bool clientCon::connectToServer() {
-    if (connect(clientSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
+    if (connect(netWorkSock, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
         std::cerr << "Connection failed!" << std::endl;
         return false;
     } else {
@@ -42,9 +42,9 @@ void clientCon::sendMessage(const std::string& message) {
 
     // 接收服务器响应
     int responseLength;
-    recv(clientSocket, (char*)&responseLength, sizeof(responseLength), 0);  // 接收响应长度
+    recv(netWorkSock, (char*)&responseLength, sizeof(responseLength), 0);  // 接收响应长度
     char buffer[512];
-    int bytesReceived = recv(clientSocket, buffer, responseLength, 0);  // 接收响应内容
+    int bytesReceived = recv(netWorkSock, buffer, responseLength, 0);  // 接收响应内容
     if (bytesReceived > 0) {
         buffer[bytesReceived] = '\0';  // 终止字符串
         std::cout << "Server response: " << buffer << std::endl;
