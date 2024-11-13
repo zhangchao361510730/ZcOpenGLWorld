@@ -95,24 +95,49 @@ void animationScene::Init() {
 
 void animationScene::Update(float dt) {
     switch (SceneManager_->runType) {
-    case 1:{
-    if (hasInitNetWorkThread) {
-        animationToolServer->setAnimationStatus(button2D_->flag);
-        if (animationToolServer->AnimaionStatusChange()) {
-            if (animationToolServer->getAnimationStatus()) {
-                sendNetMessage(1,"start");
-            } else {
-                sendNetMessage(1,"stop");
+    case 1: {
+        if (hasInitNetWorkThread) {
+            animationToolServer->setAnimationStatus(button2D_->flag);
+            if (animationToolServer->AnimaionStatusChange()) {
+                if (animationToolServer->getAnimationStatus()) {
+                    sendNetMessage(1,"start");
+                } else {
+                    sendNetMessage(1,"stop");
+                }
+                animationToolServer->setPreAnimationStatus(button2D_->flag);
+            }
+        } else {
+            // 网络线程还没有初始化
+            if (SceneManager_->hasConnected) {
+                SceneManager_->serverPtr_->messageProcessCallback = animationScene::recvNetMessage;
+                std::thread serverThread(&netControl::RecvMessageLoop, SceneManager_->serverPtr_.get());
+                serverThread.detach();  // 使线程在后台运行
+                hasInitNetWorkThread = true;
             }
         }
-    } else {
-
+            break;
     }
-        break;
-    }
-    case 2:{
-        
-        break;
+    case 2: {
+        if (hasInitNetWorkThread) {
+            animationToolClient->setAnimationStatus(button2D_->flag);
+            if (animationToolClient->AnimaionStatusChange()) {
+                if (animationToolClient->getAnimationStatus()) {
+                    sendNetMessage(1,"start");
+                } else {
+                    sendNetMessage(1,"stop");
+                }
+                animationToolClient->setPreAnimationStatus(button2D_->flag);
+            }
+        } else {
+            // 网络线程还没有初始化
+            if (SceneManager_->hasConnected) {
+                SceneManager_->clientPtr_->messageProcessCallback = animationScene::recvNetMessage;
+                std::thread serverThread(&netControl::RecvMessageLoop, SceneManager_->clientPtr_.get());
+                serverThread.detach();  // 使线程在后台运行
+                hasInitNetWorkThread = true;
+            }
+        }
+            break;
     }
     case 3:{
         
