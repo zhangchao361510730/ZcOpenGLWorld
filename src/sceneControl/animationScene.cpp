@@ -115,7 +115,12 @@ void animationScene::Update(float dt) {
                 hasInitNetWorkThread = true;
             }
         }
-            break;
+        m_DeltaTime = dt - lastFrame;
+        lastFrame = dt;
+        processInput(window);
+        animationToolServer->UpdateAnimation(m_DeltaTime);
+        animationToolClient->UpdateAnimation(m_DeltaTime);
+        break;
     }
     case 2: {
         if (hasInitNetWorkThread) {
@@ -137,52 +142,28 @@ void animationScene::Update(float dt) {
                 hasInitNetWorkThread = true;
             }
         }
-            break;
-    }
-    case 3:{
-        
-        break;
-    }
-    default:{
-        break;
-    }
-    }
-
-
-        isAnimating = button2D_->flag;
-    if (hasInitNetWorkThread) {
-        if (isAnimating != PreisAnimating) {
-            if (isAnimating) {
-                sendNetMessage(1,"start");
-            } else {
-                sendNetMessage(1,"stop");
-            }
-            PreisAnimating = isAnimating;
-        }
-    } else {
-        if (SceneManager_->hasConnected) {
-            switch (SceneManager_->runType) {
-                case 1:{
-                    SceneManager_->serverPtr_->messageProcessCallback = animationScene::recvNetMessage;
-                    std::thread serverThread(&netControl::RecvMessageLoop, SceneManager_->serverPtr_.get());
-                    serverThread.detach();  // 使线程在后台运行
-                    break;
-                }
-                case 2:{
-                    SceneManager_->clientPtr_->messageProcessCallback = animationScene::recvNetMessage;
-                    std::thread serverThread(&netControl::RecvMessageLoop, SceneManager_->clientPtr_.get());
-                    serverThread.detach();  // 使线程在后台运行
-                    break;
-                }
-        }
-            hasInitNetWorkThread = true;
-        }
-    }
         m_DeltaTime = dt - lastFrame;
         lastFrame = dt;
         processInput(window);
         animationToolServer->UpdateAnimation(m_DeltaTime);
         animationToolClient->UpdateAnimation(m_DeltaTime);
+        break;
+    }
+    case 3:{
+            animationToolServer->setAnimationStatus(button2D_->flag);
+            if (animationToolServer->AnimaionStatusChange()) {
+                animationToolServer->setPreAnimationStatus(button2D_->flag);
+            }
+            m_DeltaTime = dt - lastFrame;
+            lastFrame = dt;
+            processInput(window);
+            animationToolServer->UpdateAnimation(m_DeltaTime);
+            break;
+    }
+    default:{
+        break;
+    }
+    }
 }
 
 void animationScene::setSceneManager(SceneManager * _SceneManager_) {

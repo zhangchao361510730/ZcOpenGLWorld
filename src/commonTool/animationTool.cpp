@@ -12,7 +12,7 @@ animationTool::animationTool(loadAnimation* animation,animationScene* parten):pa
 
 
 void animationTool::UpdateAnimation(float dt) {
-	 if (parten_->isAnimating) {
+	 if (isAnimating) {
 		if (m_CurrentAnimation) {
 			m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * dt;
 			//std::cout<<"parten_->m_CurrentTime "<<parten_->m_CurrentTime<<std::endl;
