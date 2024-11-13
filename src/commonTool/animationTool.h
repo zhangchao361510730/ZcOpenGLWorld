@@ -27,7 +27,7 @@ public:
 		return isAnimating;
 	}
 	inline bool AnimaionStatusChange() {
-		return (isAnimating == PreisAnimating);
+		return (isAnimating != PreisAnimating);
 	}
 	inline void setAnimationStatus(bool s) {
 		isAnimating = s;

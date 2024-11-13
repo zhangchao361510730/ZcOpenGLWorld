@@ -96,9 +96,10 @@ void animationScene::Init() {
 void animationScene::Update(float dt) {
     switch (SceneManager_->runType) {
     case 1: {
+        animationToolServer->setAnimationStatus(button2D_->flag);
         if (hasInitNetWorkThread) {
-            animationToolServer->setAnimationStatus(button2D_->flag);
             if (animationToolServer->AnimaionStatusChange()) {
+                std::cout<<"AnimaionStatusChange true"<<std::endl;
                 if (animationToolServer->getAnimationStatus()) {
                     sendNetMessage(1,"start");
                 } else {
@@ -115,6 +116,7 @@ void animationScene::Update(float dt) {
                 hasInitNetWorkThread = true;
             }
         }
+        
         m_DeltaTime = dt - lastFrame;
         lastFrame = dt;
         processInput(window);
@@ -123,8 +125,8 @@ void animationScene::Update(float dt) {
         break;
     }
     case 2: {
+        animationToolClient->setAnimationStatus(button2D_->flag);
         if (hasInitNetWorkThread) {
-            animationToolClient->setAnimationStatus(button2D_->flag);
             if (animationToolClient->AnimaionStatusChange()) {
                 if (animationToolClient->getAnimationStatus()) {
                     sendNetMessage(1,"start");
@@ -142,6 +144,7 @@ void animationScene::Update(float dt) {
                 hasInitNetWorkThread = true;
             }
         }
+
         m_DeltaTime = dt - lastFrame;
         lastFrame = dt;
         processInput(window);
