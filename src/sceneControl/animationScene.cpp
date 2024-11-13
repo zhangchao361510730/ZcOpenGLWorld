@@ -20,7 +20,28 @@ animationScene::~animationScene()
 
 bool animationScene::recvNetMessage(int type,char* buf,int length,void* scene_) {
     animationScene* thiz_ = (animationScene*)scene_;
-    std::cout<<"type is "<<type<<" buf is "<<buf<<" len is "<<length<<std::endl;
+
+    switch (thiz_->SceneManager_->runType)
+    {
+    case 1: {
+            if (strcmp(buf,"start") == 0) {
+                thiz_->animationToolClient->setAnimationStatus(true);
+            } else {
+                thiz_->animationToolClient->setAnimationStatus(false);
+            }
+        break;
+    }
+    case 2: {
+            if (strcmp(buf,"start") == 0) {
+                thiz_->animationToolServer->setAnimationStatus(true);
+            } else {
+                thiz_->animationToolServer->setAnimationStatus(false);
+            }
+        break;
+    }
+    default:
+        break;
+    }
     return true;
 }
 
