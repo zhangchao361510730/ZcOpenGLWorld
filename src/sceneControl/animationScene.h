@@ -40,8 +40,6 @@ private:
     loadAnimation* loadAnimationClient = nullptr;
     animationTool* animationToolClient = nullptr;
 
-    
-
     bool enableMouse = true;
     float lastX = windowsWidth / 2.0f;
     float lastY = windowsHeight / 2.0f;
@@ -52,12 +50,6 @@ private:
     bool isAnimating = false;
     bool PreisAnimating = false;
     bool isAnimatingOpposite = false;
-     
-    // float m_CurrentTimeServer = 0.0f;
-    // float m_CurrentTimeOppositeServer = 0.0f;
-
-    // float m_CurrentTimeClient = 0.0f;
-    // float m_CurrentTimeOppositeClient = 0.0f;
 
     friend class animationTool;
 public:
@@ -67,7 +59,9 @@ public:
     void Update(float dt) override;  // 更新场景逻辑
     void Render() override;          // 渲染场景
     void Cleanup() override;         // 清理场景资源
-
+    inline void setAnimationStatus(animationTool* aT, bool status) {
+        
+    }
     static void glfw_error_callback(int error, const char* description);
 	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);

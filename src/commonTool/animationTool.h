@@ -23,10 +23,22 @@ public:
 	void CalculateBoneTransform(const AssimpNodeData* node, glm::mat4 parentTransform);
 
 	std::vector<glm::mat4> GetFinalBoneMatrices();
-
+	inline bool getAnimationStatus() {
+		return isAnimating;
+	}
+	inline bool AnimaionStatusChange() {
+		return (isAnimating == PreisAnimating);
+	}
+	inline void setAnimationStatus(bool s) {
+		isAnimating = s;
+	}
+	inline void setPreAnimationStatus(bool s) {
+		PreisAnimating = s;
+	}
 private:
     float m_CurrentTime = 0.0f;
-
+	bool isAnimating = false;
+	bool PreisAnimating = false;
 	animationScene* parten_;
 	std::vector<glm::mat4> m_FinalBoneMatrices;
 	loadAnimation* m_CurrentAnimation;

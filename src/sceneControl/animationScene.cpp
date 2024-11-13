@@ -94,6 +94,25 @@ void animationScene::Init() {
 }
 
 void animationScene::Update(float dt) {
+    switch (SceneManager_->runType) {
+    case 1:{
+        
+        break;
+    }
+    case 2:{
+        
+        break;
+    }
+    case 3:{
+        
+        break;
+    }
+    default:{
+        break;
+    }
+    }
+
+
         isAnimating = button2D_->flag;
     if (hasInitNetWorkThread) {
         if (isAnimating != PreisAnimating) {
@@ -163,29 +182,6 @@ void animationScene::Render() {
         glm::mat4 view = camera_->GetViewMatrix();
         shaderModel_->setMat4("projection", projection);
         shaderModel_->setMat4("view", view);
-
-
-
-    // 位置数组，定义每个模型的位置
-    // std::vector<glm::vec3> modelPositions = {
-    //     glm::vec3(0.0f, -0.4f, -15.0f),
-    //     glm::vec3(2.0f, -0.4f, -15.0f),
-    //     glm::vec3(-2.0f, -0.4f, -15.0f)
-    // };
-
-    // // 渲染每个位置的模型
-    // for (const auto& pos : modelPositions) {
-    //     glm::mat4 model = glm::mat4(1.0f);
-    //     model = glm::translate(model, pos); // 设置位置
-    //     model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f)); // 缩放
-    //     shaderModel_->setMat4("model", model);
-    //     modelBindServer->Draw(*shaderModel_);
-    // }
-
-
-
-
-
 
         switch (SceneManager_->runType)
         {
@@ -280,16 +276,7 @@ void animationScene::scroll_callback(GLFWwindow* window, double xoffset, double 
 }
 
 void animationScene::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    // animationScene* thiz = (animationScene*)glfwGetWindowUserPointer(window);
-    // if (key == GLFW_KEY_X) {
-    //     if (action == GLFW_PRESS) {
-    //         thiz->isAnimating = true;
-    //     }
-    //     else if (action == GLFW_RELEASE) {
-    //         thiz->isAnimating = false;
-    //         //thiz->m_CurrentTime = 0.0f; // 重置动画时间
-    //     }
-    // }
+
 }
 
 void animationScene::mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
@@ -355,12 +342,4 @@ void animationScene::processInput(GLFWwindow *window) {
         camera_->ProcessKeyboard(LEFT, m_DeltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera_->ProcessKeyboard(RIGHT, m_DeltaTime);
-
-    // if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
-    //     isAnimating = true;
-    // }
-    // if (glfwGetKey(window, GLFW_KEY_X) == GLFW_RELEASE) {
-    //     isAnimating = false;
-    //     //m_CurrentTime = 0.0f; // 重置动画时间
-    // }
 }
