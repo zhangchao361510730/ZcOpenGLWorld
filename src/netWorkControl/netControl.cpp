@@ -30,7 +30,6 @@ void netControl::RecvMessageLoop(void* thiz) {
             int bytesReceived = recv(thiz_->netWorkSock, (char*)&type, sizeof(type), 0);
             if (bytesReceived <= 0) {
                 perror("recv");
-                printf("错误原因: %s\n", strerror(errno));
                 std::cerr<<"1 bytesReceived is "<<bytesReceived<<std::endl;
                 break;
             }
