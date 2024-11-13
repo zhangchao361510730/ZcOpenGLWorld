@@ -40,7 +40,7 @@ private:
     float m_DeltaTime = 0.0f;
     float lastFrame = 0.0f;
     bool isAnimating = false;
-    float m_CurrentTime = 0.0f;
+
     friend class animationTool;
     _setCallBackFun_ setCallbackFun_ = nullptr;
     GLFWwindow* window = nullptr;

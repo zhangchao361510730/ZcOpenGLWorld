@@ -52,8 +52,13 @@ private:
     bool isAnimating = false;
     bool PreisAnimating = false;
     bool isAnimatingOpposite = false;
-    float m_CurrentTime = 0.0f;
-    float m_CurrentTimeOpposite = 0.0f;
+     
+    // float m_CurrentTimeServer = 0.0f;
+    // float m_CurrentTimeOppositeServer = 0.0f;
+
+    // float m_CurrentTimeClient = 0.0f;
+    // float m_CurrentTimeOppositeClient = 0.0f;
+
     friend class animationTool;
 public:
     animationScene(GLFWwindow* windows_);

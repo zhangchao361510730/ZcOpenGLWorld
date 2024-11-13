@@ -14,9 +14,9 @@ animationTool::animationTool(loadAnimation* animation,animationScene* parten):pa
 void animationTool::UpdateAnimation(float dt) {
 	 if (parten_->isAnimating) {
 		if (m_CurrentAnimation) {
-			parten_->m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * dt;
+			m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * dt;
 			//std::cout<<"parten_->m_CurrentTime "<<parten_->m_CurrentTime<<std::endl;
-			parten_->m_CurrentTime = fmod(parten_->m_CurrentTime, m_CurrentAnimation->GetDuration());// 得到时间刻度
+			m_CurrentTime = fmod(m_CurrentTime, m_CurrentAnimation->GetDuration());// 得到时间刻度
 			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
 		}
 	 }
@@ -32,7 +32,7 @@ void animationTool::CalculateBoneTransform(const AssimpNodeData* node, glm::mat4
 	glm::mat4 nodeTransform = node->transformation;
 	boneTool* boneTool = m_CurrentAnimation->FindBone(nodeName);
 	if (boneTool) {
-		boneTool->Update(parten_->m_CurrentTime );
+		boneTool->Update(m_CurrentTime );
 		nodeTransform = boneTool->GetLocalTransform();
 	}
 	glm::mat4 globalTransformation = parentTransform * nodeTransform;

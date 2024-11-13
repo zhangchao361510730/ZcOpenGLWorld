@@ -25,6 +25,8 @@ public:
 	std::vector<glm::mat4> GetFinalBoneMatrices();
 
 private:
+    float m_CurrentTime = 0.0f;
+
 	animationScene* parten_;
 	std::vector<glm::mat4> m_FinalBoneMatrices;
 	loadAnimation* m_CurrentAnimation;

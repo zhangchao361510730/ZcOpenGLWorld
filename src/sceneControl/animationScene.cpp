@@ -127,6 +127,7 @@ void animationScene::Update(float dt) {
         lastFrame = dt;
         processInput(window);
         animationToolServer->UpdateAnimation(m_DeltaTime);
+        animationToolClient->UpdateAnimation(m_DeltaTime);
 }
 
 void animationScene::setSceneManager(SceneManager * _SceneManager_) {
@@ -162,10 +163,7 @@ void animationScene::Render() {
         glm::mat4 view = camera_->GetViewMatrix();
         shaderModel_->setMat4("projection", projection);
         shaderModel_->setMat4("view", view);
-        auto transforms = animationToolServer->GetFinalBoneMatrices();
-        for (int i = 0; i < transforms.size(); ++i) {
-            shaderModel_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
-        }
+
 
 
     // 位置数组，定义每个模型的位置
@@ -184,14 +182,62 @@ void animationScene::Render() {
     //     modelBindServer->Draw(*shaderModel_);
     // }
 
-        // // render the loaded model
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -0.4f, -15.0f)); // translate it down so it's at the center of the scene
-        //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
-        model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
-        shaderModel_->setMat4("model", model);
-        modelBindServer->Draw(*shaderModel_);
 
+
+
+
+
+        switch (SceneManager_->runType)
+        {
+        case 1:{
+
+        } 
+        case 2:{
+            // // render the loaded model
+            auto transforms = animationToolServer->GetFinalBoneMatrices();
+            for (int i = 0; i < transforms.size(); ++i) {
+                shaderModel_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+            }
+            glm::mat4 serverModel = glm::mat4(1.0f);
+            serverModel = glm::translate(serverModel, glm::vec3(0.0f, -0.4f, -15.0f)); // translate it down so it's at the center of the scene
+            //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
+            serverModel = glm::scale(serverModel, glm::vec3(0.05f, 0.05f, 0.05f));
+            shaderModel_->setMat4("model", serverModel);
+            modelBindServer->Draw(*shaderModel_);
+
+            auto transforms2 = animationToolClient->GetFinalBoneMatrices();
+            for (int i = 0; i < transforms2.size(); ++i) {
+                shaderModel_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms2[i]);
+            }
+            // // render the loaded model
+            glm::mat4 ClientModel = glm::mat4(1.0f);
+            ClientModel = glm::translate(ClientModel, glm::vec3(7.0f, -0.4f, -15.0f)); // translate it down so it's at the center of the scene
+            //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
+            ClientModel = glm::scale(ClientModel, glm::vec3(0.05f, 0.05f, 0.05f));
+            shaderModel_->setMat4("model", ClientModel);
+            modelBindClient->Draw(*shaderModel_);
+            break;
+        }
+        case 3:{
+            auto transforms = animationToolServer->GetFinalBoneMatrices();
+            for (int i = 0; i < transforms.size(); ++i) {
+                shaderModel_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+            }
+            // // render the loaded model
+            glm::mat4 serverModel = glm::mat4(1.0f);
+            serverModel = glm::translate(serverModel, glm::vec3(0.0f, -0.4f, -15.0f)); // translate it down so it's at the center of the scene
+            //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
+            serverModel = glm::scale(serverModel, glm::vec3(0.05f, 0.05f, 0.05f));
+            shaderModel_->setMat4("model", serverModel);
+            modelBindServer->Draw(*shaderModel_);
+            break;
+        }
+        default:{
+            break;
+        }
+            
+        }
+        
         glm::mat4 model2 = glm::mat4(1.0f);
         model2 = glm::translate(model2, glm::vec3(0.0f, -4.0f, -16.0f));  // 平移 y + 向上   z - 向前
  #define scValue 6.0f
