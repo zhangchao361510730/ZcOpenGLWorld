@@ -96,7 +96,18 @@ void animationScene::Init() {
 void animationScene::Update(float dt) {
     switch (SceneManager_->runType) {
     case 1:{
-        
+    if (hasInitNetWorkThread) {
+        animationToolServer->setAnimationStatus(button2D_->flag);
+        if (animationToolServer->AnimaionStatusChange()) {
+            if (animationToolServer->getAnimationStatus()) {
+                sendNetMessage(1,"start");
+            } else {
+                sendNetMessage(1,"stop");
+            }
+        }
+    } else {
+
+    }
         break;
     }
     case 2:{
