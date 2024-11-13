@@ -24,15 +24,23 @@ private:
     button2D * button2D_;
     cameraTool* camera_;
     loadModelTool* loadModelTool_;
-    modelBindAnimation* modelBindA_;
-    loadAnimation* loadAnimation_;
-    animationTool* animationTool_;
+
     reflectionBox* reflectionBox_;
     uint32_t VBO = 0;
     uint32_t VAO = 0;
     ShaderGLSLTool* shaderModel_;
     ShaderGLSLTool* shaderSkyBox_;
 
+    modelBindAnimation* modelBindServer = nullptr;
+    loadAnimation* loadAnimationServer = nullptr;
+    animationTool* animationToolServer = nullptr;
+    
+
+    modelBindAnimation* modelBindClient = nullptr;
+    loadAnimation* loadAnimationClient = nullptr;
+    animationTool* animationToolClient = nullptr;
+
+    
 
     bool enableMouse = true;
     float lastX = windowsWidth / 2.0f;

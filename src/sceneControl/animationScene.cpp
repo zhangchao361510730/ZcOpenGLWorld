@@ -36,12 +36,11 @@ void animationScene::Init() {
     glEnable(GL_DEPTH_TEST);
     std::string ModelPath_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.fs");
     std::string ModelPath_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");
-    std::string animationPath;
-    if (SceneManager_->runType == 1) {
-        animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test8.fbx");
-    } else {
-        animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
-    }
+
+
+
+
+
     //std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
 
     button2D_ = new button2D();
@@ -60,11 +59,37 @@ void animationScene::Init() {
     reflectionBox_->InitReflectionBox();
 
     stbi_set_flip_vertically_on_load(true);// load model need 
-    modelBindA_ = new modelBindAnimation(animationPath.c_str());
-    loadAnimation_ = new loadAnimation(animationPath.c_str(),modelBindA_);
-    animationTool_ = new animationTool(loadAnimation_,this);
+    std::string animationPathServer;
+    std::string animationPathClient;
+    switch (SceneManager_->runType)
+    {
+    case 1:{
+
+    }
+    case 2:{
+            animationPathServer = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
+            animationPathClient = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test8.fbx");
+            
+            modelBindServer = new modelBindAnimation(animationPathServer.c_str());
+            loadAnimationServer = new loadAnimation(animationPathServer.c_str(),modelBindServer);
+            animationToolServer = new animationTool(loadAnimationServer,this);
+
+            modelBindClient = new modelBindAnimation(animationPathClient.c_str());
+            loadAnimationClient = new loadAnimation(animationPathClient.c_str(),modelBindClient);
+            animationToolClient = new animationTool(loadAnimationClient,this);
+        break;
+    }    
+    case 3:{
+            animationPathServer = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
+            modelBindServer = new modelBindAnimation(animationPathServer.c_str());
+            loadAnimationServer = new loadAnimation(animationPathServer.c_str(),modelBindServer);
+            animationToolServer = new animationTool(loadAnimationServer,this);        
+        break;
+    }
+    default:
+        break;
+    }
     shaderModel_ = new ShaderGLSLTool(ModelPath_vs.c_str(),ModelPath_fs.c_str());
-    
     hasInit = true;
 }
 
@@ -101,7 +126,7 @@ void animationScene::Update(float dt) {
         m_DeltaTime = dt - lastFrame;
         lastFrame = dt;
         processInput(window);
-        animationTool_->UpdateAnimation(m_DeltaTime);
+        animationToolServer->UpdateAnimation(m_DeltaTime);
 }
 
 void animationScene::setSceneManager(SceneManager * _SceneManager_) {
@@ -137,7 +162,7 @@ void animationScene::Render() {
         glm::mat4 view = camera_->GetViewMatrix();
         shaderModel_->setMat4("projection", projection);
         shaderModel_->setMat4("view", view);
-        auto transforms = animationTool_->GetFinalBoneMatrices();
+        auto transforms = animationToolServer->GetFinalBoneMatrices();
         for (int i = 0; i < transforms.size(); ++i) {
             shaderModel_->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
         }
@@ -156,7 +181,7 @@ void animationScene::Render() {
     //     model = glm::translate(model, pos); // 设置位置
     //     model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f)); // 缩放
     //     shaderModel_->setMat4("model", model);
-    //     modelBindA_->Draw(*shaderModel_);
+    //     modelBindServer->Draw(*shaderModel_);
     // }
 
         // // render the loaded model
@@ -165,7 +190,7 @@ void animationScene::Render() {
         //model = glm::scale(model, glm::vec3(.5f, .5f, .5f));	// it's a bit too big for our scene, so scale it down
         model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
         shaderModel_->setMat4("model", model);
-        modelBindA_->Draw(*shaderModel_);
+        modelBindServer->Draw(*shaderModel_);
 
         glm::mat4 model2 = glm::mat4(1.0f);
         model2 = glm::translate(model2, glm::vec3(0.0f, -4.0f, -16.0f));  // 平移 y + 向上   z - 向前
