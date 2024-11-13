@@ -58,10 +58,6 @@ void animationScene::Init() {
     std::string ModelPath_fs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.fs");
     std::string ModelPath_vs = std::string(CMAKE_CURRENT_DIR).append("/glslFile/anim_model.vs");
 
-
-
-
-
     //std::string animationPath = std::string(CMAKE_CURRENT_DIR).append("/modelResource/test6.fbx");
 
     button2D_ = new button2D();
@@ -120,7 +116,6 @@ void animationScene::Update(float dt) {
         animationToolServer->setAnimationStatus(button2D_->flag);
         if (hasInitNetWorkThread) {
             if (animationToolServer->AnimaionStatusChange()) {
-                std::cout<<"AnimaionStatusChange true"<<std::endl;
                 if (animationToolServer->getAnimationStatus()) {
                     sendNetMessage(1,"start");
                 } else {
@@ -253,6 +248,18 @@ void animationScene::Render() {
             ClientModel = glm::scale(ClientModel, glm::vec3(0.05f, 0.05f, 0.05f));
             shaderModel_->setMat4("model", ClientModel);
             modelBindClient->Draw(*shaderModel_);
+
+        std::vector<glm::mat4> models = {
+            //         model2 = glm::translate(model2, glm::vec3(0.0f, -4.0f, -16.0f));  // 平移 y + 向上   z - 向前
+            glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -4.0f, -16.0f)),  // 第一个盒子的位置
+            glm::translate(glm::mat4(1.0f), glm::vec3(7.0f, -4.0f, -16.0f)),  // 第二个盒子的位置
+            // 添加更多位置矩阵
+        };
+        for (auto& model2 : models) {
+            model2 = glm::scale(model2, glm::vec3(scValue, scValue, scValue));
+            reflectionBox_->runDrawProcess(model2, view, projection);
+        }
+
             break;
         }
         case 3:{
@@ -267,6 +274,11 @@ void animationScene::Render() {
             serverModel = glm::scale(serverModel, glm::vec3(0.05f, 0.05f, 0.05f));
             shaderModel_->setMat4("model", serverModel);
             modelBindServer->Draw(*shaderModel_);
+
+            glm::mat4 model2 = glm::mat4(1.0f);
+            model2 = glm::translate(model2, glm::vec3(0.0f, -4.0f, -16.0f));  // 平移 y + 向上   z - 向前
+            model2 = glm::scale(model2, glm::vec3(scValue, scValue, scValue));      // 缩放
+            reflectionBox_->runDrawProcess(model2,view,projection);
             break;
         }
         default:{
@@ -274,24 +286,6 @@ void animationScene::Render() {
         }
             
         }
-        
-        glm::mat4 model2 = glm::mat4(1.0f);
-        model2 = glm::translate(model2, glm::vec3(0.0f, -4.0f, -16.0f));  // 平移 y + 向上   z - 向前
- #define scValue 6.0f
-        model2 = glm::scale(model2, glm::vec3(scValue, scValue, scValue));      // 缩放
-        reflectionBox_->runDrawProcess(model2,view,projection);
-
-    // std::vector<glm::mat4> models = {
-    //     glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)),  // 第一个盒子的位置
-    //     glm::translate(glm::mat4(1.0f), glm::vec3(2.0f, 0.0f, 0.0f)),  // 第二个盒子的位置
-    //     glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, 0.0f, 0.0f)), // 第三个盒子的位置
-    //     // 添加更多位置矩阵
-    // };
-
-    // for (auto& model2 : models) {
-    //     model2 = glm::scale(model2, glm::vec3(scValue, scValue, scValue));
-    //     reflectionBox_->runDrawProcess(model2, view, projection);
-    // }
 
         skyB_->runDrawProcess(view,projection); 
         button2D_->runRender();
